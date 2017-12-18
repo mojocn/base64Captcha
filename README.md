@@ -77,6 +77,7 @@ func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
 // base64Captcha create http handler
 func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	//parse request parameters
+	//接收客户端发送来的请求参数
 
 	r.ParseForm()
 	formData := r.Form
@@ -88,11 +89,17 @@ func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	DefaultLen, _ := strconv.Atoi(formData.Get("DefaultLen"))
 
 	//create base64 encoding captcha
-	base64Png := base64Captcha.GenerateCaptchaPngBase64String(captchaId, PngWidth, PngHeight, DotCount, DefaultLen, MaxSkew)
+	//创建base64图像验证码
+	_, digitCap := base64Captcha.GenerateCaptcha(captchaId, base64Captcha.ConfigDigit{Height: PngHeight, Width: PngWidth, CaptchaLen: DefaultLen, MaxSkew: MaxSkew, DotCount: DotCount})
+    //base64encoding
+	base64Png := base64Captcha.CaptchaWriteToBase64Encoding(digitCap, base64Captcha.MineTypeCaptchaDigit)
 	//or you can do this
+	//你也可以是用默认参数 生成图像验证码
 	//base64Png := captcha.GenerateCaptchaPngBase64StringDefault(captchaId)
 
 	//set json response
+	//设置json响应
+
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	body := map[string]interface{}{"code": 1, "data": base64Png, "msg": "success", "debug": formData}
 	json.NewEncoder(w).Encode(body)

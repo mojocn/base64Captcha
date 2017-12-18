@@ -4,6 +4,5 @@ examples/nohup.out
 goTestOutPutPng
 *.png
 *.wav
-*.ttf
 
 ex

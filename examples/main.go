@@ -33,6 +33,49 @@ func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(body)
 }
 
+type ConfigJsonBody struct {
+	Id              string
+	ConfigAudio     base64Captcha.ConfigAudio
+	ConfigCharacter base64Captcha.ConfigCharacter
+	ConfigDigit     base64Captcha.ConfigDigit
+}
+
+var configD = base64Captcha.ConfigDigit{
+	Height:     80,
+	Width:      240,
+	MaxSkew:    0.7,
+	DotCount:   80,
+	CaptchaLen: 5,
+}
+
+var configA = base64Captcha.ConfigAudio{
+	CaptchaLen: 6,
+	Language:   "zh",
+}
+
+var configC = base64Captcha.ConfigCharacter{
+	FontsDir:           "/Users/ericzhou/go/src/github.com/mojocn/base64Captcha/examples/fonts",
+	FontExt:            "tff",
+	Height:             60,
+	Width:              240,
+	Mode:               0,
+	ComplexOfNoiseText: 0,
+	ComplexOfNoiseDot:  0,
+	IsShowHollowLine:   false,
+	IsShowNoiseDot:     false,
+	IsShowNoiseText:    false,
+	IsShowSlimeLine:    false,
+	IsShowSineLine:     false,
+	CaptchaLen:         6,
+}
+
+func generateConfigHandler(w http.ResponseWriter, r *http.Request) {
+	data := ConfigJsonBody{"sdfasdfa", configA, configC, configD}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	body := map[string]interface{}{"code": 1, "data": data, "msg": "success"}
+	json.NewEncoder(w).Encode(body)
+}
+
 // base64Captcha create http handler
 func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	//parse request parameters
@@ -67,6 +110,9 @@ func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 //start a net/http server
 //启动golang net/http 服务器
 func main() {
+	//generateConfigHandler
+	http.HandleFunc("/api/config", generateConfigHandler)
+
 	//serve Vuejs+ElementUI+Axios Web Application
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 	//api for create captcha

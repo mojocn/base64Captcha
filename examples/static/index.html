@@ -115,6 +115,38 @@
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
+
+    var captchaConfig = {
+        Id: '',
+        ConfigAudio: {
+            CaptchaLen: 6,
+            Language: 'zh'
+        },
+        ConfigCharacter: {
+            FontsDir: '/Users/ericzhou/go/src/github.com/mojocn/base64Captcha/examples/fonts',
+            FontExt: 'tff',
+            Height: 60,
+            Width: 240,
+            Mode: 0,
+            ComplexOfNoiseText: 0,
+            ComplexOfNoiseDot: 0,
+            IsShowHollowLine: false,
+            IsShowNoiseDot: false,
+            IsShowNoiseText: false,
+            IsShowSlimeLine: false,
+            IsShowSineLine: false,
+            CaptchaLen: 6
+        },
+        ConfigDigit: {
+            Height: 80,
+            Width: 240,
+            CaptchaLen: 5,
+            MaxSkew: 0.7,
+            DotCount: 80
+        }
+    };
+
+
     new Vue({
         el: '#app',
         data: function () {
