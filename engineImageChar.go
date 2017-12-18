@@ -27,12 +27,6 @@ type CaptchaImageChar struct {
 
 //ConfigCharacter captcha config for captcha-engine-characters.
 type ConfigCharacter struct {
-	//font dir for characters.
-	//字体文件夹.
-	FontsDir string
-	//font file extension must with dot.
-	//字体扩展名.
-	FontExt string
 	// Height png height in pixel.
 	// 图像验证码的高度像素.
 	Height int
@@ -344,8 +338,6 @@ func (captcha *CaptchaImageChar) DrawText(text string) error {
 
 //EngineCharCreate create captcha with config struct.
 func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
-
-	err := readFonts(config.FontsDir, config.FontExt)
 
 	captchaImage, err := NewCaptchaImage(config.Width, config.Height, randLightColor())
 

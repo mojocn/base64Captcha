@@ -54,8 +54,6 @@ var configA = base64Captcha.ConfigAudio{
 }
 
 var configC = base64Captcha.ConfigCharacter{
-	FontsDir:           "/Users/ericzhou/go/src/github.com/mojocn/base64Captcha/examples/fonts",
-	FontExt:            "tff",
 	Height:             60,
 	Width:              240,
 	Mode:               0,

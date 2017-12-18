@@ -21,8 +21,6 @@ var configA = ConfigAudio{
 }
 
 var configC = ConfigCharacter{
-	FontsDir:           ExampleFontDirPath,
-	FontExt:            ExampleFontExtension,
 	Height:             60,
 	Width:              240,
 	Mode:               0,
