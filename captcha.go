@@ -22,7 +22,9 @@ import (
 	"io"
 	"log"
 	"os"
+	"path"
 	"path/filepath"
+	"runtime"
 	"time"
 )
 
@@ -77,6 +79,17 @@ type CaptchaItem struct {
 	ImageWidth int
 	//ImageHeight image height pixel.
 	ImageHeight int
+}
+
+func init() {
+	//ge
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		panic("No caller information")
+	}
+	packageDir := path.Dir(filename)
+	readFonts(packageDir+"/fonts", ".ttf")
+
 }
 
 // VerifyCaptcha by given id key, return boolean value.
