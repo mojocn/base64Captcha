@@ -44,7 +44,7 @@ func TestGenerateCaptcha(t *testing.T) {
 		}
 		CaptchaWriteToFile(cap, GoTestOutputDir+"/all", idkey, ext)
 
-		t.Log(idkey, globalStore.Get(idkey, false))
+		//t.Log(idkey, globalStore.Get(idkey, false))
 
 	}
 
@@ -54,7 +54,7 @@ func TestGenerateCaptcha(t *testing.T) {
 		ext := "png"
 		CaptchaWriteToFile(cap, GoTestOutputDir+"/all", "char_"+idkey, ext)
 
-		t.Log(idkey, globalStore.Get(idkey, false))
+		//t.Log(idkey, globalStore.Get(idkey, false))
 
 	}
 }
