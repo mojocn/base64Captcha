@@ -1,23 +1,20 @@
 package base64Captcha
 
 import (
+	"github.com/golang/freetype"
+	"github.com/golang/freetype/truetype"
 	"io/ioutil"
+	"log"
 	"os"
 	"strings"
 )
 
-//FontFamily store font file path information.
-var FontFamily = make([]string, 0)
+//FontFamilyOfBytes read all font to bytes.
+var FontFamilyOfBytes = make([][]byte, 0)
 
-//appendFontFamily add font. 添加一个字体路径到字体库.
-func appendFontFamily(fontPath ...string) {
-	FontFamily = append(FontFamily, fontPath...)
-}
-
-//readFonts import fonts from dir.
+//readFontsToSliceOfBytes import fonts from dir.
 //获取指定目录下的所有文件，不进入下一级目录搜索，可以匹配后缀过滤。
-func readFonts(dirPth string, suffix string) (err error) {
-	files := make([]string, 0, 10)
+func readFontsToSliceOfBytes(dirPth string, suffix string) (err error) {
 	dir, err := ioutil.ReadDir(dirPth)
 	if err != nil {
 		return err
@@ -28,12 +25,30 @@ func readFonts(dirPth string, suffix string) (err error) {
 		if fi.IsDir() { // 忽略目录
 			continue
 		}
-		if strings.HasSuffix(strings.ToUpper(fi.Name()), suffix) { //匹配文件
-			files = append(files, dirPth+PthSep+fi.Name())
+		//匹配文件 ttf 文件
+		if strings.HasSuffix(strings.ToUpper(fi.Name()), suffix) {
+			//获取字体文件路径
+			fontFilePath := dirPth + PthSep + fi.Name()
+			//读取字体文件路径到bytes
+			if fontBytes, err := ioutil.ReadFile(fontFilePath); err == nil {
+				FontFamilyOfBytes = append(FontFamilyOfBytes, fontBytes)
+			} else {
+				log.Print(err)
+			}
 		}
 	}
-	appendFontFamily(files...)
 	return nil
+}
+
+//randFontFamily choose random font family.选择随机的字体
+func randFontFamily() (*truetype.Font, error) {
+	fontBytes := FontFamilyOfBytes[r.Intn(len(FontFamilyOfBytes))]
+	f, err := freetype.ParseFont(fontBytes)
+	if err != nil {
+		log.Println(err)
+		return &truetype.Font{}, err
+	}
+	return f, nil
 }
 
 var digitFontData = [][]byte{

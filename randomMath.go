@@ -6,10 +6,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/golang/freetype"
-	"github.com/golang/freetype/truetype"
 	"image/color"
-	"io/ioutil"
 )
 
 //randText create random text. 生成随机文本.
@@ -73,23 +70,6 @@ func random(min int64, max int64) float64 {
 		return (float64(rand.Int63n(min*-1)) + decimal) * -1
 	}
 	return float64(rand.Int63n(max-min)+min) + decimal
-}
-
-//randFontFamily choose random font family.选择随机的字体
-func randFontFamily() (*truetype.Font, error) {
-	fontfile := FontFamily[r.Intn(len(FontFamily))]
-
-	fontBytes, err := ioutil.ReadFile(fontfile)
-	if err != nil {
-		fmt.Println(err)
-		return &truetype.Font{}, err
-	}
-	f, err := freetype.ParseFont(fontBytes)
-	if err != nil {
-		fmt.Println(err)
-		return &truetype.Font{}, err
-	}
-	return f, nil
 }
 
 //randDeepColor get random deep color. 随机生成深色系.

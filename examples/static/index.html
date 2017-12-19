@@ -7,145 +7,322 @@
     <meta name="Description" content="Base64 Captcha"/>
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <style>
+        .el-header, .el-footer {
+            background-color: #B3C0D1;
+            color: #333;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        .el-main {
+            background-color: #E9EEF3;
+            color: #333;
+            text-align: center;
+            /*line-height: 160px;*/
+        }
+
+        body > .el-container {
+            margin-bottom: 40px;
+        }
+
+        .el-container:nth-child(5) .el-aside,
+        .el-container:nth-child(6) .el-aside {
+            line-height: 260px;
+        }
+
+        .el-container:nth-child(7) .el-aside {
+            line-height: 320px;
+        }
+
         body {
+            margin: 0px;
             text-align: center;
         }
+
         .login-container {
             -webkit-border-radius: 5px;
             border-radius: 5px;
             -moz-border-radius: 5px;
             background-clip: padding-box;
-            margin: 50px auto auto auto;
-            width: 640px;
-            padding:  15px 30px ;
+            margin: 15px auto auto auto;
+            width: 480px;
+            padding: 12px;
             background: #fff;
             border: 1px solid #eaeaea;
             box-shadow: 0 0 25px #cac6c6;
         }
+
         .title {
             margin: 0px auto 20px auto;
             text-align: center;
             color: #505458;
         }
+
         .captcha-img {
             cursor: pointer;
             position: relative;
             border: 1px solid chartreuse;
             box-shadow: 0 0 6px #cac6c6;
         }
+
         .el-form-item {
             margin-bottom: 6px;
         }
-        .header {
-            position: absolute;
-            top: 8px;
-            padding-left: 64px;
-            right: auto;
-            left: auto;
-            float: left;
-        }
+
     </style>
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 </head>
 <body>
 <div id="app">
-    <el-form
-            label-width="180px"
-            label-position="left"
-            class="login-container">
-        <h3 class="title">Base64 Captcha Playground</h3>
 
-        <el-form-item label="DefaultLen:数字个数">
-            <el-slider v-model="form.DefaultLen" :min="1" :max="10" show-input
-                       @change="generateCaptcha(true)"></el-slider>
-        </el-form-item>
+    <el-container>
+        <el-header>
+            <!-- Place this tag where you want the button to render. -->
+            <a class="github-button" href="https://github.com/mojocn/base64captcha" data-size="large"
+               data-show-count="true" aria-label="Star mojocn/base64captcha on GitHub">Star</a>
+            <!-- Place this tag where you want the button to render. -->
+            <a class="github-button" href="https://github.com/mojocn" data-size="large" data-show-count="true"
+               aria-label="Follow @mojocn on GitHub">Follow @mojocn</a>
+            <!-- Place this tag where you want the button to render. -->
+            <a class="github-button" href="https://github.com/mojocn/base64captcha/issues" data-size="large"
+               data-show-count="true" aria-label="Issue mojocn/base64captcha on GitHub">Issue</a>
+            <!-- Place this tag where you want the button to render. -->
+            <a class="github-button" href="https://github.com/mojocn/base64captcha/archive/master.zip"
+               data-size="large" aria-label="Download mojocn/base64captcha on GitHub">Download</a>
+            <a href="https://godoc.org/github.com/mojocn/base64Captcha" rel="nofollow"><img
+                    src="https://camo.githubusercontent.com/600bdcf87a3b63b5300c6673401901196360a82a/68747470733a2f2f676f646f632e6f72672f6769746875622e636f6d2f6d6f6a6f636e2f626173653634436170746368613f7374617475732e737667"
+                    alt="GoDoc" data-canonical-src="https://godoc.org/github.com/mojocn/base64Captcha?status.svg"
+                    style="max-width:100%;"></a>
+            <a href="https://goreportcard.com/report/github.com/mojocn/base64Captcha" rel="nofollow"><img
+                    src="https://camo.githubusercontent.com/0848346ead4693b8b2d975d8cbbb032945fb708d/68747470733a2f2f676f7265706f7274636172642e636f6d2f62616467652f6769746875622e636f6d2f6d6f6a6f636e2f62617365363443617074636861"
+                    alt="Go Report Card"
+                    data-canonical-src="https://goreportcard.com/badge/github.com/mojocn/base64Captcha"
+                    style="max-width:100%;"></a>
 
-        <el-form-item label="PngWidth:图片宽度">
-            <el-slider v-model="form.PngWidth" :min="20" :max="480" :step="5" show-input
-                       @change="generateCaptcha(true)"></el-slider>
-        </el-form-item>
-        <el-form-item label="PngHeight:图片宽度">
-            <el-slider v-model="form.PngHeight" :min="20" :max="180" :step="5" show-input
-                       @change="generateCaptcha(true)"></el-slider>
-        </el-form-item>
-        <el-form-item label="MaxSkew:干扰系数">
-            <el-slider v-model="form.MaxSkew" :step="0.05" :min="0.1" :max="1" show-input
-                       @change="generateCaptcha(true)"></el-slider>
-        </el-form-item>
-        <el-form-item label="DotCount:圆点数量">
-            <el-slider v-model="form.DotCount" :min="2" :max="100" show-input
-                       @change="generateCaptcha(true)"></el-slider>
-        </el-form-item>
-        <img @click.prevent="generateCaptcha" :src="blob" class="captcha-img">
+        </el-header>
+        <el-main>
+            <h3 class="title">Base64 Captcha Playground</h3>
 
-            <el-input
-                    type="text"
-                    v-model="form.captchaDigits"
-                    auto-complete="off"
-                    style="margin: 15px auto"
-                    placeholder="input your captcha numbers">
-            </el-input>
-            <el-button
-                    type="primary"
-                    style="width:100%"
-                    v-loading="loading"
-                    @click.native.prevent="submitForm">
-                Verify Captcha
-            </el-button>
-    </el-form>
+
+            <el-tabs v-model="form.CaptchaType" type="border-card" @tab-click="handleClick">
+                <el-tab-pane label="Capcha-Engine-Digit-Config" name="digit">
+
+                    <el-form
+                            label-width="280px"
+                            label-position="left">
+
+                        <el-form-item label="ConfigDigit.CaptchaLen:数字个数">
+                            <el-slider v-model="form.ConfigDigit.CaptchaLen" :min="1" :max="10" show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+
+                        <el-form-item label="ConfigDigit.Width:图片宽度">
+                            <el-slider v-model="form.ConfigDigit.Width" :min="20" :max="480" :step="5"
+                                       show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+                        <el-form-item label="ConfigDigit.Height:图片高度">
+                            <el-slider v-model="form.ConfigDigit.Height" :min="20" :max="180" :step="5"
+                                       show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+                        <el-form-item label="ConfigDigit.MaxSkew:干扰系数">
+                            <el-slider v-model="form.ConfigDigit.MaxSkew" :step="0.05" :min="0.1" :max="1"
+                                       show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+                        <el-form-item label="ConfigDigit.DotCount:圆点数量">
+                            <el-slider v-model="form.ConfigDigit.DotCount" :min="2" :max="100" show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+                    </el-form>
+
+                </el-tab-pane>
+                <el-tab-pane label="Capcha-Engine-Character-Config" name="character">
+
+                    <el-form
+                            label-width="280px"
+                            label-position="left">
+
+                        <el-form-item label="ConfigCharacter.CaptchaLen">
+                            <el-slider v-model="form.ConfigCharacter.CaptchaLen" :min="1" :max="10" show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+
+                        <el-form-item label="ConfigCharacter.Width">
+                            <el-slider v-model="form.ConfigCharacter.Width" :min="20" :max="480" :step="5"
+                                       show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+                        <el-form-item label="ConfigCharacter.Height">
+                            <el-slider v-model="form.ConfigCharacter.Height" :min="20" :max="180" :step="5"
+                                       show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+                        <el-form-item label="ConfigCharacter.Mode">
+                            <el-slider v-model="form.ConfigCharacter.Mode" :min="0" :max="3"
+                                       show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+
+                        <el-form-item label="Captcha Layer">
+                            <el-checkbox v-model="form.ConfigCharacter.IsShowHollowLine" @change="generateCaptcha">
+                                IsShowHollowLine
+                            </el-checkbox>
+                            <el-checkbox v-model="form.ConfigCharacter.IsShowNoiseDot" @change="generateCaptcha">
+                                IsShowNoiseDot
+                            </el-checkbox>
+                            <el-checkbox v-model="form.ConfigCharacter.IsShowNoiseText" @change="generateCaptcha">
+                                IsShowNoiseText
+                            </el-checkbox>
+                            <el-checkbox v-model="form.ConfigCharacter.IsShowSlimeLine" @change="generateCaptcha">
+                                IsShowSlimeLine
+                            </el-checkbox>
+                            <el-checkbox v-model="form.ConfigCharacter.IsShowSineLine" @change="generateCaptcha">
+                                IsShowSlimeLine
+                            </el-checkbox>
+
+                        </el-form-item>
+
+
+                        <el-form-item label="ConfigCharacter.ComplexOfNoiseText"
+                                      v-if="form.ConfigCharacter.IsShowNoiseText">
+                            <el-slider v-model="form.ConfigCharacter.ComplexOfNoiseText" :min="0" :max="2" show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+                        <el-form-item label="ConfigCharacter.ComplexOfNoiseDot"
+                                      v-if="form.ConfigCharacter.IsShowNoiseDot">
+                            <el-slider v-model="form.ConfigCharacter.ComplexOfNoiseDot" :min="0" :max="2" show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+                    </el-form>
+                </el-tab-pane>
+                <el-tab-pane label="Capcha-Engine-Audio-Config" name="audio">
+
+                    <el-form
+                            label-width="280px"
+                            label-position="left">
+
+                        <el-form-item label="ConfigAudio.CaptchaLen">
+                            <el-slider v-model="form.ConfigAudio.CaptchaLen" :min="1" :max="10" show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+
+                        <el-form-item label="ConfigAudio.Language">
+
+                            <el-radio-group v-model="form.ConfigAudio.Language">
+                                <el-radio-button label="en"></el-radio-button>
+                                <el-radio-button label="zh"></el-radio-button>
+                                <el-radio-button label="ru"></el-radio-button>
+                                <el-radio-button label="ja"></el-radio-button>
+                            </el-radio-group>
+
+                        </el-form-item>
+
+                    </el-form>
+
+
+                </el-tab-pane>
+            </el-tabs>
+
+
+            <el-form class="login-container">
+
+                <el-form-item>
+                    <img @click.prevent="generateCaptcha" :src="blob" class="captcha-img"
+                         v-if="form.CaptchaType !== 'audio'"/>
+                    <audio controls :src="blob" v-if="form.CaptchaType === 'audio'"/>
+
+                </el-form-item>
+                <el-form-item>
+                    <el-input
+                            type="text"
+                            v-model="form.VerifyValue"
+                            auto-complete="off"
+                            style="margin: 15px auto"
+                            placeholder="input your captcha numbers">
+                    </el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button
+                            type="primary"
+                            style="width:100%"
+                            v-loading="loading"
+                            @click.native.prevent="submitForm">
+                        Verify Captcha
+                    </el-button>
+                </el-form-item>
+            </el-form>
+
+
+        </el-main>
+        <el-footer>Footer</el-footer>
+    </el-container>
 
 </div>
-<footer class="header">
-
-    <!-- Place this tag where you want the button to render. -->
-    <a class="github-button" href="https://github.com/mojocn/base64captcha" data-size="large" data-show-count="true" aria-label="Star mojocn/base64captcha on GitHub">Star</a>
-    <!-- Place this tag where you want the button to render. -->
-    <a class="github-button" href="https://github.com/mojocn" data-size="large" data-show-count="true" aria-label="Follow @mojocn on GitHub">Follow @mojocn</a>
-    <!-- Place this tag where you want the button to render. -->
-    <a class="github-button" href="https://github.com/mojocn/base64captcha/issues" data-size="large" data-show-count="true" aria-label="Issue mojocn/base64captcha on GitHub">Issue</a>
-    <!-- Place this tag where you want the button to render. -->
-    <a class="github-button" href="https://github.com/mojocn/base64captcha/archive/master.zip" data-size="large" aria-label="Download mojocn/base64captcha on GitHub">Download</a>
-    <a href="https://godoc.org/github.com/mojocn/base64Captcha" rel="nofollow"><img src="https://camo.githubusercontent.com/600bdcf87a3b63b5300c6673401901196360a82a/68747470733a2f2f676f646f632e6f72672f6769746875622e636f6d2f6d6f6a6f636e2f626173653634436170746368613f7374617475732e737667" alt="GoDoc" data-canonical-src="https://godoc.org/github.com/mojocn/base64Captcha?status.svg" style="max-width:100%;"></a>
-    <a href="https://goreportcard.com/report/github.com/mojocn/base64Captcha" rel="nofollow"><img src="https://camo.githubusercontent.com/0848346ead4693b8b2d975d8cbbb032945fb708d/68747470733a2f2f676f7265706f7274636172642e636f6d2f62616467652f6769746875622e636f6d2f6d6f6a6f636e2f62617365363443617074636861" alt="Go Report Card" data-canonical-src="https://goreportcard.com/badge/github.com/mojocn/base64Captcha" style="max-width:100%;"></a>
-</footer>
 </body>
 
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
+
     new Vue({
         el: '#app',
         data: function () {
             return {
                 form: {
-                    captchaId: "",
-                    captchaDigits: "",
-                    DotCount: 20,
-                    MaxSkew: 0.7,
-                    PngWidth: 240,
-                    PngHeight: 80,
-                    DefaultLen: 6
+                    CaptchaType: "digit",
+                    Id: '',
+                    VerifyValue: '',
+                    ConfigAudio: {
+                        CaptchaLen: 6,
+                        Language: 'zh'
+                    },
+                    ConfigCharacter: {
+                        Height: 60,
+                        Width: 240,
+                        Mode: 0,
+                        ComplexOfNoiseText: 0,
+                        ComplexOfNoiseDot: 0,
+                        IsShowHollowLine: false,
+                        IsShowNoiseDot: false,
+                        IsShowNoiseText: false,
+                        IsShowSlimeLine: false,
+                        IsShowSineLine: false,
+                        CaptchaLen: 6
+                    },
+                    ConfigDigit: {
+                        Height: 80,
+                        Width: 240,
+                        CaptchaLen: 5,
+                        MaxSkew: 0.7,
+                        DotCount: 80
+                    }
                 },
                 blob: "",
-                loading:false
+                loading: false
             }
         },
         methods: {
-            generateCaptcha: function (isRefresh) {
+
+            handleClick:function(tab, event) {
+                this.generateCaptcha();
+            },
+
+            generateCaptcha: function () {
                 this.loading = true;
                 //generate uuid string so the serve can verify numbers in the png
                 //you can generate the captchaId in other way
-                if (!isRefresh) {
-                    this.form.captchaId = Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
-                }
                 var that = this;
+
+
                 // the api/getCaptcha endpoint only recieve captchaId paramenter
-                axios.get('/api/getCaptcha', {params: that.form})
+                axios.post('/api/getCaptcha', that.form)
                         .then(function (response) {
                             that.loading = false;
-                            console.log(response);
+                            that.form.Id = response.data.captchaId
                             that.blob = response.data.data;
                         })
                         .catch(function (error) {
@@ -160,8 +337,7 @@
             submitForm: function () {
                 var that = this;
                 this.loading = true;
-
-                axios.get('/api/verifyCaptcha', {params: that.form})
+                axios.post('/api/verifyCaptcha', that.form)
                         .then(function (response) {
                             that.loading = false;
                             that.$notify({
@@ -184,7 +360,7 @@
             }
         },
         mounted: function () {
-            this.generateCaptcha(false)
+            this.generateCaptcha()
         }
     })
 </script>
