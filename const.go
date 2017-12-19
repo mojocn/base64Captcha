@@ -6,18 +6,15 @@ const (
 	TxtNumbers = "012346789"
 	//TxtAlphabet characters for alphabet.
 	TxtAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-	//MineTypeCaptchaAudioMineType output base64 mine-type.
-	MineTypeCaptchaAudioMineType = "audio/wav"
-	//MineTypeCaptchaDigit output base64 mine-type.
-	MineTypeCaptchaDigit = "image/png"
-	//MineTypeCaptchaChar output base64 mine-type.
-	MineTypeCaptchaChar = "image/png"
+	//MimeTypeCaptchaAudio output base64 mine-type.
+	MimeTypeCaptchaAudio = "audio/wav"
+	//MimeTypeCaptchaImage output base64 mine-type.
+	MimeTypeCaptchaImage = "image/png"
+
 	//FileExtCaptchaAudio output file extension.
 	FileExtCaptchaAudio = "wav"
-	//FileExtCaptchaDigit output file extension.
-	FileExtCaptchaDigit = "png"
-	//FileExtCaptchaChar output file extension.
-	FileExtCaptchaChar = "png"
+	//FileExtCaptchaImage output file extension.
+	FileExtCaptchaImage = "png"
 )
 const (
 	//CaptchaComplexLower complex level lower.

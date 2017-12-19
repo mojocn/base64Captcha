@@ -52,8 +52,15 @@ type CaptchaInterface interface {
 
 //CaptchaWriteToBase64Encoding converts captcha to base64 encoding string.
 //mimeType is one of "audio/wav" "image/png".
-func CaptchaWriteToBase64Encoding(cap CaptchaInterface, mimeType string) string {
+func CaptchaWriteToBase64Encoding(cap CaptchaInterface) string {
 	binaryData := cap.BinaryEncodeing()
+
+	mimeType := MimeTypeCaptchaImage
+	_, ok := cap.(*Audio)
+	if ok {
+		mimeType = MimeTypeCaptchaAudio
+	}
+
 	return fmt.Sprintf("data:%s;base64,%s", mimeType, base64.StdEncoding.EncodeToString(binaryData))
 }
 
