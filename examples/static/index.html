@@ -224,7 +224,7 @@
                 <el-form-item>
                     <img @click.prevent="generateCaptcha" :src="blob" class="captcha-img"
                          v-if="form.CaptchaType !== 'audio'"/>
-                    <audio controls :src="blob" v-if="form.CaptchaType === 'audio'"/>
+                    <audio controls :src="blob" autoplay v-if="form.CaptchaType === 'audio'"/>
 
                 </el-form-item>
                 <el-form-item>
