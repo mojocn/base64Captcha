@@ -5,6 +5,7 @@ import (
 	"github.com/golang/freetype/truetype"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"os"
 	"path"
 	"runtime"
@@ -15,6 +16,7 @@ import (
 var FontFamilyOfBytes = make([][]byte, 0)
 
 func init() {
+
 	//get current package dir path
 	_, filename, _, ok := runtime.Caller(0)
 	if !ok {
@@ -55,10 +57,10 @@ func readFontsToSliceOfBytes(dirPth string, suffix string) (err error) {
 
 //randFontFamily choose random font family.选择随机的字体
 func randFontFamily() (*truetype.Font, error) {
-	fontBytes := FontFamilyOfBytes[r.Intn(len(FontFamilyOfBytes))]
+	fontCount := len(FontFamilyOfBytes)
+	fontBytes := FontFamilyOfBytes[rand.Intn(fontCount)]
 	f, err := freetype.ParseFont(fontBytes)
 	if err != nil {
-		log.Println(err)
 		return &truetype.Font{}, err
 	}
 	return f, nil

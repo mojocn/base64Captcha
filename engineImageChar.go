@@ -13,10 +13,7 @@ import (
 	"log"
 	"math"
 	"math/rand"
-	"time"
 )
-
-var r = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 //CaptchaImageChar captcha-engine-char return type.
 type CaptchaImageChar struct {
@@ -81,12 +78,12 @@ func (captcha *CaptchaImageChar) DrawHollowLine() *CaptchaImageChar {
 
 	lineColor := color.RGBA{R: 245, G: 250, B: 251, A: 255}
 
-	x1 := float64(r.Intn(first))
-	//y1 := float64(r.Intn(y)+y);
+	x1 := float64(rand.Intn(first))
+	//y1 := float64(rand.Intn(y)+y);
 
-	x2 := float64(r.Intn(first) + end)
+	x2 := float64(rand.Intn(first) + end)
 
-	multiple := float64(r.Intn(5)+3) / float64(5)
+	multiple := float64(rand.Intn(5)+3) / float64(5)
 	if int(multiple*10)%3 == 0 {
 		multiple = multiple * -1.0
 	}
@@ -116,7 +113,7 @@ func (captcha *CaptchaImageChar) DrawSineLine() *CaptchaImageChar {
 	var py float64
 
 	//振幅
-	a := r.Intn(captcha.ImageHeight / 2)
+	a := rand.Intn(captcha.ImageHeight / 2)
 
 	//Y轴方向偏移量
 	b := random(int64(-captcha.ImageHeight/4), int64(captcha.ImageHeight/4))
@@ -136,7 +133,7 @@ func (captcha *CaptchaImageChar) DrawSineLine() *CaptchaImageChar {
 	px1 := 0
 	px2 := int(random(int64(float64(captcha.ImageWidth)*0.8), int64(captcha.ImageWidth)))
 
-	c := color.RGBA{R: uint8(r.Intn(150)), G: uint8(r.Intn(150)), B: uint8(r.Intn(150)), A: uint8(255)}
+	c := color.RGBA{R: uint8(rand.Intn(150)), G: uint8(rand.Intn(150)), B: uint8(rand.Intn(150)), A: uint8(255)}
 
 	for px := px1; px < px2; px++ {
 		if w != 0 {
@@ -164,15 +161,15 @@ func (captcha *CaptchaImageChar) DrawSlimLine(num int) *CaptchaImageChar {
 
 	for i := 0; i < num; i++ {
 
-		point1 := point{X: r.Intn(first), Y: r.Intn(y)}
-		point2 := point{X: r.Intn(first) + end, Y: r.Intn(y)}
+		point1 := point{X: rand.Intn(first), Y: rand.Intn(y)}
+		point2 := point{X: rand.Intn(first) + end, Y: rand.Intn(y)}
 
 		if i%2 == 0 {
-			point1.Y = r.Intn(y) + y*2
-			point2.Y = r.Intn(y)
+			point1.Y = rand.Intn(y) + y*2
+			point2.Y = rand.Intn(y)
 		} else {
-			point1.Y = r.Intn(y) + y*(i%2)
-			point2.Y = r.Intn(y) + y*2
+			point1.Y = rand.Intn(y) + y*(i%2)
+			point2.Y = rand.Intn(y) + y*2
 		}
 
 		captcha.drawBeeline(point1, point2, randDeepColor())
@@ -229,11 +226,11 @@ func (captcha *CaptchaImageChar) DrawNoise(complex int) *CaptchaImageChar {
 
 	for i := 0; i < maxSize; i++ {
 
-		rw := r.Intn(captcha.ImageWidth)
-		rh := r.Intn(captcha.ImageHeight)
+		rw := rand.Intn(captcha.ImageWidth)
+		rh := rand.Intn(captcha.ImageHeight)
 
 		captcha.nrgba.Set(rw, rh, randColor())
-		size := r.Intn(maxSize)
+		size := rand.Intn(maxSize)
 		if size%3 == 0 {
 			captcha.nrgba.Set(rw+1, rh+1, randColor())
 		}
@@ -263,15 +260,15 @@ func (captcha *CaptchaImageChar) DrawTextNoise(complex int) error {
 	c.SetClip(captcha.nrgba.Bounds())
 	c.SetDst(captcha.nrgba)
 	c.SetHinting(font.HintingFull)
-	rawFontSize := float64(captcha.ImageHeight) / (1 + float64(r.Intn(7))/float64(10))
+	rawFontSize := float64(captcha.ImageHeight) / (1 + float64(rand.Intn(7))/float64(10))
 
 	for i := 0; i < maxSize; i++ {
 
-		rw := r.Intn(captcha.ImageWidth)
-		rh := r.Intn(captcha.ImageHeight)
+		rw := rand.Intn(captcha.ImageWidth)
+		rh := rand.Intn(captcha.ImageHeight)
 
 		text := randText(1, TxtNumbers+TxtAlphabet)
-		fontSize := rawFontSize/2 + float64(r.Intn(5))
+		fontSize := rawFontSize/2 + float64(rand.Intn(5))
 
 		c.SetSrc(image.NewUniform(randLightColor()))
 		c.SetFontSize(fontSize)
@@ -306,7 +303,7 @@ func (captcha *CaptchaImageChar) DrawText(text string) error {
 
 	for i, s := range text {
 
-		fontSize := float64(captcha.ImageHeight) / (1 + float64(r.Intn(7))/float64(9))
+		fontSize := float64(captcha.ImageHeight) / (1 + float64(rand.Intn(7))/float64(9))
 
 		c.SetSrc(image.NewUniform(randDeepColor()))
 		c.SetFontSize(fontSize)
@@ -320,7 +317,7 @@ func (captcha *CaptchaImageChar) DrawText(text string) error {
 
 		x := int(fontWidth)*i + int(fontWidth)/int(fontSize)
 
-		y := 5 + r.Intn(captcha.ImageHeight/2) + int(fontSize/2)
+		y := 5 + rand.Intn(captcha.ImageHeight/2) + int(fontSize/2)
 
 		pt := freetype.Pt(x, y)
 
