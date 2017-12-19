@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+//ConfigJsonBody json request body.
 type ConfigJsonBody struct {
 	Id              string
 	CaptchaType     string
