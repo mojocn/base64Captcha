@@ -106,6 +106,7 @@ func VerifyCaptcha(identifier, verifyValue string) bool {
 }
 
 //GenerateCaptcha create captcha by config struct and id.
+//idkey can be an empty string, base64 will create a unique id four you.
 //if idKey is a empty string, the package will generate a random unique identifier for you.
 //configuration struct should be one of those struct ConfigAudio, ConfigCharacter, ConfigDigit.
 //
@@ -152,7 +153,7 @@ func VerifyCaptcha(identifier, verifyValue string) bool {
 //	base64stringD := base64Captcha.CaptchaWriteToBase64Encoding(capD)
 func GenerateCaptcha(idKey string, configuration interface{}) (id string, captchaInstance CaptchaInterface) {
 	if idKey == "" {
-		idKey = RandomId()
+		idKey = randomId()
 	}
 	id = idKey
 	var verifyValue string

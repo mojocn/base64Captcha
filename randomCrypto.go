@@ -107,9 +107,9 @@ func randomBytesMod(length int, mod byte) (b []byte) {
 	}
 }
 
-// RandomId returns a new random id key string.
+// randomId returns a new random id key string.
 // golang服务器端产生随机的idKey
-func RandomId() string {
+func randomId() string {
 	b := randomBytesMod(idLen, byte(len(idChars)))
 	for i, c := range b {
 		b[i] = idChars[c]
@@ -117,8 +117,8 @@ func RandomId() string {
 	return string(b)
 }
 
-//ParseDigitsToString parse RandomDigits to normal string
-func ParseDigitsToString(bytes []byte) string {
+//parseDigitsToString parse RandomDigits to normal string
+func parseDigitsToString(bytes []byte) string {
 	ssbb := make([]byte, len(bytes))
 	for idx, by := range bytes {
 		ssbb[idx] = by + '0'

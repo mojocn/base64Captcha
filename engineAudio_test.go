@@ -12,7 +12,7 @@ import (
 func BenchmarkNewAudio(b *testing.B) {
 	b.StopTimer()
 	d := RandomDigits(DefaultLen)
-	id := RandomId()
+	id := randomId()
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
 		NewAudio(id, d, "")
@@ -22,7 +22,7 @@ func BenchmarkNewAudio(b *testing.B) {
 func BenchmarkAudioWriteTo(b *testing.B) {
 	b.StopTimer()
 	d := RandomDigits(DefaultLen)
-	id := RandomId()
+	id := randomId()
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
 		a := NewAudio(id, d, "")
@@ -33,7 +33,7 @@ func BenchmarkAudioWriteTo(b *testing.B) {
 
 func TestEngineAudioCreate(t *testing.T) {
 	for i := 0; i < 10; i++ {
-		idKey := RandomId()
+		idKey := randomId()
 		au := EngineAudioCreate(idKey, configA)
 		if err := CaptchaWriteToFile(au, GoTestOutputDir+"/audio", idKey, "wav"); err != nil {
 			t.Log(err)

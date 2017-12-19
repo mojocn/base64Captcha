@@ -40,7 +40,7 @@ type Audio struct {
 func EngineAudioCreate(id string, config ConfigAudio) *Audio {
 	digits := RandomDigits(config.CaptchaLen)
 	audio := NewAudio(id, digits, config.Language)
-	audio.VerifyValue = ParseDigitsToString(digits)
+	audio.VerifyValue = parseDigitsToString(digits)
 	return audio
 }
 
