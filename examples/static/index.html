@@ -11,7 +11,7 @@
             background-color: #B3C0D1;
             color: #333;
             text-align: center;
-            line-height: 60px;
+            line-height: 77px;
         }
 
         .el-main {
@@ -21,18 +21,8 @@
             /*line-height: 160px;*/
         }
 
-        body > .el-container {
-            margin-bottom: 40px;
-        }
 
-        .el-container:nth-child(5) .el-aside,
-        .el-container:nth-child(6) .el-aside {
-            line-height: 260px;
-        }
 
-        .el-container:nth-child(7) .el-aside {
-            line-height: 320px;
-        }
 
         body {
             margin: 0px;
@@ -105,7 +95,9 @@
             <h3 class="title">Base64 Captcha Playground</h3>
 
 
-            <el-tabs v-model="form.CaptchaType" type="border-card" @tab-click="handleClick">
+            <el-tabs v-model="form.CaptchaType"
+                     style="width: 50%;margin-left: auto;margin-right: auto;"
+                     type="border-card" @tab-click="handleClick">
                 <el-tab-pane label="Capcha-Engine-Digit-Config" name="digit">
 
                     <el-form
@@ -211,7 +203,7 @@
 
                         <el-form-item label="ConfigAudio.Language">
 
-                            <el-radio-group v-model="form.ConfigAudio.Language">
+                            <el-radio-group v-model="form.ConfigAudio.Language" @change="generateCaptcha">
                                 <el-radio-button label="en"></el-radio-button>
                                 <el-radio-button label="zh"></el-radio-button>
                                 <el-radio-button label="ru"></el-radio-button>
@@ -322,7 +314,7 @@
                 axios.post('/api/getCaptcha', that.form)
                         .then(function (response) {
                             that.loading = false;
-                            that.form.Id = response.data.captchaId
+                            that.form.Id = response.data.captchaId;
                             that.blob = response.data.data;
                         })
                         .catch(function (error) {
