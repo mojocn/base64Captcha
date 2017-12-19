@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package base64Captcha creates digits-numbers-alphabet-arithmetic-audio(声音,数字,字母,算术,混合) captcha of base64-encoding.
+// Package base64Captcha support digits, numbers,alphabet, arithmetic, audio and digit-alphabet captcha.
 // base64Captcha is used for rapid development of RESTful APIs, web apps and backend services in Go. give a string identifier to the package and it returns with a base64-encoding-png-string
 package base64Captcha
 

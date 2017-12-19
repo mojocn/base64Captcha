@@ -1,4 +1,4 @@
-# Base64 Encoding Captcha for RESTful application
+# Base64captch support digits, numbers,alphabet, arithmetic, audio and digit-alphabet captcha.
 [![Go Report Card](https://goreportcard.com/badge/github.com/mojocn/base64Captcha)](https://goreportcard.com/report/github.com/mojocn/base64Captcha)
 [![GoDoc](https://godoc.org/github.com/mojocn/base64Captcha?status.svg)](https://godoc.org/github.com/mojocn/base64Captcha)
 
