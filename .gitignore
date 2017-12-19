@@ -1,8 +1,6 @@
 .idea/*
 .idea
 examples/nohup.out
-goTestOutPutPng
-*.png
-*.wav
-
+examples/examples
+goTestOutPutPng/*
 ex

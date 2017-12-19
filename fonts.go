@@ -6,11 +6,24 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
+	"runtime"
 	"strings"
 )
 
 //FontFamilyOfBytes read all font to bytes.
 var FontFamilyOfBytes = make([][]byte, 0)
+
+func init() {
+	//get current package dir path
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		panic("No caller information")
+	}
+	packageDirPath := path.Dir(filename)
+	//loading fonts for engine char
+	readFontsToSliceOfBytes(packageDirPath+"/fonts", ".ttf")
+}
 
 //readFontsToSliceOfBytes import fonts from dir.
 //获取指定目录下的所有文件，不进入下一级目录搜索，可以匹配后缀过滤。

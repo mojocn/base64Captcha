@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//Package base64Captcha creates digits captcha of base64-encoding png.
+// Package base64Captcha creates digits-numbers-alphabet-arithmetic-audio(声音,数字,字母,算术,混合) captcha of base64-encoding.
 // base64Captcha is used for rapid development of RESTful APIs, web apps and backend services in Go. give a string identifier to the package and it returns with a base64-encoding-png-string
 package base64Captcha
 
@@ -22,9 +22,7 @@ import (
 	"io"
 	"log"
 	"os"
-	"path"
 	"path/filepath"
-	"runtime"
 	"time"
 )
 
@@ -90,17 +88,6 @@ type CaptchaItem struct {
 	ImageHeight int
 }
 
-func init() {
-	//get current package dir path
-	_, filename, _, ok := runtime.Caller(0)
-	if !ok {
-		panic("No caller information")
-	}
-	packageDirPath := path.Dir(filename)
-	//loading fonts for engine char
-	readFontsToSliceOfBytes(packageDirPath+"/fonts", ".ttf")
-}
-
 // VerifyCaptcha by given id key, return boolean value.
 // 验证图像验证码,返回boolean.
 func VerifyCaptcha(identifier, verifyValue string) bool {
@@ -118,7 +105,51 @@ func VerifyCaptcha(identifier, verifyValue string) bool {
 	return result
 }
 
-//GenerateCaptcha create captch by config struct.
+//GenerateCaptcha create captcha by config struct and id.
+//if idKey is a empty string, the package will generate a random unique identifier for you.
+//configuration struct should be one of those struct ConfigAudio, ConfigCharacter, ConfigDigit.
+//
+//Example Code
+//	//config struct for digits
+//	var configD = base64Captcha.ConfigDigit{
+//		Height:     80,
+//		Width:      240,
+//		MaxSkew:    0.7,
+//		DotCount:   80,
+//		CaptchaLen: 5,
+//	}
+//	//config struct for audio
+//	var configA = base64Captcha.ConfigAudio{
+//		CaptchaLen: 6,
+//		Language:   "zh",
+//	}
+//	//config struct for Character
+//	var configC = base64Captcha.ConfigCharacter{
+//		Height:             60,
+//		Width:              240,
+//		//const CaptchaModeNumber:数字,CaptchaModeAlphabet:字母,CaptchaModeArithmetic:算术,CaptchaModeNumberAlphabet:数字字母混合.
+//		Mode:               base64Captcha.CaptchaModeNumber,
+//		ComplexOfNoiseText: base64Captcha.CaptchaComplexLower,
+//		ComplexOfNoiseDot:  base64Captcha.CaptchaComplexLower,
+//		IsShowHollowLine:   false,
+//		IsShowNoiseDot:     false,
+//		IsShowNoiseText:    false,
+//		IsShowSlimeLine:    false,
+//		IsShowSineLine:     false,
+//		CaptchaLen:         6,
+//	}
+//	//create a audio captcha.
+//	idKeyA,capA := base64Captcha.GenerateCaptcha("",configA)
+//	//write to base64 string.
+//	base64stringA := base64Captcha.CaptchaWriteToBase64Encoding(capA)
+//	//create a characters captcha.
+//	idKeyC,capC := base64Captcha.GenerateCaptcha("",configC)
+//	//write to base64 string.
+//	base64stringC := base64Captcha.CaptchaWriteToBase64Encoding(capC)
+//	//create a digits captcha.
+//	idKeyD,capD := base64Captcha.GenerateCaptcha("",configD)
+//	//write to base64 string.
+//	base64stringD := base64Captcha.CaptchaWriteToBase64Encoding(capD)
 func GenerateCaptcha(idKey string, configuration interface{}) (id string, captchaInstance CaptchaInterface) {
 	if idKey == "" {
 		idKey = RandomId()
