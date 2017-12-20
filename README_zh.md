@@ -121,21 +121,6 @@ type ConfigJsonBody struct {
 	ConfigDigit     base64Captcha.ConfigDigit
 }
 
-var configC = base64Captcha.ConfigCharacter{
-	Height:             60,
-	Width:              240,
-	Mode:               0,
-	ComplexOfNoiseText: 0,
-	ComplexOfNoiseDot:  0,
-	IsShowHollowLine:   false,
-	IsShowNoiseDot:     false,
-	IsShowNoiseText:    false,
-	IsShowSlimeLine:    false,
-	IsShowSineLine:     false,
-	CaptchaLen:         6,
-}
-
-
 // base64Captcha create http handler
 func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	//parse request parameters
