@@ -94,18 +94,17 @@ func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	default:
 		config = postParameters.ConfigDigit
 	}
-	captchaId, digitCap := base64Captcha.GenerateCaptcha(postParameters.Id, config)
-	base64Png := base64Captcha.CaptchaWriteToBase64Encoding(digitCap)
+	captchaId, captcaInterfaceInstance := base64Captcha.GenerateCaptcha(postParameters.Id, config)
+	base64blob := base64Captcha.CaptchaWriteToBase64Encoding(captcaInterfaceInstance)
 
-	//or you can do this
-	//你也可以是用默认参数 生成图像验证码
-	//base64Png := captcha.GenerateCaptchaPngBase64StringDefault(captchaId)
+	//or you can just write the captcha content to the httpResponseWriter.
+	//before you put the captchaId into the response COOKIE.
+	//captcaInterfaceInstance.WriteTo(w)
 
 	//set json response
 	//设置json响应
-
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	body := map[string]interface{}{"code": 1, "data": base64Png, "captchaId": captchaId, "msg": "success"}
+	body := map[string]interface{}{"code": 1, "data": base64blob, "captchaId": captchaId, "msg": "success"}
 	json.NewEncoder(w).Encode(body)
 }
 
