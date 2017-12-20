@@ -8,12 +8,14 @@ import (
 	"math/rand"
 	"os"
 	"path"
+	"path/filepath"
 	"runtime"
 	"strings"
 )
 
 //FontFamilyOfBytes read all font to bytes.
 var FontFamilyOfBytes = make([][]byte, 0)
+var SimpleFont *truetype.Font
 
 func init() {
 
@@ -25,6 +27,8 @@ func init() {
 	packageDirPath := path.Dir(filename)
 	//loading fonts for engine char
 	readFontsToSliceOfBytes(packageDirPath+"/fonts", ".ttf")
+	//read simply font
+	SimpleFont = readSimpleFont(packageDirPath)
 }
 
 //readFontsToSliceOfBytes import fonts from dir.
@@ -48,22 +52,45 @@ func readFontsToSliceOfBytes(dirPth string, suffix string) (err error) {
 			if fontBytes, err := ioutil.ReadFile(fontFilePath); err == nil {
 				FontFamilyOfBytes = append(FontFamilyOfBytes, fontBytes)
 			} else {
-				log.Print(err)
+				log.Fatal(err)
 			}
+		} else {
+			log.Fatal("the folder:", dirPth, "has not ", suffix, "font file.")
 		}
 	}
 	return nil
 }
 
 //randFontFamily choose random font family.选择随机的字体
-func randFontFamily() (*truetype.Font, error) {
+func randFontFamily() *truetype.Font {
 	fontCount := len(FontFamilyOfBytes)
-	fontBytes := FontFamilyOfBytes[rand.Intn(fontCount)]
+
+	index := 0
+	if fontCount != 1 {
+		index = rand.Intn(fontCount)
+	}
+	fontBytes := FontFamilyOfBytes[index]
 	f, err := freetype.ParseFont(fontBytes)
 	if err != nil {
-		return &truetype.Font{}, err
+		log.Fatal(err)
 	}
-	return f, nil
+	return f
+}
+
+//read simple font of RitaSmith.ttf for easy mode.
+func readSimpleFont(packageDirPath string) *truetype.Font {
+	fontFilePath := filepath.Join(packageDirPath, "fonts/RitaSmith.ttf")
+	if fontBytes, err := ioutil.ReadFile(fontFilePath); err == nil {
+		if fo, err := freetype.ParseFont(fontBytes); err != nil {
+			log.Println(err)
+			return &truetype.Font{}
+		} else {
+			return fo
+		}
+	} else {
+		log.Println(err)
+		return &truetype.Font{}
+	}
 }
 
 var digitFontData = [][]byte{

@@ -32,6 +32,8 @@ type ConfigCharacter struct {
 	Width int
 	//Mode : base64captcha.CaptchaModeNumber=0, base64captcha.CaptchaModeAlphabet=1, base64captcha.CaptchaModeArithmetic=2, base64captcha.CaptchaModeNumberAlphabet=3.
 	Mode int
+	//IsUseSimpleFont is use simply font(...base64Captcha/fonts/RitaSmith.ttf).
+	IsUseSimpleFont bool
 	//ComplexOfNoiseText text noise count.
 	ComplexOfNoiseText int
 	//ComplexOfNoiseDot dot noise count.
@@ -240,7 +242,7 @@ func (captcha *CaptchaImageChar) DrawNoise(complex int) *CaptchaImageChar {
 
 //DrawTextNoise draw noises which are single character.
 //画文字噪点.
-func (captcha *CaptchaImageChar) DrawTextNoise(complex int) error {
+func (captcha *CaptchaImageChar) DrawTextNoise(complex int, isSimpleFont bool) error {
 	density := 1500
 	if complex == CaptchaComplexLower {
 		density = 2000
@@ -272,26 +274,25 @@ func (captcha *CaptchaImageChar) DrawTextNoise(complex int) error {
 
 		c.SetSrc(image.NewUniform(randLightColor()))
 		c.SetFontSize(fontSize)
-		f, err := randFontFamily()
 
-		if err != nil {
-			log.Println(err)
-			return err
+		if isSimpleFont {
+			c.SetFont(SimpleFont)
+		} else {
+			f := randFontFamily()
+			c.SetFont(f)
 		}
-		c.SetFont(f)
+
 		pt := freetype.Pt(rw, rh)
 
-		_, err = c.DrawString(text, pt)
-		if err != nil {
-			log.Println(err)
-			return err
+		if _, err := c.DrawString(text, pt); err != nil {
+			log.Fatal(err)
 		}
 	}
 	return nil
 }
 
 //DrawText draw captcha string to image.把文字写入图像验证码
-func (captcha *CaptchaImageChar) DrawText(text string) error {
+func (captcha *CaptchaImageChar) DrawText(text string, isSimpleFont bool) error {
 	c := freetype.NewContext()
 	c.SetDPI(imageStringDpi)
 
@@ -307,13 +308,13 @@ func (captcha *CaptchaImageChar) DrawText(text string) error {
 
 		c.SetSrc(image.NewUniform(randDeepColor()))
 		c.SetFontSize(fontSize)
-		f, err := randFontFamily()
 
-		if err != nil {
-			log.Println(err)
-			return err
+		if isSimpleFont {
+			c.SetFont(SimpleFont)
+		} else {
+			f := randFontFamily()
+			c.SetFont(f)
 		}
-		c.SetFont(f)
 
 		x := int(fontWidth)*i + int(fontWidth)/int(fontSize)
 
@@ -321,10 +322,8 @@ func (captcha *CaptchaImageChar) DrawText(text string) error {
 
 		pt := freetype.Pt(x, y)
 
-		_, err = c.DrawString(string(s), pt)
-		if err != nil {
-			log.Println(err)
-			return err
+		if _, err := c.DrawString(string(s), pt); err != nil {
+			log.Fatal(err)
 		}
 		//pt.Y += c.pointToFixed(*size * *spacing)
 		//pt.X += c.pointToFixed(*size);
@@ -349,7 +348,7 @@ func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
 	}
 	//背景有文字干扰
 	if config.IsShowNoiseText {
-		captchaImage.DrawTextNoise(config.ComplexOfNoiseText)
+		captchaImage.DrawTextNoise(config.ComplexOfNoiseText, config.IsUseSimpleFont)
 	}
 
 	//画 细直线 (n 条)
@@ -378,7 +377,7 @@ func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
 		captchaImage.VerifyValue = captchaContent
 	}
 	//写入string
-	captchaImage.DrawText(captchaContent)
+	captchaImage.DrawText(captchaContent, config.IsUseSimpleFont)
 	captchaImage.Content = captchaContent
 	//captchaImage.DrawText(randText(4))
 

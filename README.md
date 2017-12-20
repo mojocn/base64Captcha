@@ -57,6 +57,7 @@ func demoCodeCaptchaCreate() {
 		Mode:               base64Captcha.CaptchaModeNumber,
 		ComplexOfNoiseText: base64Captcha.CaptchaComplexLower,
 		ComplexOfNoiseDot:  base64Captcha.CaptchaComplexLower,
+		IsUseSimpleFont:    true,
 		IsShowHollowLine:   false,
 		IsShowNoiseDot:     false,
 		IsShowNoiseText:    false,
@@ -260,6 +261,8 @@ func main() {
         ComplexOfNoiseText int
         //ComplexOfNoiseDot dot noise count.
         ComplexOfNoiseDot int
+        //IsUseSimpleFont is only use this (...fonts/RitaSmith.ttf)font.
+        IsUseSimpleFont bool
         //IsShowHollowLine is show hollow line.
         IsShowHollowLine bool
         //IsShowNoiseDot is show noise dot.

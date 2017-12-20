@@ -157,7 +157,11 @@
                                        @change="generateCaptcha"></el-slider>
                         </el-form-item>
 
-
+                        <el-form-item label="ConfigCharacter.IsUseSimpleFont">
+                            <el-checkbox v-model="form.ConfigCharacter.IsUseSimpleFont" @change="generateCaptcha">
+                                Is UseSimple Font(...base64Captcha/fonts/RitaSmith.ttf)
+                            </el-checkbox>
+                        </el-form-item>
                         <el-form-item label="Captcha Layer">
                             <el-checkbox v-model="form.ConfigCharacter.IsShowHollowLine" @change="generateCaptcha">
                                 IsShowHollowLine
@@ -278,6 +282,7 @@
                         Mode: 2,
                         ComplexOfNoiseText: 0,
                         ComplexOfNoiseDot: 0,
+                        IsUseSimpleFont:true,
                         IsShowHollowLine: false,
                         IsShowNoiseDot: false,
                         IsShowNoiseText: false,
