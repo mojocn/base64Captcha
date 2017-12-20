@@ -1,6 +1,5 @@
 # Base64captch support digits, numbers,alphabet, arithmetic, audio and digit-alphabet captcha.
-[![Go Report Card](https://goreportcard.com/badge/github.com/mojocn/base64Captcha)](https://goreportcard.com/report/github.com/mojocn/base64Captcha)
-[![GoDoc](https://godoc.org/github.com/mojocn/base64Captcha?status.svg)](https://godoc.org/github.com/mojocn/base64Captcha)
+[![Go Report Card](https://goreportcard.com/badge/github.com/mojocn/base64Captcha)](https://goreportcard.com/report/github.com/mojocn/base64Captcha)[![GoDoc](https://godoc.org/github.com/mojocn/base64Captcha?status.svg)](https://godoc.org/github.com/mojocn/base64Captcha)
 
 Package base64Captcha creates digits-numbers-alphabet-arithmetic-audio(声音,数字,字母,算术,混合) captcha of base64-encoding.
 base64Captcha is used for rapid development of RESTful APIs, web apps and backend services in Go.
@@ -66,10 +65,13 @@ func demoCodeCaptchaCreate() {
 		CaptchaLen:         6,
 	}
 	//create a audio captcha.
+	//GenerateCaptcha first parameter is empty string,so the package will generate a random uuid for you.
 	idKeyA, capA := base64Captcha.GenerateCaptcha("", configA)
 	//write to base64 string.
+	//GenerateCaptcha first parameter is empty string,so the package will generate a random uuid for you.
 	base64stringA := base64Captcha.CaptchaWriteToBase64Encoding(capA)
 	//create a characters captcha.
+	//GenerateCaptcha first parameter is empty string,so the package will generate a random uuid for you.
 	idKeyC, capC := base64Captcha.GenerateCaptcha("", configC)
 	//write to base64 string.
 	base64stringC := base64Captcha.CaptchaWriteToBase64Encoding(capC)

@@ -60,15 +60,18 @@ func demoCodeCaptchaCreate() {
 		IsShowSineLine:     false,
 		CaptchaLen:         6,
 	}
-	//create a audio captcha.
+	//创建声音验证码
+	//GenerateCaptcha 第一个参数为空字符串,包会自动在服务器一个随机种子给你产生随机uiid.
 	idKeyA, capA := base64Captcha.GenerateCaptcha("", configA)
 	//以base64编码
 	base64stringA := base64Captcha.CaptchaWriteToBase64Encoding(capA)
-	//create a characters captcha.
+	//创建字符公式验证码.
+	//GenerateCaptcha 第一个参数为空字符串,包会自动在服务器一个随机种子给你产生随机uiid.
 	idKeyC, capC := base64Captcha.GenerateCaptcha("", configC)
 	//以base64编码
 	base64stringC := base64Captcha.CaptchaWriteToBase64Encoding(capC)
-	//create a digits captcha.
+	//创建数字验证码.
+	//GenerateCaptcha 第一个参数为空字符串,包会自动在服务器一个随机种子给你产生随机uiid.
 	idKeyD, capD := base64Captcha.GenerateCaptcha("", configD)
 	//以base64编码
 	base64stringD := base64Captcha.CaptchaWriteToBase64Encoding(capD)
@@ -153,6 +156,7 @@ func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	default:
 		config = postParameters.ConfigDigit
 	}
+	//GenerateCaptcha 第一个参数为空字符串,包会自动在服务器一个随机种子给你产生随机uiid.
 	captchaId, digitCap := base64Captcha.GenerateCaptcha(postParameters.Id, config)
 	base64Png := base64Captcha.CaptchaWriteToBase64Encoding(digitCap)
 

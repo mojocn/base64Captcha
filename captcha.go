@@ -132,6 +132,7 @@ func VerifyCaptcha(identifier, verifyValue string) bool {
 //		Mode:               base64Captcha.CaptchaModeNumber,
 //		ComplexOfNoiseText: base64Captcha.CaptchaComplexLower,
 //		ComplexOfNoiseDot:  base64Captcha.CaptchaComplexLower,
+//		IsUseSimpleFont:    true,
 //		IsShowHollowLine:   false,
 //		IsShowNoiseDot:     false,
 //		IsShowNoiseText:    false,
@@ -140,10 +141,13 @@ func VerifyCaptcha(identifier, verifyValue string) bool {
 //		CaptchaLen:         6,
 //	}
 //	//create a audio captcha.
+//	//GenerateCaptcha first parameter is empty string,so the package will generate a random uuid for you.
 //	idKeyA,capA := base64Captcha.GenerateCaptcha("",configA)
 //	//write to base64 string.
+//	//GenerateCaptcha first parameter is empty string,so the package will generate a random uuid for you.
 //	base64stringA := base64Captcha.CaptchaWriteToBase64Encoding(capA)
 //	//create a characters captcha.
+//	//GenerateCaptcha first parameter is empty string,so the package will generate a random uuid for you.
 //	idKeyC,capC := base64Captcha.GenerateCaptcha("",configC)
 //	//write to base64 string.
 //	base64stringC := base64Captcha.CaptchaWriteToBase64Encoding(capC)
