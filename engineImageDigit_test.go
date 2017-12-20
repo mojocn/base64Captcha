@@ -7,7 +7,7 @@ import (
 func TestEngineDigitsCreate(t *testing.T) {
 
 	for i := 0; i < 14; i++ {
-		idKey := RandomId()
+		idKey := randomId()
 		im := EngineDigitsCreate(idKey, configD)
 		CaptchaWriteToFile(im, GoTestOutputDir+"/digit", idKey, "png")
 		t.Log(idKey, im.VerifyValue)

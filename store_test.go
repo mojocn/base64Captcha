@@ -52,7 +52,7 @@ func TestCollect(t *testing.T) {
 	ids := make([]string, 10)
 	d := randText(10, TxtAlphabet+TxtNumbers)
 	for i := range ids {
-		ids[i] = RandomId()
+		ids[i] = randomId()
 		s.Set(ids[i], d)
 	}
 	s.(*memoryStore).collect()
@@ -76,7 +76,7 @@ func BenchmarkSetCollect(b *testing.B) {
 	s := NewMemoryStore(9999, -1)
 	ids := make([]string, 1000)
 	for i := range ids {
-		ids[i] = RandomId()
+		ids[i] = randomId()
 	}
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {

@@ -5,12 +5,31 @@ import (
 	"github.com/golang/freetype/truetype"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"os"
+	"path"
+	"path/filepath"
+	"runtime"
 	"strings"
 )
 
 //FontFamilyOfBytes read all font to bytes.
 var FontFamilyOfBytes = make([][]byte, 0)
+var SimpleFont *truetype.Font
+
+func init() {
+
+	//get current package dir path
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		panic("No caller information")
+	}
+	packageDirPath := path.Dir(filename)
+	//loading fonts for engine char
+	readFontsToSliceOfBytes(packageDirPath+"/fonts", ".ttf")
+	//read simply font
+	SimpleFont = readSimpleFont(packageDirPath)
+}
 
 //readFontsToSliceOfBytes import fonts from dir.
 //获取指定目录下的所有文件，不进入下一级目录搜索，可以匹配后缀过滤。
@@ -33,22 +52,45 @@ func readFontsToSliceOfBytes(dirPth string, suffix string) (err error) {
 			if fontBytes, err := ioutil.ReadFile(fontFilePath); err == nil {
 				FontFamilyOfBytes = append(FontFamilyOfBytes, fontBytes)
 			} else {
-				log.Print(err)
+				log.Fatal(err)
 			}
+		} else {
+			log.Fatal("the folder:", dirPth, "has not ", suffix, "font file.")
 		}
 	}
 	return nil
 }
 
 //randFontFamily choose random font family.选择随机的字体
-func randFontFamily() (*truetype.Font, error) {
-	fontBytes := FontFamilyOfBytes[r.Intn(len(FontFamilyOfBytes))]
+func randFontFamily() *truetype.Font {
+	fontCount := len(FontFamilyOfBytes)
+
+	index := 0
+	if fontCount != 1 {
+		index = rand.Intn(fontCount)
+	}
+	fontBytes := FontFamilyOfBytes[index]
 	f, err := freetype.ParseFont(fontBytes)
 	if err != nil {
-		log.Println(err)
-		return &truetype.Font{}, err
+		log.Fatal(err)
 	}
-	return f, nil
+	return f
+}
+
+//read simple font of RitaSmith.ttf for easy mode.
+func readSimpleFont(packageDirPath string) *truetype.Font {
+	fontFilePath := filepath.Join(packageDirPath, "fonts/RitaSmith.ttf")
+	if fontBytes, err := ioutil.ReadFile(fontFilePath); err == nil {
+		if fo, err := freetype.ParseFont(fontBytes); err != nil {
+			log.Println(err)
+			return &truetype.Font{}
+		} else {
+			return fo
+		}
+	} else {
+		log.Println(err)
+		return &truetype.Font{}
+	}
 }
 
 var digitFontData = [][]byte{

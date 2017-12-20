@@ -2,21 +2,17 @@ package base64Captcha
 
 import (
 	"fmt"
+	"image/color"
 	"math"
 	"math/rand"
-	"time"
-
-	"image/color"
 )
 
 //randText create random text. 生成随机文本.
 func randText(num int, sourceChars string) string {
 	textNum := len(sourceChars)
 	text := ""
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-
 	for i := 0; i < num; i++ {
-		text = text + string(sourceChars[r.Intn(textNum)])
+		text = text + string(sourceChars[rand.Intn(textNum)])
 	}
 	return text
 }
@@ -77,7 +73,7 @@ func randDeepColor() color.RGBA {
 
 	randColor := randColor()
 
-	increase := float64(30 + r.Intn(255))
+	increase := float64(30 + rand.Intn(255))
 
 	red := math.Abs(math.Min(float64(randColor.R)-increase, 255))
 
@@ -90,9 +86,9 @@ func randDeepColor() color.RGBA {
 //randLightColor get random ligth color. 随机生成浅色.
 func randLightColor() color.RGBA {
 
-	red := r.Intn(55) + 200
-	green := r.Intn(55) + 200
-	blue := r.Intn(55) + 200
+	red := rand.Intn(55) + 200
+	green := rand.Intn(55) + 200
+	blue := rand.Intn(55) + 200
 
 	return color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
 }
@@ -100,9 +96,9 @@ func randLightColor() color.RGBA {
 //randColor get random color. 生成随机颜色.
 func randColor() color.RGBA {
 
-	red := r.Intn(255)
-	green := r.Intn(255)
-	blue := r.Intn(255)
+	red := rand.Intn(255)
+	green := rand.Intn(255)
+	blue := rand.Intn(255)
 	if (red + green) > 400 {
 		blue = 0
 	} else {

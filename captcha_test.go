@@ -26,6 +26,7 @@ var configC = ConfigCharacter{
 	Mode:               0,
 	ComplexOfNoiseText: 0,
 	ComplexOfNoiseDot:  0,
+	IsUseSimpleFont:    true,
 	IsShowHollowLine:   false,
 	IsShowNoiseDot:     false,
 	IsShowNoiseText:    false,
@@ -44,7 +45,7 @@ func TestGenerateCaptcha(t *testing.T) {
 		}
 		CaptchaWriteToFile(cap, GoTestOutputDir+"/all", idkey, ext)
 
-		t.Log(idkey, globalStore.Get(idkey, false))
+		//t.Log(idkey, globalStore.Get(idkey, false))
 
 	}
 
@@ -54,7 +55,7 @@ func TestGenerateCaptcha(t *testing.T) {
 		ext := "png"
 		CaptchaWriteToFile(cap, GoTestOutputDir+"/all", "char_"+idkey, ext)
 
-		t.Log(idkey, globalStore.Get(idkey, false))
+		//t.Log(idkey, globalStore.Get(idkey, false))
 
 	}
 }

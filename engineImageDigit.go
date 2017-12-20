@@ -94,7 +94,7 @@ func EngineDigitsCreate(id string, config ConfigDigit) *CaptchaImageDigit {
 	// Initialize PRNG.
 	m := new(CaptchaImageDigit)
 	//parse digits to string
-	m.VerifyValue = ParseDigitsToString(digits)
+	m.VerifyValue = parseDigitsToString(digits)
 
 	m.rng.Seed(deriveSeed(imageSeedPurpose, id, digits))
 
