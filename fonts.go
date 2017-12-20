@@ -8,14 +8,12 @@ import (
 	"math/rand"
 	"os"
 	"path"
-	"path/filepath"
 	"runtime"
 	"strings"
 )
 
 //FontFamilyOfBytes read all font to bytes.
-var FontFamilyOfBytes = make([][]byte, 0)
-var SimpleFont *truetype.Font
+var trueTypeFontFamilys = make([]*truetype.Font, 0)
 
 func init() {
 
@@ -26,71 +24,53 @@ func init() {
 	}
 	packageDirPath := path.Dir(filename)
 	//loading fonts for engine char
-	readFontsToSliceOfBytes(packageDirPath+"/fonts", ".ttf")
-	//read simply font
-	SimpleFont = readSimpleFont(packageDirPath)
+	readFontsToSliceOfTrueTypeFonts(packageDirPath+"/fonts", ".ttf")
 }
 
-//readFontsToSliceOfBytes import fonts from dir.
-//获取指定目录下的所有文件，不进入下一级目录搜索，可以匹配后缀过滤。
-func readFontsToSliceOfBytes(dirPth string, suffix string) (err error) {
+//readFontsToSliceOfTrueTypeFonts import fonts from dir.
+//make the simple-font(RitaSmith.ttf) the first font of trueTypeFonts.
+func readFontsToSliceOfTrueTypeFonts(dirPth string, suffix string) {
+	//read folder.
 	dir, err := ioutil.ReadDir(dirPth)
 	if err != nil {
-		return err
+		log.Fatal(err)
 	}
 	PthSep := string(os.PathSeparator)
-	suffix = strings.ToUpper(suffix) //忽略后缀匹配的大小写
-	for _, fi := range dir {
-		if fi.IsDir() { // 忽略目录
-			continue
-		}
+	for _, file := range dir {
+		fileName := file.Name()
 		//匹配文件 ttf 文件
-		if strings.HasSuffix(strings.ToUpper(fi.Name()), suffix) {
+		if strings.HasSuffix(fileName, suffix) {
 			//获取字体文件路径
-			fontFilePath := dirPth + PthSep + fi.Name()
+			fontFilePath := dirPth + PthSep + fileName
 			//读取字体文件路径到bytes
 			if fontBytes, err := ioutil.ReadFile(fontFilePath); err == nil {
-				FontFamilyOfBytes = append(FontFamilyOfBytes, fontBytes)
+				//font file bytes to trueTypeFont
+				if trueTypeFont, err := freetype.ParseFont(fontBytes); err == nil {
+					//RitaSmith.ttf is for font simple mode.
+					if strings.Contains(fileName, "RitaSmith.ttf") {
+						//pre-append simple font.
+						trueTypeFontFamilys = append([]*truetype.Font{trueTypeFont}, trueTypeFontFamilys...)
+					} else {
+						trueTypeFontFamilys = append(trueTypeFontFamilys, trueTypeFont)
+					}
+				} else {
+					log.Fatal(err)
+				}
 			} else {
 				log.Fatal(err)
 			}
-		} else {
-			log.Fatal("the folder:", dirPth, "has not ", suffix, "font file.")
 		}
 	}
-	return nil
 }
 
 //randFontFamily choose random font family.选择随机的字体
 func randFontFamily() *truetype.Font {
-	fontCount := len(FontFamilyOfBytes)
-
-	index := 0
-	if fontCount != 1 {
-		index = rand.Intn(fontCount)
+	fontCount := len(trueTypeFontFamilys)
+	if fontCount == 0 {
+		log.Fatal("FontFamily is empty!")
 	}
-	fontBytes := FontFamilyOfBytes[index]
-	f, err := freetype.ParseFont(fontBytes)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return f
-}
-
-//read simple font of RitaSmith.ttf for easy mode.
-func readSimpleFont(packageDirPath string) *truetype.Font {
-	fontFilePath := filepath.Join(packageDirPath, "fonts/RitaSmith.ttf")
-	if fontBytes, err := ioutil.ReadFile(fontFilePath); err == nil {
-		if fo, err := freetype.ParseFont(fontBytes); err != nil {
-			log.Println(err)
-			return &truetype.Font{}
-		} else {
-			return fo
-		}
-	} else {
-		log.Println(err)
-		return &truetype.Font{}
-	}
+	index := rand.Intn(fontCount)
+	return trueTypeFontFamilys[index]
 }
 
 var digitFontData = [][]byte{

@@ -276,7 +276,7 @@ func (captcha *CaptchaImageChar) DrawTextNoise(complex int, isSimpleFont bool) e
 		c.SetFontSize(fontSize)
 
 		if isSimpleFont {
-			c.SetFont(SimpleFont)
+			c.SetFont(trueTypeFontFamilys[0])
 		} else {
 			f := randFontFamily()
 			c.SetFont(f)
@@ -310,7 +310,7 @@ func (captcha *CaptchaImageChar) DrawText(text string, isSimpleFont bool) error 
 		c.SetFontSize(fontSize)
 
 		if isSimpleFont {
-			c.SetFont(SimpleFont)
+			c.SetFont(trueTypeFontFamilys[0])
 		} else {
 			f := randFontFamily()
 			c.SetFont(f)
