@@ -26,7 +26,7 @@ var configC = ConfigCharacter{
 	Mode:               0,
 	ComplexOfNoiseText: 0,
 	ComplexOfNoiseDot:  0,
-	IsUseSimpleFont:    true,
+	IsUseSimpleFont:    false,
 	IsShowHollowLine:   false,
 	IsShowNoiseDot:     false,
 	IsShowNoiseText:    false,

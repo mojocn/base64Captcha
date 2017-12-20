@@ -17,6 +17,10 @@ Base64是网络上最常见的用于传输8Bit字节代码的编码方式之一�
 [![28+58=?.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/28%2B58%3D%3F.png)](http://captcha.mojotv.cn/ "Playground")
 [![ACNRfd.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/ACNRfd.png)](http://captcha.mojotv.cn/ "Playground")
 [![rW4npZ.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/rW4npZ.png)](http://captcha.mojotv.cn/ "Playground")
+[![99+73=?.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/99%2B73%3D%3F.png)](http://captcha.mojotv.cn/ "Playground")
+[![ctOv6N.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/ctOv6N.png)](http://captcha.mojotv.cn/ "Playground")
+[![gGncJC.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/gGncJC.png)](http://captcha.mojotv.cn/ "Playground")
+[![108360.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/108360.png)](http://captcha.mojotv.cn/ "Playground")
 [wav file](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/1lNMVxfysfSQJXvjR1LX.wav)
 
 
@@ -116,21 +120,6 @@ type ConfigJsonBody struct {
 	ConfigCharacter base64Captcha.ConfigCharacter
 	ConfigDigit     base64Captcha.ConfigDigit
 }
-
-var configC = base64Captcha.ConfigCharacter{
-	Height:             60,
-	Width:              240,
-	Mode:               0,
-	ComplexOfNoiseText: 0,
-	ComplexOfNoiseDot:  0,
-	IsShowHollowLine:   false,
-	IsShowNoiseDot:     false,
-	IsShowNoiseText:    false,
-	IsShowSlimeLine:    false,
-	IsShowSineLine:     false,
-	CaptchaLen:         6,
-}
-
 
 // base64Captcha create http handler
 func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
