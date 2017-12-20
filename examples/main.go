@@ -44,6 +44,7 @@ func demoCode() {
 		Mode:               base64Captcha.CaptchaModeNumber,
 		ComplexOfNoiseText: base64Captcha.CaptchaComplexLower,
 		ComplexOfNoiseDot:  base64Captcha.CaptchaComplexLower,
+		IsUseSimpleFont:    true,
 		IsShowHollowLine:   false,
 		IsShowNoiseDot:     false,
 		IsShowNoiseText:    false,
