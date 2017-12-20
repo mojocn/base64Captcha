@@ -64,9 +64,9 @@ func demoCode() {
 	//write to base64 string.
 	base64stringD := base64Captcha.CaptchaWriteToBase64Encoding(capD)
 
-	fmt.Println(idKeyA, base64stringA, "\n")
-	fmt.Println(idKeyC, base64stringC, "\n")
-	fmt.Println(idKeyD, base64stringD, "\n")
+	fmt.Println(idKeyA, base64stringA)
+	fmt.Println(idKeyC, base64stringC)
+	fmt.Println(idKeyD, base64stringD)
 }
 
 // base64Captcha create http handler

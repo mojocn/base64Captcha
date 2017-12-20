@@ -8,24 +8,7 @@ give a string identifier to the package and it returns with a base64-encoding-pn
 #### Why Base64 for RESTful Application
       Data URIs are now supported by all major browsers. IE supports embedding images since version 8 as well.
       RESTful Application retruns small base64 image is more convenient.
-A Data URI takes the format:
-```
-data:[<MIME-type>][;charset=<encoding>][;base64],<data>
-```
-CSS Image Embedding Example
-```css
-div.image {
-  background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIA...);
-}
-```
-HTML Image Embedding Example
-```html
-<img alt="Embedded Image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIA..." />
-```
-Similarily, if you wanted to encode an Ogg audio file, you would use the MIME type audio/ogg as follows:
-```
-<audio controls src="data:audio/ogg;base64,T2dnUwACAAAAAAAAAAA+..........+fm5nB6slBlZ3Fcha363d5ut7u3ni1rLoPf728l3KcK" />
-```
+
 #### Documentation
 
 * [English](https://godoc.org/github.com/mojocn/base64Captcha)

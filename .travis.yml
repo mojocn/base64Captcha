@@ -1,0 +1,15 @@
+language: go
+
+go:
+  - 1.8.x
+  - 1.9.x
+
+script:
+  - go test -race -coverprofile=coverage.txt -covermode=atomic
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+notifications:
+  email:
+    on_success: never
