@@ -13,23 +13,21 @@ import (
 )
 
 //FontFamilyOfBytes read all font to bytes.
-var trueTypeFontFamilys = make([]*truetype.Font, 0)
+var trueTypeFontFamilys = readFontsToSliceOfTrueTypeFonts()
 
-func init() {
-
+//readFontsToSliceOfTrueTypeFonts import fonts from dir.
+//make the simple-font(RitaSmith.ttf) the first font of trueTypeFonts.
+func readFontsToSliceOfTrueTypeFonts() []*truetype.Font {
+	fonts := make([]*truetype.Font, 0)
 	//get current package dir path
 	_, filename, _, ok := runtime.Caller(0)
 	if !ok {
 		panic("No caller information")
 	}
 	packageDirPath := path.Dir(filename)
-	//loading fonts for engine char
-	readFontsToSliceOfTrueTypeFonts(packageDirPath+"/fonts", ".ttf")
-}
+	dirPth := packageDirPath + "/fonts"
+	suffix := ".ttf"
 
-//readFontsToSliceOfTrueTypeFonts import fonts from dir.
-//make the simple-font(RitaSmith.ttf) the first font of trueTypeFonts.
-func readFontsToSliceOfTrueTypeFonts(dirPth string, suffix string) {
 	//read folder.
 	dir, err := ioutil.ReadDir(dirPth)
 	if err != nil {
@@ -49,9 +47,9 @@ func readFontsToSliceOfTrueTypeFonts(dirPth string, suffix string) {
 					//RitaSmith.ttf is for font simple mode.
 					if strings.Contains(fileName, "RitaSmith.ttf") {
 						//pre-append simple font.
-						trueTypeFontFamilys = append([]*truetype.Font{trueTypeFont}, trueTypeFontFamilys...)
+						fonts = append([]*truetype.Font{trueTypeFont}, fonts...)
 					} else {
-						trueTypeFontFamilys = append(trueTypeFontFamilys, trueTypeFont)
+						fonts = append(fonts, trueTypeFont)
 					}
 				} else {
 					log.Println(err)
@@ -61,6 +59,7 @@ func readFontsToSliceOfTrueTypeFonts(dirPth string, suffix string) {
 			}
 		}
 	}
+	return fonts
 }
 
 //randFontFamily choose random font family.选择随机的字体
