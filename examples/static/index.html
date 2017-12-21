@@ -139,6 +139,8 @@
                         <el-form-item label="ConfigCharacter.Mode">
                             <el-slider v-model="form.ConfigCharacter.Mode" :min="0" :max="3"
                                        show-input
+                                       show-stops
+                                       :format-tooltip="formatTooltip"
                                        @change="generateCaptcha"></el-slider>
                         </el-form-item>
                         <el-form-item label="ConfigCharacter.CaptchaLen" v-show="form.ConfigCharacter.Mode !== 2">
@@ -159,7 +161,7 @@
 
                         <el-form-item label="ConfigCharacter.IsUseSimpleFont">
                             <el-checkbox v-model="form.ConfigCharacter.IsUseSimpleFont" @change="generateCaptcha">
-                                Is UseSimple Font(...base64Captcha/fonts/RitaSmith.ttf)
+                                ...base64Captcha/fonts/RitaSmith.ttf
                             </el-checkbox>
                         </el-form-item>
                         <el-form-item label="Captcha Layer">
@@ -303,7 +305,10 @@
             }
         },
         methods: {
-
+            formatTooltip:function(val) {
+                var items = ['CaptchaModeNumber','CaptchaModeAlphabet','CaptchaModeArithmetic','CaptchaModeNumberAlphabet'];
+                return items[val];
+            },
             handleClick:function(tab, event) {
                 this.generateCaptcha();
             },
