@@ -285,7 +285,7 @@ func (captcha *CaptchaImageChar) DrawTextNoise(complex int, isSimpleFont bool) e
 		pt := freetype.Pt(rw, rh)
 
 		if _, err := c.DrawString(text, pt); err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 	}
 	return nil
@@ -323,7 +323,7 @@ func (captcha *CaptchaImageChar) DrawText(text string, isSimpleFont bool) error 
 		pt := freetype.Pt(x, y)
 
 		if _, err := c.DrawString(string(s), pt); err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		//pt.Y += c.pointToFixed(*size * *spacing)
 		//pt.X += c.pointToFixed(*size);

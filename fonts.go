@@ -33,7 +33,7 @@ func readFontsToSliceOfTrueTypeFonts(dirPth string, suffix string) {
 	//read folder.
 	dir, err := ioutil.ReadDir(dirPth)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	PthSep := string(os.PathSeparator)
 	for _, file := range dir {
@@ -54,10 +54,10 @@ func readFontsToSliceOfTrueTypeFonts(dirPth string, suffix string) {
 						trueTypeFontFamilys = append(trueTypeFontFamilys, trueTypeFont)
 					}
 				} else {
-					log.Fatal(err)
+					log.Println(err)
 				}
 			} else {
-				log.Fatal(err)
+				log.Println(err)
 			}
 		}
 	}
@@ -67,7 +67,7 @@ func readFontsToSliceOfTrueTypeFonts(dirPth string, suffix string) {
 func randFontFamily() *truetype.Font {
 	fontCount := len(trueTypeFontFamilys)
 	if fontCount == 0 {
-		log.Fatal("FontFamily is empty!")
+		log.Println("FontFamily is empty!")
 	}
 	index := rand.Intn(fontCount)
 	return trueTypeFontFamilys[index]
