@@ -31,9 +31,6 @@ func appendAssetFontToTrueTypeFonts(assetName string, fonts []*truetype.Font) []
 //randFontFamily choose random font family.选择随机的字体
 func randFontFamily() *truetype.Font {
 	fontCount := len(trueTypeFontFamilys)
-	if fontCount == 0 {
-		log.Fatal("FontFamily is empty!没有加载到字体!")
-	}
 	index := rand.Intn(fontCount)
 	return trueTypeFontFamilys[index]
 }

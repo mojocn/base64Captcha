@@ -2,6 +2,8 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/mojocn/base64Captcha)](https://goreportcard.com/report/github.com/mojocn/base64Captcha)
 [![GoDoc](https://godoc.org/github.com/mojocn/base64Captcha?status.svg)](https://godoc.org/github.com/mojocn/base64Captcha)
 [![codecov](https://codecov.io/gh/mojocn/base64Captcha/branch/master/graph/badge.svg)](https://codecov.io/gh/mojocn/base64Captcha)
+![stability-stable](https://img.shields.io/badge/stability-stable-brightgreen.svg)
+[![codebeat badge](https://codebeat.co/badges/650029a5-fcea-4416-925e-277e2f178e96)](https://codebeat.co/projects/github-com-mojocn-base64captcha-master)
 
 Base64captch supports digit, number, alphabet, arithmetic, audio and digit-alphabet captcha.
 Base64Captcha is used for fast development of RESTful APIs, web apps and backend services in Go.
