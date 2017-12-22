@@ -66,8 +66,15 @@ func TestGenerateCaptcha(t *testing.T) {
 func TestCaptchaWriteToBase64Encoding(t *testing.T) {
 	idkey, cap := GenerateCaptcha("", configD)
 	base64string := CaptchaWriteToBase64Encoding(cap)
-	if strings.Contains(base64string, "base64,") {
+	if strings.Contains(base64string, MimeTypeCaptchaImage) {
 		t.Log(base64string, idkey)
+	} else {
+		t.Error("encodeing base64 string failed.")
+	}
+	idkeyA, capA := GenerateCaptcha("", configA)
+	base64stringA := CaptchaWriteToBase64Encoding(capA)
+	if strings.Contains(base64stringA, MimeTypeCaptchaAudio) {
+		t.Log(base64string, idkeyA)
 	} else {
 		t.Error("encodeing base64 string failed.")
 	}
