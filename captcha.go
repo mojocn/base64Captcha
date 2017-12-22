@@ -71,11 +71,8 @@ func CaptchaWriteToFile(cap CaptchaInterface, outputDir, fileName, fileExt strin
 		return err
 	}
 	defer file.Close()
-	if _, err = cap.WriteTo(file); err == nil {
-		return nil
-	} else {
-		return err
-	}
+	_, err = cap.WriteTo(file)
+	return err
 }
 
 //CaptchaItem captcha basic information.

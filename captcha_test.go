@@ -77,9 +77,10 @@ func TestCaptchaWriteToBase64Encoding(t *testing.T) {
 func TestVerifyCaptcha(t *testing.T) {
 	idkey, _ := GenerateCaptcha("", configD)
 	verifyValue := globalStore.Get(idkey, false)
-	if verifyValue == "" {
-		t.Error("verify captcha content is failed.")
+	if VerifyCaptcha(idkey, verifyValue) {
+		t.Log(idkey, verifyValue)
 	} else {
-		t.Log(verifyValue)
+		t.Error("verify captcha content is failed.")
+
 	}
 }

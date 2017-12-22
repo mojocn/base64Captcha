@@ -16,17 +16,15 @@ func readFontsToSliceOfTrueTypeFonts() []*truetype.Font {
 	//RitaSmith.ttf is first element for font simple mode.
 	assetFontNames := []string{"fonts/RitaSmith.ttf", "fonts/actionj.ttf", "fonts/chromohv.ttf", "fonts/Flim-Flam.ttf", "fonts/DeborahFancyDress.ttf", "fonts/DENNEthree-dee.ttf", "fonts/Comismsh.ttf", "fonts/ApothecaryFont.ttf", "fonts/3Dumb.ttf"}
 	for _, assetName := range assetFontNames {
-		if fontBytes, err := Asset(assetName); err == nil {
-			//font file bytes to trueTypeFont
-			if trueTypeFont, err := freetype.ParseFont(fontBytes); err == nil {
-				fonts = append(fonts, trueTypeFont)
-			} else {
-				log.Println(err, "bin to true font failded")
-			}
-		} else {
-			log.Println(err, "data asset bin failed")
-		}
+		fonts = appendAssetFontToTrueTypeFonts(assetName, fonts)
 	}
+	return fonts
+}
+func appendAssetFontToTrueTypeFonts(assetName string, fonts []*truetype.Font) []*truetype.Font {
+	fontBytes, _ := Asset(assetName)
+	//font file bytes to trueTypeFont
+	trueTypeFont, _ := freetype.ParseFont(fontBytes)
+	fonts = append(fonts, trueTypeFont)
 	return fonts
 }
 
