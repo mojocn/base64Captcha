@@ -1,16 +1,10 @@
 package base64Captcha
 
 import (
-	"fmt"
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
-	"io/ioutil"
 	"log"
 	"math/rand"
-	"os"
-	"path"
-	"runtime"
-	"strings"
 )
 
 //FontFamilyOfBytes read all font to bytes.
@@ -19,45 +13,18 @@ import (
 //make the simple-font(RitaSmith.ttf) the first font of trueTypeFonts.
 func readFontsToSliceOfTrueTypeFonts() []*truetype.Font {
 	fonts := make([]*truetype.Font, 0)
-	//get current package dir path
-	_, filename, _, ok := runtime.Caller(0)
-	if !ok {
-		panic("No caller information")
-	}
-	fontDirPath := path.Dir(filename) + "/fonts"
-	fmt.Println(fontDirPath)
-	fontDirPath = strings.Replace(fontDirPath, "_test/_obj_test/", "", 1)
-	suffix := ".ttf"
-
-	//read folder.
-	dir, err := ioutil.ReadDir(fontDirPath)
-	if err != nil {
-		log.Println(err)
-	}
-	PthSep := string(os.PathSeparator)
-	for _, file := range dir {
-		fileName := file.Name()
-		//匹配文件 ttf 文件
-		if strings.HasSuffix(fileName, suffix) {
-			//获取字体文件路径
-			fontFilePath := fontDirPath + PthSep + fileName
-			//读取字体文件路径到bytes
-			if fontBytes, err := ioutil.ReadFile(fontFilePath); err == nil {
-				//font file bytes to trueTypeFont
-				if trueTypeFont, err := freetype.ParseFont(fontBytes); err == nil {
-					//RitaSmith.ttf is for font simple mode.
-					if strings.Contains(fileName, "RitaSmith.ttf") {
-						//pre-append simple font.
-						fonts = append([]*truetype.Font{trueTypeFont}, fonts...)
-					} else {
-						fonts = append(fonts, trueTypeFont)
-					}
-				} else {
-					log.Println(err)
-				}
+	//RitaSmith.ttf is first element for font simple mode.
+	assetFontNames := []string{"fonts/RitaSmith.ttf", "fonts/actionj.ttf", "fonts/chromohv.ttf", "fonts/Flim-Flam.ttf", "fonts/DeborahFancyDress.ttf", "fonts/DENNEthree-dee.ttf", "fonts/Comismsh.ttf", "fonts/ApothecaryFont.ttf", "fonts/3Dumb.ttf"}
+	for _, assetName := range assetFontNames {
+		if fontBytes, err := Asset(assetName); err == nil {
+			//font file bytes to trueTypeFont
+			if trueTypeFont, err := freetype.ParseFont(fontBytes); err == nil {
+				fonts = append(fonts, trueTypeFont)
 			} else {
-				log.Println(err)
+				log.Println(err, "bin to true font failded")
 			}
+		} else {
+			log.Println(err, "data asset bin failed")
 		}
 	}
 	return fonts
