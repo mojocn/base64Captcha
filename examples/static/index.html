@@ -11,7 +11,10 @@
             background-color: #B3C0D1;
             color: #333;
             text-align: center;
-            line-height: 77px;
+            line-height: 0px;
+        }
+        .el-header > p{
+            margin-top: 12px!important;
         }
 
         .el-main {
@@ -70,37 +73,45 @@
 <div id="app">
 
     <el-container>
-        <el-header>
+        <el-header
+                style="height: 90px!important;"
+        >
             <!-- Place this tag where you want the button to render. -->
-            <a class="github-button" href="https://github.com/mojocn/base64captcha" data-size="large"
-               data-show-count="true" aria-label="Star mojocn/base64captcha on GitHub">Star</a>
-            <!-- Place this tag where you want the button to render. -->
-            <a class="github-button" href="https://github.com/mojocn" data-size="large" data-show-count="true"
-               aria-label="Follow @mojocn on GitHub">Follow @mojocn</a>
-            <!-- Place this tag where you want the button to render. -->
-            <a class="github-button" href="https://github.com/mojocn/base64captcha/issues" data-size="large"
-               data-show-count="true" aria-label="Issue mojocn/base64captcha on GitHub">Issue</a>
-            <!-- Place this tag where you want the button to render. -->
-            <a class="github-button" href="https://github.com/mojocn/base64captcha/archive/master.zip"
-               data-size="large" aria-label="Download mojocn/base64captcha on GitHub">Download</a>
-            <a href="https://godoc.org/github.com/mojocn/base64Captcha" rel="nofollow"><img
-                    src="https://camo.githubusercontent.com/600bdcf87a3b63b5300c6673401901196360a82a/68747470733a2f2f676f646f632e6f72672f6769746875622e636f6d2f6d6f6a6f636e2f626173653634436170746368613f7374617475732e737667"
-                    alt="GoDoc" data-canonical-src="https://godoc.org/github.com/mojocn/base64Captcha?status.svg"
-                    style="max-width:100%;"></a>
-            <a href="https://goreportcard.com/report/github.com/mojocn/base64Captcha" rel="nofollow"><img
-                    src="https://camo.githubusercontent.com/0848346ead4693b8b2d975d8cbbb032945fb708d/68747470733a2f2f676f7265706f7274636172642e636f6d2f62616467652f6769746875622e636f6d2f6d6f6a6f636e2f62617365363443617074636861"
-                    alt="Go Report Card"
-                    data-canonical-src="https://goreportcard.com/badge/github.com/mojocn/base64Captcha"
-                    style="max-width:100%;">
-            </a>
-            <a href="http://golangfoundation.org" rel="nofollow"><img src="https://camo.githubusercontent.com/36f4996a1c92724272c100659936593ff0909a29/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f476f6c616e672d466f756e646174696f6e2d677265656e2e737667" alt="Foundation" data-canonical-src="https://img.shields.io/badge/Golang-Foundation-green.svg" style="max-width:100%;"></a>
-            <a href="https://codecov.io/gh/mojocn/base64Captcha">
-                <img src="https://codecov.io/gh/mojocn/base64Captcha/branch/master/graph/badge.svg" />
-            </a>
-            <a href="https://codebeat.co/projects/github-com-mojocn-base64captcha-master"><img alt="codebeat badge" src="https://codebeat.co/badges/650029a5-fcea-4416-925e-277e2f178e96" /></a>
+            <p>
+                <a class="github-button" href="https://github.com/mojocn/base64captcha" data-size="large"
+                   data-show-count="true" aria-label="Star mojocn/base64captcha on GitHub">Star</a>
+                <!-- Place this tag where you want the button to render. -->
+                <a class="github-button" href="https://github.com/mojocn" data-size="large" data-show-count="true"
+                   aria-label="Follow @mojocn on GitHub">Follow @mojocn</a>
+                <!-- Place this tag where you want the button to render. -->
+                <a class="github-button" href="https://github.com/mojocn/base64captcha/issues" data-size="large"
+                   data-show-count="true" aria-label="Issue mojocn/base64captcha on GitHub">Issue</a>
+                <!-- Place this tag where you want the button to render. -->
+                <a class="github-button" href="https://github.com/mojocn/base64captcha/archive/master.zip"
+                   data-size="large" aria-label="Download mojocn/base64captcha on GitHub">Download</a>
+            </p>
+            <p>
+                <a href="https://godoc.org/github.com/mojocn/base64Captcha" rel="nofollow"><img
+                        src="https://camo.githubusercontent.com/600bdcf87a3b63b5300c6673401901196360a82a/68747470733a2f2f676f646f632e6f72672f6769746875622e636f6d2f6d6f6a6f636e2f626173653634436170746368613f7374617475732e737667"
+                        alt="GoDoc" data-canonical-src="https://godoc.org/github.com/mojocn/base64Captcha?status.svg"
+                        style="max-width:100%;"></a>
+                <a href="https://goreportcard.com/report/github.com/mojocn/base64Captcha" rel="nofollow"><img
+                        src="https://camo.githubusercontent.com/0848346ead4693b8b2d975d8cbbb032945fb708d/68747470733a2f2f676f7265706f7274636172642e636f6d2f62616467652f6769746875622e636f6d2f6d6f6a6f636e2f62617365363443617074636861"
+                        alt="Go Report Card"
+                        data-canonical-src="https://goreportcard.com/badge/github.com/mojocn/base64Captcha"
+                        style="max-width:100%;">
+                </a>
+                <a href="http://golangfoundation.org" rel="nofollow"><img src="https://camo.githubusercontent.com/36f4996a1c92724272c100659936593ff0909a29/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f476f6c616e672d466f756e646174696f6e2d677265656e2e737667" alt="Foundation" data-canonical-src="https://img.shields.io/badge/Golang-Foundation-green.svg" style="max-width:100%;"></a>
+                <a href="https://codecov.io/gh/mojocn/base64Captcha">
+                    <img src="https://codecov.io/gh/mojocn/base64Captcha/branch/master/graph/badge.svg" />
+                </a>
+                <a href="https://codebeat.co/projects/github-com-mojocn-base64captcha-master"><img alt="codebeat badge" src="https://codebeat.co/badges/650029a5-fcea-4416-925e-277e2f178e96" /></a>
 
-            <a href="http://doge.mit-license.org"><img src="https://camo.githubusercontent.com/3d7aa1ddbfa86368152bf42123c17b69ea8070be/687474703a2f2f696d672e736869656c64732e696f2f3a6c6963656e73652d6d69742d626c75652e737667" alt="License" data-canonical-src="http://img.shields.io/:license-mit-blue.svg" style="max-width:100%;"></a>
-            <a href="https://camo.githubusercontent.com/69f50fbca17d6577018651ff9afcb55cdac03bc4/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f73746162696c6974792d737461626c652d627269676874677265656e2e737667" target="_blank"><img src="https://camo.githubusercontent.com/69f50fbca17d6577018651ff9afcb55cdac03bc4/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f73746162696c6974792d737461626c652d627269676874677265656e2e737667" alt="stability-stable" data-canonical-src="https://img.shields.io/badge/stability-stable-brightgreen.svg" style="max-width:100%;"></a>
+                <a href="http://doge.mit-license.org"><img src="https://camo.githubusercontent.com/3d7aa1ddbfa86368152bf42123c17b69ea8070be/687474703a2f2f696d672e736869656c64732e696f2f3a6c6963656e73652d6d69742d626c75652e737667" alt="License" data-canonical-src="http://img.shields.io/:license-mit-blue.svg" style="max-width:100%;"></a>
+                <a href="https://camo.githubusercontent.com/69f50fbca17d6577018651ff9afcb55cdac03bc4/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f73746162696c6974792d737461626c652d627269676874677265656e2e737667" target="_blank"><img src="https://camo.githubusercontent.com/69f50fbca17d6577018651ff9afcb55cdac03bc4/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f73746162696c6974792d737461626c652d627269676874677265656e2e737667" alt="stability-stable" data-canonical-src="https://img.shields.io/badge/stability-stable-brightgreen.svg" style="max-width:100%;"></a>
+            </p>
+
+
         </el-header>
         <el-main>
             <h3 class="title">Base64 Captcha Playground</h3>

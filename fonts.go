@@ -3,7 +3,6 @@ package base64Captcha
 import (
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
-	"log"
 	"math/rand"
 )
 
