@@ -3,71 +3,38 @@ package base64Captcha
 import (
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
-	"io/ioutil"
 	"log"
 	"math/rand"
-	"os"
-	"path"
-	"runtime"
-	"strings"
 )
 
 //FontFamilyOfBytes read all font to bytes.
-var trueTypeFontFamilys = make([]*truetype.Font, 0)
-
-func init() {
-
-	//get current package dir path
-	_, filename, _, ok := runtime.Caller(0)
-	if !ok {
-		panic("No caller information")
-	}
-	packageDirPath := path.Dir(filename)
-	//loading fonts for engine char
-	readFontsToSliceOfTrueTypeFonts(packageDirPath+"/fonts", ".ttf")
-}
 
 //readFontsToSliceOfTrueTypeFonts import fonts from dir.
 //make the simple-font(RitaSmith.ttf) the first font of trueTypeFonts.
-func readFontsToSliceOfTrueTypeFonts(dirPth string, suffix string) {
-	//read folder.
-	dir, err := ioutil.ReadDir(dirPth)
-	if err != nil {
-		log.Fatal(err)
-	}
-	PthSep := string(os.PathSeparator)
-	for _, file := range dir {
-		fileName := file.Name()
-		//匹配文件 ttf 文件
-		if strings.HasSuffix(fileName, suffix) {
-			//获取字体文件路径
-			fontFilePath := dirPth + PthSep + fileName
-			//读取字体文件路径到bytes
-			if fontBytes, err := ioutil.ReadFile(fontFilePath); err == nil {
-				//font file bytes to trueTypeFont
-				if trueTypeFont, err := freetype.ParseFont(fontBytes); err == nil {
-					//RitaSmith.ttf is for font simple mode.
-					if strings.Contains(fileName, "RitaSmith.ttf") {
-						//pre-append simple font.
-						trueTypeFontFamilys = append([]*truetype.Font{trueTypeFont}, trueTypeFontFamilys...)
-					} else {
-						trueTypeFontFamilys = append(trueTypeFontFamilys, trueTypeFont)
-					}
-				} else {
-					log.Fatal(err)
-				}
+func readFontsToSliceOfTrueTypeFonts() []*truetype.Font {
+	fonts := make([]*truetype.Font, 0)
+	//RitaSmith.ttf is first element for font simple mode.
+	assetFontNames := []string{"fonts/RitaSmith.ttf", "fonts/actionj.ttf", "fonts/chromohv.ttf", "fonts/Flim-Flam.ttf", "fonts/DeborahFancyDress.ttf", "fonts/DENNEthree-dee.ttf", "fonts/Comismsh.ttf", "fonts/ApothecaryFont.ttf", "fonts/3Dumb.ttf"}
+	for _, assetName := range assetFontNames {
+		if fontBytes, err := Asset(assetName); err == nil {
+			//font file bytes to trueTypeFont
+			if trueTypeFont, err := freetype.ParseFont(fontBytes); err == nil {
+				fonts = append(fonts, trueTypeFont)
 			} else {
-				log.Fatal(err)
+				log.Println(err, "bin to true font failded")
 			}
+		} else {
+			log.Println(err, "data asset bin failed")
 		}
 	}
+	return fonts
 }
 
 //randFontFamily choose random font family.选择随机的字体
 func randFontFamily() *truetype.Font {
 	fontCount := len(trueTypeFontFamilys)
 	if fontCount == 0 {
-		log.Fatal("FontFamily is empty!")
+		log.Fatal("FontFamily is empty!没有加载到字体!")
 	}
 	index := rand.Intn(fontCount)
 	return trueTypeFontFamilys[index]

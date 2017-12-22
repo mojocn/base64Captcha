@@ -1,4 +1,4 @@
-# base64Captcha快速生成base64编码图片验证码字符串
+# 快速生成base64编码图片验证码字符串.base64图形验证码(captcha)为golang而设计.
 支持多种样式,算术,数字,字母,混合模式,语音模式.
 
 Base64是网络上最常见的用于传输8Bit字节代码的编码方式之一。Base64编码可用于在HTTP环境下传递较长的标识信息, 直接把base64当成是字符串方式的数据就好了
@@ -28,7 +28,13 @@ Base64是网络上最常见的用于传输8Bit字节代码的编码方式之一�
 
     go get -u github.com/mojocn/base64Captcha
 
-
+对于中国大陆Gopher `go get golang.org/x/image` 失败解决方案:
+```shell
+    cd $GOPATH/src/golang.org/x
+    git clone https://github.com/golang/image.git
+    cd $GOPATH/src/golang.org/x/image
+    go install
+```
 ###  创建图像验证码
 ```
 import "github.com/mojocn/base64Captcha"
@@ -194,6 +200,7 @@ func main() {
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 
 	//api for create captcha
+	//创建图像验证码api
 	http.HandleFunc("/api/getCaptcha", generateCaptchaHandler)
 
 	//api for verify captcha
@@ -211,7 +218,6 @@ func main() {
 
 #### 访问 `http://localhost:777`
 
-如果喜欢,请star 非常感谢.
 
 ## License
 

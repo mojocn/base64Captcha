@@ -61,7 +61,10 @@
 
     </style>
     <!-- Place this tag in your head or just before your close body tag. -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="https://buttons.github.io/buttons.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
 <div id="app">
@@ -139,6 +142,8 @@
                         <el-form-item label="ConfigCharacter.Mode">
                             <el-slider v-model="form.ConfigCharacter.Mode" :min="0" :max="3"
                                        show-input
+                                       show-stops
+                                       :format-tooltip="formatTooltip"
                                        @change="generateCaptcha"></el-slider>
                         </el-form-item>
                         <el-form-item label="ConfigCharacter.CaptchaLen" v-show="form.ConfigCharacter.Mode !== 2">
@@ -159,7 +164,7 @@
 
                         <el-form-item label="ConfigCharacter.IsUseSimpleFont">
                             <el-checkbox v-model="form.ConfigCharacter.IsUseSimpleFont" @change="generateCaptcha">
-                                Is UseSimple Font(...base64Captcha/fonts/RitaSmith.ttf)
+                                ...base64Captcha/fonts/RitaSmith.ttf
                             </el-checkbox>
                         </el-form-item>
                         <el-form-item label="Captcha Layer">
@@ -259,11 +264,8 @@
 </div>
 </body>
 
-<script src="https://unpkg.com/vue/dist/vue.js"></script>
-<script src="https://unpkg.com/element-ui/lib/index.js"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script>
 
+<script>
     new Vue({
         el: '#app',
         data: function () {
@@ -303,7 +305,10 @@
             }
         },
         methods: {
-
+            formatTooltip:function(val) {
+                var items = ['CaptchaModeNumber','CaptchaModeAlphabet','CaptchaModeArithmetic','CaptchaModeNumberAlphabet'];
+                return items[val];
+            },
             handleClick:function(tab, event) {
                 this.generateCaptcha();
             },
