@@ -52,13 +52,12 @@ type CaptchaInterface interface {
 //mimeType is one of "audio/wav" "image/png".
 func CaptchaWriteToBase64Encoding(cap CaptchaInterface) string {
 	binaryData := cap.BinaryEncodeing()
-
-	mimeType := MimeTypeCaptchaImage
-	_, ok := cap.(*Audio)
-	if ok {
+	var mimeType string
+	if _, ok := cap.(*Audio); ok {
 		mimeType = MimeTypeCaptchaAudio
+	} else {
+		mimeType = MimeTypeCaptchaImage
 	}
-
 	return fmt.Sprintf("data:%s;base64,%s", mimeType, base64.StdEncoding.EncodeToString(binaryData))
 }
 
@@ -72,8 +71,11 @@ func CaptchaWriteToFile(cap CaptchaInterface, outputDir, fileName, fileExt strin
 		return err
 	}
 	defer file.Close()
-	_, err = cap.WriteTo(file)
-	return err
+	if _, err = cap.WriteTo(file); err == nil {
+		return nil
+	} else {
+		return err
+	}
 }
 
 //CaptchaItem captcha basic information.

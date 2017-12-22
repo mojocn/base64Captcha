@@ -63,10 +63,10 @@ func deriveSeed(purpose byte, id string, digits []byte) (out [16]byte) {
 	return
 }
 
-// RandomDigits returns a byte slice of the given length containing
+// randomDigits returns a byte slice of the given length containing
 // pseudorandom numbers in range 0-9. The slice can be used as a captcha
 // solution.
-func RandomDigits(length int) []byte {
+func randomDigits(length int) []byte {
 	return randomBytesMod(length, 10)
 }
 
@@ -117,7 +117,7 @@ func randomId() string {
 	return string(b)
 }
 
-//parseDigitsToString parse RandomDigits to normal string
+//parseDigitsToString parse randomDigits to normal string
 func parseDigitsToString(bytes []byte) string {
 	ssbb := make([]byte, len(bytes))
 	for idx, by := range bytes {

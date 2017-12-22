@@ -38,18 +38,18 @@ type Audio struct {
 
 //EngineAudioCreate create captcha with configAudio.
 func EngineAudioCreate(id string, config ConfigAudio) *Audio {
-	digits := RandomDigits(config.CaptchaLen)
-	audio := NewAudio(id, digits, config.Language)
+	digits := randomDigits(config.CaptchaLen)
+	audio := newAudio(id, digits, config.Language)
 	audio.VerifyValue = parseDigitsToString(digits)
 	return audio
 }
 
-// NewAudio returns a new audio captcha with the given digits, where each digit
+// newAudio returns a new audio captcha with the given digits, where each digit
 // must be in range 0-9. Digits are pronounced in the given language. If there
 // are no sounds for the given language, English is used.
 //
 // Possible values for lang are "en", "ja", "ru", "zh".
-func NewAudio(id string, digits []byte, lang string) *Audio {
+func newAudio(id string, digits []byte, lang string) *Audio {
 	a := new(Audio)
 
 	// Initialize PRNG.
@@ -97,8 +97,8 @@ func NewAudio(id string, digits []byte, lang string) *Audio {
 	return a
 }
 
-// EncodedLen returns the length of WAV-encoded audio captcha.
-func (a *Audio) EncodedLen() int {
+// encodedLen returns the length of WAV-encoded audio captcha.
+func (a *Audio) encodedLen() int {
 	return len(waveHeader) + 4 + a.body.Len()
 }
 

@@ -60,9 +60,9 @@ type point struct {
 	Y int
 }
 
-//NewCaptchaImage new blank captchaImage context.
+//newCaptchaImage new blank captchaImage context.
 //新建一个图片对象.
-func NewCaptchaImage(width int, height int, bgColor color.RGBA) (cImage *CaptchaImageChar, err error) {
+func newCaptchaImage(width int, height int, bgColor color.RGBA) (cImage *CaptchaImageChar, err error) {
 	m := image.NewNRGBA(image.Rect(0, 0, width, height))
 	draw.Draw(m, m.Bounds(), &image.Uniform{bgColor}, image.ZP, draw.Src)
 	cImage = &CaptchaImageChar{}
@@ -73,9 +73,9 @@ func NewCaptchaImage(width int, height int, bgColor color.RGBA) (cImage *Captcha
 	return
 }
 
-//DrawHollowLine draw strong and bold white line.
+//drawHollowLine draw strong and bold white line.
 //添加一个较粗的空白直线
-func (captcha *CaptchaImageChar) DrawHollowLine() *CaptchaImageChar {
+func (captcha *CaptchaImageChar) drawHollowLine() *CaptchaImageChar {
 
 	first := captcha.ImageWidth / 20
 	end := first * 19
@@ -111,9 +111,9 @@ func (captcha *CaptchaImageChar) DrawHollowLine() *CaptchaImageChar {
 	return captcha
 }
 
-//DrawSineLine draw a sine line.
+//drawSineLine draw a sine line.
 //画一条正弦曲线.
-func (captcha *CaptchaImageChar) DrawSineLine() *CaptchaImageChar {
+func (captcha *CaptchaImageChar) drawSineLine() *CaptchaImageChar {
 	var py float64
 
 	//振幅
@@ -154,9 +154,9 @@ func (captcha *CaptchaImageChar) DrawSineLine() *CaptchaImageChar {
 	return captcha
 }
 
-//DrawSlimLine draw n slim-random-color lines.
+//drawSlimLine draw n slim-random-color lines.
 //画n条随机颜色的细线
-func (captcha *CaptchaImageChar) DrawSlimLine(num int) *CaptchaImageChar {
+func (captcha *CaptchaImageChar) drawSlimLine(num int) *CaptchaImageChar {
 
 	first := captcha.ImageWidth / 10
 	end := first * 9
@@ -215,9 +215,9 @@ func (captcha *CaptchaImageChar) drawBeeline(point1 point, point2 point, lineCol
 	}
 }
 
-//DrawNoise draw noise dots.
+//drawNoise draw noise dots.
 //画干扰点.
-func (captcha *CaptchaImageChar) DrawNoise(complex int) *CaptchaImageChar {
+func (captcha *CaptchaImageChar) drawNoise(complex int) *CaptchaImageChar {
 	density := 18
 	if complex == CaptchaComplexLower {
 		density = 28
@@ -242,9 +242,9 @@ func (captcha *CaptchaImageChar) DrawNoise(complex int) *CaptchaImageChar {
 	return captcha
 }
 
-//DrawTextNoise draw noises which are single character.
+//drawTextNoise draw noises which are single character.
 //画文字噪点.
-func (captcha *CaptchaImageChar) DrawTextNoise(complex int, isSimpleFont bool) error {
+func (captcha *CaptchaImageChar) drawTextNoise(complex int, isSimpleFont bool) error {
 	density := 1500
 	if complex == CaptchaComplexLower {
 		density = 2000
@@ -293,8 +293,8 @@ func (captcha *CaptchaImageChar) DrawTextNoise(complex int, isSimpleFont bool) e
 	return nil
 }
 
-//DrawText draw captcha string to image.把文字写入图像验证码
-func (captcha *CaptchaImageChar) DrawText(text string, isSimpleFont bool) error {
+//drawText draw captcha string to image.把文字写入图像验证码
+func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool) error {
 	c := freetype.NewContext()
 	c.SetDPI(imageStringDpi)
 
@@ -337,30 +337,30 @@ func (captcha *CaptchaImageChar) DrawText(text string, isSimpleFont bool) error 
 //EngineCharCreate create captcha with config struct.
 func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
 
-	captchaImage, err := NewCaptchaImage(config.Width, config.Height, randLightColor())
+	captchaImage, err := newCaptchaImage(config.Width, config.Height, randLightColor())
 
 	//背景有像素点干扰
 	if config.IsShowNoiseDot {
-		captchaImage.DrawNoise(config.ComplexOfNoiseDot)
+		captchaImage.drawNoise(config.ComplexOfNoiseDot)
 	}
 
 	//波浪线       比较丑
 	if config.IsShowHollowLine {
-		captchaImage.DrawHollowLine()
+		captchaImage.drawHollowLine()
 	}
 	//背景有文字干扰
 	if config.IsShowNoiseText {
-		captchaImage.DrawTextNoise(config.ComplexOfNoiseText, config.IsUseSimpleFont)
+		captchaImage.drawTextNoise(config.ComplexOfNoiseText, config.IsUseSimpleFont)
 	}
 
 	//画 细直线 (n 条)
 	if config.IsShowSlimeLine {
-		captchaImage.DrawSlimLine(3)
+		captchaImage.drawSlimLine(3)
 	}
 
 	//画 多个小波浪线
 	if config.IsShowSineLine {
-		captchaImage.DrawSineLine()
+		captchaImage.drawSineLine()
 	}
 	var captchaContent string
 
@@ -379,9 +379,9 @@ func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
 		captchaImage.VerifyValue = captchaContent
 	}
 	//写入string
-	captchaImage.DrawText(captchaContent, config.IsUseSimpleFont)
+	captchaImage.drawText(captchaContent, config.IsUseSimpleFont)
 	captchaImage.Content = captchaContent
-	//captchaImage.DrawText(randText(4))
+	//captchaImage.drawText(randText(4))
 
 	if err != nil {
 		fmt.Println(err)

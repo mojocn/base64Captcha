@@ -1,6 +1,7 @@
 package base64Captcha
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -53,9 +54,32 @@ func TestGenerateCaptcha(t *testing.T) {
 		configC.Mode = i % 4
 		idkey, cap := GenerateCaptcha("", configC)
 		ext := "png"
-		CaptchaWriteToFile(cap, GoTestOutputDir+"/all", "char_"+idkey, ext)
+		err := CaptchaWriteToFile(cap, GoTestOutputDir+"/all", "char_"+idkey, ext)
+		if err == nil {
+			t.Log(idkey, globalStore.Get(idkey, false))
+		} else {
+			t.Error(idkey)
+		}
+	}
+}
 
-		//t.Log(idkey, globalStore.Get(idkey, false))
+func TestCaptchaWriteToBase64Encoding(t *testing.T) {
+	idkey, cap := GenerateCaptcha("", configD)
+	base64string := CaptchaWriteToBase64Encoding(cap)
+	if strings.Contains(base64string, "base64,") {
+		t.Log(base64string, idkey)
+	} else {
+		t.Error("encodeing base64 string failed.")
+	}
 
+}
+
+func TestVerifyCaptcha(t *testing.T) {
+	idkey, _ := GenerateCaptcha("", configD)
+	verifyValue := globalStore.Get(idkey, false)
+	if verifyValue == "" {
+		t.Error("verify captcha content is failed.")
+	} else {
+		t.Log(verifyValue)
 	}
 }

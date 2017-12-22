@@ -52,45 +52,9 @@ type CaptchaImageDigit struct {
 	rng     siprng
 }
 
-// NewImage returns a new captcha image of the given width and height with the
-// given digits, where each digit must be in range 0-9.
-func NewImage(id string, digits []byte, width, height int) *CaptchaImageDigit {
-
-	m := new(CaptchaImageDigit)
-
-	// Initialize PRNG.
-	m.rng.Seed(deriveSeed(imageSeedPurpose, id, digits))
-
-	m.Paletted = image.NewPaletted(image.Rect(0, 0, width, height), m.getRandomPalette())
-	m.calculateSizes(width, height, len(digits))
-	// Randomly position captcha inside the image.
-	maxx := width - (m.ImageWidth+m.dotSize)*len(digits) - m.dotSize
-	maxy := height - m.ImageHeight - m.dotSize*2
-	var border int
-	if width > height {
-		border = height / 5
-	} else {
-		border = width / 5
-	}
-	x := m.rng.Int(border, maxx-border)
-	y := m.rng.Int(border, maxy-border)
-	// Draw digits.
-	for _, n := range digits {
-		m.drawDigit(digitFontData[n], x, y)
-		x += m.ImageWidth + m.dotSize
-	}
-	// Draw strike-through line.
-	m.strikeThrough()
-	// Apply wave distortion.
-	m.distort(m.rng.Float(5, 10), m.rng.Float(100, 200))
-	// Fill image with random circles.
-	m.fillWithCircles(DotCount, m.dotSize)
-	return m
-}
-
 //EngineDigitsCreate create captcha by engine-digits with configuration.
 func EngineDigitsCreate(id string, config ConfigDigit) *CaptchaImageDigit {
-	digits := RandomDigits(config.CaptchaLen)
+	digits := randomDigits(config.CaptchaLen)
 	// Initialize PRNG.
 	m := new(CaptchaImageDigit)
 	//parse digits to string
