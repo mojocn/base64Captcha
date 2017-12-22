@@ -1,6 +1,7 @@
 package base64Captcha
 
 import (
+	"fmt"
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
 	"io/ioutil"
@@ -13,7 +14,6 @@ import (
 )
 
 //FontFamilyOfBytes read all font to bytes.
-var trueTypeFontFamilys = readFontsToSliceOfTrueTypeFonts()
 
 //readFontsToSliceOfTrueTypeFonts import fonts from dir.
 //make the simple-font(RitaSmith.ttf) the first font of trueTypeFonts.
@@ -24,12 +24,13 @@ func readFontsToSliceOfTrueTypeFonts() []*truetype.Font {
 	if !ok {
 		panic("No caller information")
 	}
-	packageDirPath := path.Dir(filename)
-	dirPth := packageDirPath + "/fonts"
+	fontDirPath := path.Dir(filename) + "/fonts"
+	fmt.Println(fontDirPath)
+	fontDirPath = strings.Replace(fontDirPath, "_test/_obj_test/", "", 1)
 	suffix := ".ttf"
 
 	//read folder.
-	dir, err := ioutil.ReadDir(dirPth)
+	dir, err := ioutil.ReadDir(fontDirPath)
 	if err != nil {
 		log.Println(err)
 	}
@@ -39,7 +40,7 @@ func readFontsToSliceOfTrueTypeFonts() []*truetype.Font {
 		//匹配文件 ttf 文件
 		if strings.HasSuffix(fileName, suffix) {
 			//获取字体文件路径
-			fontFilePath := dirPth + PthSep + fileName
+			fontFilePath := fontDirPath + PthSep + fileName
 			//读取字体文件路径到bytes
 			if fontBytes, err := ioutil.ReadFile(fontFilePath); err == nil {
 				//font file bytes to trueTypeFont
@@ -66,7 +67,7 @@ func readFontsToSliceOfTrueTypeFonts() []*truetype.Font {
 func randFontFamily() *truetype.Font {
 	fontCount := len(trueTypeFontFamilys)
 	if fontCount == 0 {
-		log.Println("FontFamily is empty!")
+		log.Fatal("FontFamily is empty!没有加载到字体!")
 	}
 	index := rand.Intn(fontCount)
 	return trueTypeFontFamilys[index]

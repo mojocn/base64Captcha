@@ -15,6 +15,8 @@ import (
 	"math/rand"
 )
 
+var trueTypeFontFamilys = readFontsToSliceOfTrueTypeFonts()
+
 //CaptchaImageChar captcha-engine-char return type.
 type CaptchaImageChar struct {
 	CaptchaItem
