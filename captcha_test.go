@@ -1,6 +1,7 @@
 package base64Captcha
 
 import (
+	"io/ioutil"
 	"strings"
 	"testing"
 )
@@ -37,6 +38,7 @@ var configC = ConfigCharacter{
 }
 
 func TestGenerateCaptcha(t *testing.T) {
+	GenerateCaptcha("", CaptchaItem{})
 	for idx, vv := range []interface{}{configA, configD} {
 
 		idkey, cap := GenerateCaptcha("", vv)
@@ -44,7 +46,13 @@ func TestGenerateCaptcha(t *testing.T) {
 		if idx == 0 {
 			ext = "wav"
 		}
-		CaptchaWriteToFile(cap, GoTestOutputDir+"/all", idkey, ext)
+		GoTestOutputDir, _ := ioutil.TempDir("", "")
+
+		CaptchaWriteToFile(cap, GoTestOutputDir, idkey, ext)
+		CaptchaWriteToFile(cap, GoTestOutputDir, idkey, ext)
+
+		tempDir, _ := ioutil.TempDir("", "")
+		CaptchaWriteToFile(cap, tempDir, idkey, ext)
 
 		//t.Log(idkey, globalStore.Get(idkey, false))
 
@@ -88,6 +96,9 @@ func TestVerifyCaptcha(t *testing.T) {
 		t.Log(idkey, verifyValue)
 	} else {
 		t.Error("verify captcha content is failed.")
-
 	}
+
+	VerifyCaptcha("", "")
+	VerifyCaptcha("dsafasf", "ddd")
+
 }

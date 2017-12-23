@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package base64Captcha support digits, numbers,alphabet, arithmetic, audio and digit-alphabet captcha.
-// base64Captcha is used for rapid development of RESTful APIs, web apps and backend services in Go. give a string identifier to the package and it returns with a base64-encoding-png-string
+// Package base64Captcha supports digits, numbers,alphabet, arithmetic, audio and digit-alphabet captcha.
+// base64Captcha is used for fast development of RESTful APIs, web apps and backend services in Go. give a string identifier to the package and it returns with a base64-encoding-png-string
 package base64Captcha
 
 import (
