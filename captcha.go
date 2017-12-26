@@ -23,6 +23,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -97,7 +98,7 @@ func VerifyCaptcha(identifier, verifyValue string) bool {
 	if storeValue == "" {
 		return false
 	}
-	result := storeValue == verifyValue
+	result := strings.ToLower(storeValue) == strings.ToLower(verifyValue)
 	if result {
 		globalStore.Get(identifier, true)
 	}
