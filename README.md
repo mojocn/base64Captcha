@@ -367,7 +367,7 @@ Any question you can leave a message. If you like the package please star this r
 
 ![](examples/static/btcQr.png)
 
-Bitcoin gratefully accepted: `1K5ipZdApQ5zymPYKtWFCeJFs1FJwvJvre`
+Bitcoin gratefully accepted: `13uMABdLALy9aCwRSFWZnAUM8VGn8Gsa4i`
 ## License
 
 base64Captcha source code is licensed under the Apache Licence, Version 2.0
