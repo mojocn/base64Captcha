@@ -365,7 +365,7 @@ Any question you can leave a message. If you like the package please star this r
 
 ## Send Thanks
 
-![](examples/static/btcQr.png)
+![](examples/static/btcQr1.png)
 
 Bitcoin gratefully accepted: `13uMABdLALy9aCwRSFWZnAUM8VGn8Gsa4i`
 ## License
