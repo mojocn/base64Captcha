@@ -21,10 +21,10 @@ give a string identifier to the package and it returns with a base64-encoding-pn
 #### [Playground Powered by Vuejs+elementUI+Axios](http://captcha.mojotv.cn)
 
 [![Playground](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/captcha.png "Playground")](http://captcha.mojotv.cn/ "Playground")
-[![28+58=?.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/28%2B58%3D%3F.png)](http://captcha.mojotv.cn/ "Playground")
+[![28+58.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/28%2B58%3D%3F.png)](http://captcha.mojotv.cn/ "Playground")
 [![ACNRfd.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/ACNRfd.png)](http://captcha.mojotv.cn/ "Playground")
 [![rW4npZ.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/rW4npZ.png)](http://captcha.mojotv.cn/ "Playground")
-[![99+73=?.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/99%2B73%3D%3F.png)](http://captcha.mojotv.cn/ "Playground")
+[![99+73.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/99%2B73%3D%3F.png)](http://captcha.mojotv.cn/ "Playground")
 [![ctOv6N.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/ctOv6N.png)](http://captcha.mojotv.cn/ "Playground")
 [![gGncJC.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/gGncJC.png)](http://captcha.mojotv.cn/ "Playground")
 [![108360.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/108360.png)](http://captcha.mojotv.cn/ "Playground")
@@ -352,7 +352,7 @@ server {
         }
         location @backend {
            proxy_set_header X-Forwarded-For $remote_addr;
-           proxy_set_header Host $http_host;
+           pro=xy_set_header Host $http_host;
            proxy_pass http://127.0.0.1:3333;
         }
         access_log  /home/wwwlogs/captcha.mojotv.cn.log;
