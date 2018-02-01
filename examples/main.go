@@ -2,13 +2,34 @@
 package main
 
 import (
+	"golang.org/x/net/websocket"
 	"encoding/json"
 	"fmt"
 	"github.com/mojocn/base64Captcha"
 	"log"
 	"net/http"
 )
+func websocketEcho(ws *websocket.Conn) {
+	var err error
+	for {
+		var reply string
 
+		if err = websocket.Message.Receive(ws, &reply); err != nil {
+			log.Println("Can't receive")
+			break
+		}
+
+		log.Println("Received back from client: " + reply)
+
+		msg := "ws send :Received:  " + reply
+		log.Println("Sending to client: " + msg)
+
+		if err = websocket.Message.Send(ws, msg); err != nil {
+			log.Println("Can't send")
+			break
+		}
+	}
+}
 //ConfigJsonBody json request body.
 type ConfigJsonBody struct {
 	Id              string
@@ -17,57 +38,6 @@ type ConfigJsonBody struct {
 	ConfigAudio     base64Captcha.ConfigAudio
 	ConfigCharacter base64Captcha.ConfigCharacter
 	ConfigDigit     base64Captcha.ConfigDigit
-}
-
-func demoCode() {
-	//config struct for digits
-	//数字验证码配置
-	var configD = base64Captcha.ConfigDigit{
-		Height:     80,
-		Width:      240,
-		MaxSkew:    0.7,
-		DotCount:   80,
-		CaptchaLen: 5,
-	}
-	//config struct for audio
-	//声音验证码配置
-	var configA = base64Captcha.ConfigAudio{
-		CaptchaLen: 6,
-		Language:   "zh",
-	}
-	//config struct for Character
-	//字符,公式,验证码配置
-	var configC = base64Captcha.ConfigCharacter{
-		Height: 60,
-		Width:  240,
-		//const CaptchaModeNumber:数字,CaptchaModeAlphabet:字母,CaptchaModeArithmetic:算术,CaptchaModeNumberAlphabet:数字字母混合.
-		Mode:               base64Captcha.CaptchaModeNumber,
-		ComplexOfNoiseText: base64Captcha.CaptchaComplexLower,
-		ComplexOfNoiseDot:  base64Captcha.CaptchaComplexLower,
-		IsUseSimpleFont:    true,
-		IsShowHollowLine:   false,
-		IsShowNoiseDot:     false,
-		IsShowNoiseText:    false,
-		IsShowSlimeLine:    false,
-		IsShowSineLine:     false,
-		CaptchaLen:         6,
-	}
-	//create a audio captcha.
-	idKeyA, capA := base64Captcha.GenerateCaptcha("", configA)
-	//write to base64 string.
-	base64stringA := base64Captcha.CaptchaWriteToBase64Encoding(capA)
-	//create a characters captcha.
-	idKeyC, capC := base64Captcha.GenerateCaptcha("", configC)
-	//write to base64 string.
-	base64stringC := base64Captcha.CaptchaWriteToBase64Encoding(capC)
-	//create a digits captcha.
-	idKeyD, capD := base64Captcha.GenerateCaptcha("", configD)
-	//write to base64 string.
-	base64stringD := base64Captcha.CaptchaWriteToBase64Encoding(capD)
-
-	fmt.Println(idKeyA, base64stringA)
-	fmt.Println(idKeyC, base64stringC)
-	fmt.Println(idKeyD, base64stringD)
 }
 
 // base64Captcha create http handler
@@ -137,7 +107,6 @@ func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
 //start a net/http server
 //启动golang net/http 服务器
 func main() {
-
 	//serve Vuejs+ElementUI+Axios Web Application
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 
@@ -146,6 +115,7 @@ func main() {
 
 	//api for verify captcha
 	http.HandleFunc("/api/verifyCaptcha", captchaVerifyHandle)
+	http.Handle("/ws", websocket.Handler(websocketEcho))
 
 	fmt.Println("Server is at localhost:3333")
 	if err := http.ListenAndServe("localhost:3333", nil); err != nil {
