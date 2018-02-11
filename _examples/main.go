@@ -2,13 +2,14 @@
 package main
 
 import (
-	"golang.org/x/net/websocket"
 	"encoding/json"
 	"fmt"
 	"github.com/mojocn/base64Captcha"
+	"golang.org/x/net/websocket"
 	"log"
 	"net/http"
 )
+
 func websocketEcho(ws *websocket.Conn) {
 	var err error
 	for {
@@ -30,6 +31,7 @@ func websocketEcho(ws *websocket.Conn) {
 		}
 	}
 }
+
 //ConfigJsonBody json request body.
 type ConfigJsonBody struct {
 	Id              string
