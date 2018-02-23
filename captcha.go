@@ -178,7 +178,7 @@ func GenerateCaptcha(idKey string, configuration interface{}) (id string, captch
 		captchaInstance = dig
 
 	default:
-		log.Println("config type not supported", config)
+		log.Fatal("config type not supported", config)
 	}
 
 	globalStore.Set(idKey, verifyValue)
