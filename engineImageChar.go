@@ -375,7 +375,7 @@ func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
 		captchaContent = randText(config.CaptchaLen, TxtNumbers)
 		captchaImage.VerifyValue = captchaContent
 	default:
-		captchaContent = randText(config.CaptchaLen, TxtAlphabet+TxtNumbers)
+		captchaContent = randText(config.CaptchaLen, TxtSimpleCharaters)
 		captchaImage.VerifyValue = captchaContent
 	}
 	//写入string
