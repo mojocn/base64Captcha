@@ -20,15 +20,15 @@ give a string identifier to the package and it returns with a base64-encoding-pn
 
 #### [Playground Powered by Vuejs+elementUI+Axios](http://captcha.mojotv.cn)
 
-[![Playground](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/captcha.png "Playground")](http://captcha.mojotv.cn/ "Playground")
-[![28+58.png](https://github.com/mojocn/base64Captcha/blob/master/examples/static/28+58.png?raw=true)](http://captcha.mojotv.cn/ "Playground")
-[![ACNRfd.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/ACNRfd.png)](http://captcha.mojotv.cn/ "Playground")
-[![rW4npZ.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/rW4npZ.png)](http://captcha.mojotv.cn/ "Playground")
-[![99+73.png](https://github.com/mojocn/base64Captcha/blob/master/examples/static/99+73.png?raw=true)](http://captcha.mojotv.cn/ "Playground")
-[![ctOv6N.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/ctOv6N.png)](http://captcha.mojotv.cn/ "Playground")
-[![gGncJC.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/gGncJC.png)](http://captcha.mojotv.cn/ "Playground")
-[![108360.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/108360.png)](http://captcha.mojotv.cn/ "Playground")
-[wav file](https://raw.githubusercontent.com/mojocn/base64Captcha/master/examples/static/1lNMVxfysfSQJXvjR1LX.wav)
+[![Playground](https://raw.githubusercontent.com/mojocn/base64Captcha/master/_examples/static/captcha.png "Playground")](http://captcha.mojotv.cn/ "Playground")
+[![28+58.png](https://github.com/mojocn/base64Captcha/blob/master/_examples/static/28+58.png?raw=true)](http://captcha.mojotv.cn/ "Playground")
+[![ACNRfd.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/_examples/static/ACNRfd.png)](http://captcha.mojotv.cn/ "Playground")
+[![rW4npZ.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/_examples/static/rW4npZ.png)](http://captcha.mojotv.cn/ "Playground")
+[![99+73.png](https://github.com/mojocn/base64Captcha/blob/master/_examples/static/99+73.png?raw=true)](http://captcha.mojotv.cn/ "Playground")
+[![ctOv6N.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/_examples/static/ctOv6N.png)](http://captcha.mojotv.cn/ "Playground")
+[![gGncJC.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/_examples/static/gGncJC.png)](http://captcha.mojotv.cn/ "Playground")
+[![108360.png](https://raw.githubusercontent.com/mojocn/base64Captcha/master/_examples/static/108360.png)](http://captcha.mojotv.cn/ "Playground")
+[wav file](https://raw.githubusercontent.com/mojocn/base64Captcha/master/_examples/static/1lNMVxfysfSQJXvjR1LX.wav)
 
 ## Quick Start
 
