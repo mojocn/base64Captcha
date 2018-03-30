@@ -15,10 +15,10 @@
 package base64Captcha
 
 import (
-	"container/list"
-	"sync"
-	"time"
+	"fmt"
 )
+
+var providers = make(map[string]Store)
 
 // Store An object implementing Store interface can be registered with SetCustomStore
 // function to handle storage and retrieval of captcha ids and solutions for
@@ -34,88 +34,32 @@ type Store interface {
 	// Get returns stored digits for the captcha id. Clear indicates
 	// whether the captcha must be deleted from the store.
 	Get(id string, clear bool) string
+
+	InitStore(sc storeConfig) error
 }
 
-// expValue stores timestamp and id of captchas. It is used in the list inside
-// memoryStore for indexing generated captchas by timestamp to enable garbage
-// collection of expired captchas.
-type idByTimeValue struct {
-	timestamp time.Time
-	id        string
+type storeConfig struct {
+	expire int64    	// 单位：秒
+	limitNumber int		// 最大个数
+	extraConfig string  //额外配置信息，如redis连接等
 }
 
-// memoryStore is an internal store for captcha ids and their values.
-type memoryStore struct {
-	sync.RWMutex
-	digitsById map[string]string
-	idByTime   *list.List
-	// Number of items stored since last collection.
-	numStored int
-	// Number of saved items that triggers collection.
-	collectNum int
-	// Expiration time of captchas.
-	expiration time.Duration
-}
-
-// NewMemoryStore returns a new standard memory store for captchas with the
-// given collection threshold and expiration time (duration). The returned
-// store must be registered with SetCustomStore to replace the default one.
-func NewMemoryStore(collectNum int, expiration time.Duration) Store {
-	s := new(memoryStore)
-	s.digitsById = make(map[string]string)
-	s.idByTime = list.New()
-	s.collectNum = collectNum
-	s.expiration = expiration
-	return s
-}
-
-func (s *memoryStore) Set(id string, value string) {
-	s.Lock()
-	s.digitsById[id] = value
-	s.idByTime.PushBack(idByTimeValue{time.Now(), id})
-	s.numStored++
-	s.Unlock()
-	if s.numStored > s.collectNum {
-		go s.collect()
+func NewGlobalStore(storeType string, config storeConfig) (Store, error){
+	provider, ok := providers[storeType]
+	if  !ok{
+		return nil, fmt.Errorf("store: unknown provide %q (forgotten import?)", storeType)
 	}
+	error := provider.InitStore(config)
+	return provider, error
 }
 
-func (s *memoryStore) Get(id string, clear bool) (value string) {
-	if !clear {
-		// When we don't need to clear captcha, acquire read lock.
-		s.RLock()
-		defer s.RUnlock()
-	} else {
-		s.Lock()
-		defer s.Unlock()
+func Register(name string, store Store){
+	if store == nil {
+		panic("store: Register store is nil")
 	}
-	value, ok := s.digitsById[id]
-	if !ok {
-		return
+	if _, dup := providers[name]; dup {
+		panic("store: Register called twice for store " + name)
 	}
-	if clear {
-		delete(s.digitsById, id)
-	}
-	return
+	providers[name] = store
 }
 
-func (s *memoryStore) collect() {
-	now := time.Now()
-	s.Lock()
-	defer s.Unlock()
-	s.numStored = 0
-	for e := s.idByTime.Front(); e != nil; {
-		ev, ok := e.Value.(idByTimeValue)
-		if !ok {
-			return
-		}
-		if ev.timestamp.Add(s.expiration).Before(now) {
-			delete(s.digitsById, ev.id)
-			next := e.Next()
-			s.idByTime.Remove(e)
-			e = next
-		} else {
-			return
-		}
-	}
-}
