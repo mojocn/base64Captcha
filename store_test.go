@@ -30,4 +30,6 @@ func TestNewGlobalStore(t *testing.T) {
 		fmt.Println(error)
 	}
 	s.Set("111", "teststore")
+	value:= s.Get("111", false)
+	fmt.Println(value == "teststore")
 }

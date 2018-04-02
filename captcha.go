@@ -37,9 +37,9 @@ type CaptchaInterface interface {
 }
 
 
-func Init(){
+func Init(extra string){
 	var err error
-	globalStore, err = NewGlobalStore("redis", storeConfig{expire:60, limitNumber:10240, extraConfig:"127.0.0.1:6379"})
+	globalStore, err = NewGlobalStore("redis", storeConfig{expire:120, limitNumber:10240, extraConfig:extra})
 	if err != nil {
 		log.Fatalf("captcha Init error : %s\n", err.Error())
 	}
