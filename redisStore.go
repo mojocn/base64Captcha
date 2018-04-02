@@ -4,6 +4,7 @@ import (
 	"github.com/garyburd/redigo/redis"
 	"strings"
 	"strconv"
+	"log"
 )
 
 const MaxPoolSize = 10
@@ -18,15 +19,24 @@ type redisStore struct{
 func (rs *redisStore)Set(id string, value string){
 	conn := rs.p.Get()
 	defer conn.Close()
-	conn.Do("SETEX", id, rs.expire, value)
+	_, err := conn.Do("SETEX", id, rs.expire, value)
+	if err != nil {
+		log.Fatalf("redisStore set error: %s", err.Error())
+	}
 }
 
 func (rs *redisStore)Get(id string, clear bool) string{
 	conn := rs.p.Get()
 	defer conn.Close()
-	value,_ := redis.String(conn.Do("GET", id))
+	value, err := redis.String(conn.Do("GET", id))
+	if err != nil {
+		log.Fatalf("redisStore get error: %s", err.Error())
+	}
 	if clear{
-		conn.Do("DEL", id)
+		_, err = conn.Do("DEL", id)
+		if err != nil {
+			log.Fatalf("redisStore get error: %s", err.Error())
+		}
 	}
 	return value
 }
