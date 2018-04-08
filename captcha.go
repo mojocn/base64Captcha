@@ -41,6 +41,12 @@ var (
 	thisPackageDirPath = ""
 )
 
+// SetCustomStore sets custom storage for captchas, replacing the default
+// memory store. This function must be called before generating any captchas.
+func SetCustomStore(s Store) {
+	globalStore = s
+}
+
 //CaptchaInterface captcha interface for captcha engine to to write staff
 type CaptchaInterface interface {
 	//BinaryEncodeing covert to bytes

@@ -149,6 +149,7 @@ func verfiyCaptcha(idkey,verifyValue string){
 
 SetCustomStore sets custom storage for captchas, replacing the default
 memory store. This function must be called before generating any captchas.
+##### [Customize Redis Store](_examples_redis/main.go)
 ### func NewMemoryStore
 
 	func NewMemoryStore(collectNum int, expiration time.Duration) Store
@@ -358,7 +359,7 @@ server {
         access_log  /home/wwwlogs/captcha.mojotv.cn.log;
 }
 ```
-#### Go to [http://localhost:777](http://localhost:3333)
+#### Go to [http://localhost:777](http://localhost:7777)
 
 Congratulations! You've just built your first **base64Captcha-APIs** app.
 Any question you can leave a message. If you like the package please star this repo
