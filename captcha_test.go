@@ -38,7 +38,7 @@ var configC = ConfigCharacter{
 }
 
 func TestGenerateCaptcha(t *testing.T) {
-	GenerateCaptcha("", CaptchaItem{})
+	//GenerateCaptcha("", CaptchaItem{})
 	for idx, vv := range []interface{}{configA, configD} {
 
 		idkey, cap := GenerateCaptcha("", vv)
