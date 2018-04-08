@@ -211,8 +211,9 @@ func main() {
 	}
 }
 ```
+#### [使用redis做储存](examples_redis/main.go)
 #### 运行demo代码
-    cd $GOPATH/src/github.com/mojocn/captcha/examples
+    cd $GOPATH/src/github.com/mojocn/captcha/_examples
     go run main.go
 
 #### 访问 `http://localhost:777`

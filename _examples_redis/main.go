@@ -4,32 +4,53 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/go-redis/redis"
 	"github.com/mojocn/base64Captcha"
-	"golang.org/x/net/websocket"
 	"log"
 	"net/http"
+	"time"
 )
 
-func websocketEcho(ws *websocket.Conn) {
-	var err error
-	for {
-		var reply string
+//customizeRdsStore An object implementing Store interface
+type customizeRdsStore struct {
+	redisClient *redis.Client
+}
 
-		if err = websocket.Message.Receive(ws, &reply); err != nil {
-			log.Println("Can't receive")
-			break
-		}
+// customizeRdsStore implementing Set method of  Store interface
+func (s *customizeRdsStore) Set(id string, value string) {
+	err := s.redisClient.Set(id, value, time.Minute*10).Err()
+	if err != nil {
+		panic(err)
+	}
+}
 
-		log.Println("Received back from client: " + reply)
-
-		msg := "ws send :Received:  " + reply
-		log.Println("Sending to client: " + msg)
-
-		if err = websocket.Message.Send(ws, msg); err != nil {
-			log.Println("Can't send")
-			break
+// customizeRdsStore implementing Get method of  Store interface
+func (s *customizeRdsStore) Get(id string, clear bool) (value string) {
+	val, err := s.redisClient.Get(id).Result()
+	if err != nil {
+		panic(err)
+	}
+	if clear {
+		err := s.redisClient.Del(id).Err()
+		if err != nil {
+			panic(err)
 		}
 	}
+	return val
+}
+
+func init() {
+	//create redis client
+	client := redis.NewClient(&redis.Options{
+		Addr:     "127.0.0.1:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+	//init redis store
+	customeStore := customizeRdsStore{client}
+
+	base64Captcha.SetCustomStore(&customeStore)
+
 }
 
 //ConfigJsonBody json request body.
@@ -110,14 +131,13 @@ func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
 //启动golang net/http 服务器
 func main() {
 	//serve Vuejs+ElementUI+Axios Web Application
-	http.Handle("/", http.FileServer(http.Dir("./static")))
+	http.Handle("/", http.FileServer(http.Dir("/Users/ericzhou/go/src/github.com/mojocn/base64Captcha/_examples/static")))
 
 	//api for create captcha
 	http.HandleFunc("/api/getCaptcha", generateCaptchaHandler)
 
 	//api for verify captcha
 	http.HandleFunc("/api/verifyCaptcha", captchaVerifyHandle)
-	http.Handle("/ws", websocket.Handler(websocketEcho))
 
 	fmt.Println("Server is at localhost:7777")
 	if err := http.ListenAndServe("localhost:7777", nil); err != nil {
