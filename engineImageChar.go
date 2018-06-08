@@ -128,6 +128,8 @@ func (captcha *CaptchaImageChar) drawSineLine() *CaptchaImageChar {
 	var t float64
 	if captcha.ImageHeight > captcha.ImageWidth/2 {
 		t = random(int64(captcha.ImageWidth/2), int64(captcha.ImageHeight))
+	} else if captcha.ImageHeight == captcha.ImageWidth/2 {
+		t = float64(captcha.ImageHeight)
 	} else {
 		t = random(int64(captcha.ImageHeight), int64(captcha.ImageWidth/2))
 	}
