@@ -4,11 +4,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/go-redis/redis"
-	"github.com/mojocn/base64Captcha"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/go-redis/redis"
+	"github.com/mojocn/base64Captcha"
 )
 
 //customizeRdsStore An object implementing Store interface
