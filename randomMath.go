@@ -12,7 +12,7 @@ import (
 func randText(num int, sourceChars string) string {
 	textNum := len(sourceChars)
 	text := ""
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	r := randSeed()
 	for i := 0; i < num; i++ {
 		text = text + string(sourceChars[r.Intn(textNum)])
 	}
