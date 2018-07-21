@@ -20,7 +20,7 @@ give a string identifier to the package and it returns with a base64-encoding-pn
 
 #### [Playground Powered by Vuejs+elementUI+Axios](http://captcha.mojotv.cn)
 
-[![golang base64 captcah package demo](https://img.youtube.com/vi/Yf0xDn2Q1Ek/0.jpg)](https://www.youtube.com/watch?v=Yf0xDn2Q1Ek)
+[![golang base64 captcah package demo](https://imgur.com/bsnXDNj)](https://www.youtube.com/watch?v=Yf0xDn2Q1Ek)
 
 ## Quick Start
 
