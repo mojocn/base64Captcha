@@ -12,8 +12,9 @@ import (
 func randText(num int, sourceChars string) string {
 	textNum := len(sourceChars)
 	text := ""
+	r := randSeed()
 	for i := 0; i < num; i++ {
-		text = text + string(sourceChars[rand.Intn(textNum)])
+		text = text + string(sourceChars[r.Intn(textNum)])
 	}
 	return text
 }
