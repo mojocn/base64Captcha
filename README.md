@@ -356,11 +356,6 @@ server {
 Congratulations! You've just built your first **base64Captcha-APIs** app.
 Any question you can leave a message. If you like the package please star this repo
 
-## Send Thanks
-
-![](examples/static/btcQr1.png)
-
-Bitcoin gratefully accepted: `13uMABdLALy9aCwRSFWZnAUM8VGn8Gsa4i`
 ## License
 
 base64Captcha source code is licensed under the Apache Licence, Version 2.0
