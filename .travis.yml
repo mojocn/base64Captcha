@@ -2,14 +2,20 @@ language: go
 
 go:
   - 1.8.x
-  - 1.9.x
+  - 1.9.x  
+  - 1.10.x
+  - 1.11.x
 
+before_install:
+  - go get -t -v ./...
 script:
   - go test -race -coverprofile=coverage.txt -covermode=atomic
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -t d93442cf-8aac-4a40-9aef-125c99119c6e
-
+  - bash <(curl -s https://codecov.io/bash)
+  
 notifications:
   email:
-    on_success: never
+    recipients:
+      - neochau@gmail.com
+    on_success: always
