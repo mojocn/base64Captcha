@@ -8,8 +8,11 @@ go:
 
 before_install:
   - go get -t -v ./...
+  - diff -u <(echo -n) <(gofmt -d -s .)
+  - go tool vet .
+
 script:
-  - go test -race -coverprofile=coverage.txt -covermode=atomic
+  - go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
@@ -18,4 +21,3 @@ notifications:
   email:
     recipients:
       - neochau@gmail.com
-    on_success: always
