@@ -91,7 +91,7 @@ func newAudio(id string, digits []byte, lang string) *Audio {
 		mixSound(bg[pos:], v)
 		pos += len(v) + intervals[i+1]
 	}
-	a.body.Write(bg)
+	//a.body.Write(bg)
 	// Write ending (one beep).
 	a.body.Write(endingBeepSound)
 	return a
