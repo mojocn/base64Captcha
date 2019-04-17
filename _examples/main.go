@@ -5,32 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/mojocn/base64Captcha"
-	"golang.org/x/net/websocket"
 	"log"
 	"net/http"
 )
-
-func websocketEcho(ws *websocket.Conn) {
-	var err error
-	for {
-		var reply string
-
-		if err = websocket.Message.Receive(ws, &reply); err != nil {
-			log.Println("Can't receive")
-			break
-		}
-
-		log.Println("Received back from client: " + reply)
-
-		msg := "ws send :Received:  " + reply
-		log.Println("Sending to client: " + msg)
-
-		if err = websocket.Message.Send(ws, msg); err != nil {
-			log.Println("Can't send")
-			break
-		}
-	}
-}
 
 //ConfigJsonBody json request body.
 type ConfigJsonBody struct {
@@ -117,7 +94,6 @@ func main() {
 
 	//api for verify captcha
 	http.HandleFunc("/api/verifyCaptcha", captchaVerifyHandle)
-	http.Handle("/ws", websocket.Handler(websocketEcho))
 
 	fmt.Println("Server is at localhost:7777")
 	if err := http.ListenAndServe("localhost:7777", nil); err != nil {

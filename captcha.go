@@ -97,7 +97,7 @@ type CaptchaItem struct {
 // VerifyCaptcha by given id key and remove the captcha value in store, return boolean value.
 // 验证图像验证码,返回boolean.
 func VerifyCaptcha(identifier, verifyValue string) bool {
-	return VerifyCaptchaAndIsClear(identifier,verifyValue,true)
+	return VerifyCaptchaAndIsClear(identifier, verifyValue, true)
 }
 
 // VerifyCaptchaAndIsClear verify captcha, return boolean value.
@@ -105,19 +105,12 @@ func VerifyCaptcha(identifier, verifyValue string) bool {
 // verifyValue is the captcha image value,
 // isClear is whether to clear the value in store.
 // 验证图像验证码,返回boolean.
-func VerifyCaptchaAndIsClear(identifier, verifyValue string,isClear bool) bool {
+func VerifyCaptchaAndIsClear(identifier, verifyValue string, isClear bool) bool {
 	if verifyValue == "" {
 		return false
 	}
-	storeValue := globalStore.Get(identifier, false)
-	if storeValue == "" {
-		return false
-	}
-	result := strings.ToLower(storeValue) == strings.ToLower(verifyValue)
-	if result {
-		globalStore.Get(identifier, isClear)
-	}
-	return result
+	storeValue := globalStore.Get(identifier, isClear)
+	return strings.ToLower(storeValue) == strings.ToLower(verifyValue)
 }
 
 //GenerateCaptcha create captcha by config struct and id.
