@@ -4,3 +4,5 @@ examples/nohup.out
 examples/examples
 goTestOutPutPng/*
 ex
+vendor/*
+!vendor/vendor.json
