@@ -20,9 +20,13 @@ type redisStore struct {
 // NewRedisStore returns a new redis store for captcha with the
 // given collection threshold and expiration time (duration). The returned
 // store can registered with SetCustomStore to replace the default one.
-func NewRedisStore(client *redis.Client, prefix string, expiration time.Duration) Store {
+func NewRedisStore(addr string, password string, db int, prefix string, expiration time.Duration) Store {
 	s := new(redisStore)
-	s.client = client
+	s.client = redis.NewClient(&redis.Options{
+		Addr:     addr,
+		Password: password,
+		DB:       db,
+	})
 	s.prefix = prefix
 	s.expiration = expiration
 	return s
