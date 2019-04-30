@@ -12,19 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package base64Captcha
+package store
 
 import (
+	"fmt"
+	"github.com/mojocn/base64Captcha"
+	"math/rand"
 	"testing"
+	"time"
+)
+
+var (
+	GCLimitNumber = 10240
+	Expiration    = 10 * time.Minute
 )
 
 func TestSetGet(t *testing.T) {
-	s := NewMemoryStore(GCLimitNumber, Expiration)
+	s := NewMemoryStore(base64Captcha.GCLimitNumber, base64Captcha.Expiration)
 	id := "captcha id"
-	d := randText(10, TxtAlphabet)
+	d := "random-string"
 	s.Set(id, d)
 	d2 := s.Get(id, false)
-	if d2 == "" || d2 != d {
+	if d2 != d {
 		t.Errorf("saved %v, getDigits returned got %v", d, d2)
 	}
 }
@@ -32,10 +41,10 @@ func TestSetGet(t *testing.T) {
 func TestGetClear(t *testing.T) {
 	s := NewMemoryStore(GCLimitNumber, Expiration)
 	id := "captcha id"
-	d := randText(10, TxtAlphabet+TxtNumbers)
+	d := "932839jfffjkdss"
 	s.Set(id, d)
 	d2 := s.Get(id, true)
-	if d2 == "" || d != d2 {
+	if d != d2 {
 		t.Errorf("saved %v, getDigitsClear returned got %v", d, d2)
 	}
 	d2 = s.Get(id, false)
@@ -45,14 +54,14 @@ func TestGetClear(t *testing.T) {
 }
 
 func TestCollect(t *testing.T) {
-	//TODO(dchest): can't test automatic collection when saving, because
-	//it's currently launched in a different goroutine.
+	// TODO(dchest): can't test automatic collection when saving, because
+	// it's currently launched in a different goroutine.
 	s := NewMemoryStore(10, -1)
 	// create 10 ids
 	ids := make([]string, 10)
-	d := randText(10, TxtAlphabet+TxtNumbers)
+	d := "fdjsij892jfi392j2"
 	for i := range ids {
-		ids[i] = randomId()
+		ids[i] = fmt.Sprintf("%d", rand.Int63())
 		s.Set(ids[i], d)
 	}
 	s.(*memoryStore).collect()
@@ -72,11 +81,11 @@ func TestCollect(t *testing.T) {
 
 func BenchmarkSetCollect(b *testing.B) {
 	b.StopTimer()
-	d := randText(10, TxtAlphabet+TxtNumbers)
+	d := "fdskfew9832232r"
 	s := NewMemoryStore(9999, -1)
 	ids := make([]string, 1000)
 	for i := range ids {
-		ids[i] = randomId()
+		ids[i] = fmt.Sprintf("%d", rand.Int63())
 	}
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
