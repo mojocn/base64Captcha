@@ -6,9 +6,6 @@ import (
 	"testing"
 )
 
-const ExampleFontDirPath = "/Users/ericzhou/go/src/github.com/mojocn/base64Captcha/examples/fonts"
-const ExampleFontExtension = "ttf"
-
 var configD = ConfigDigit{
 	Height:     80,
 	Width:      240,
@@ -38,7 +35,7 @@ var configC = ConfigCharacter{
 }
 
 func TestGenerateCaptcha(t *testing.T) {
-	//GenerateCaptcha("", CaptchaItem{})
+	// GenerateCaptcha("", CaptchaItem{})
 	for idx, vv := range []interface{}{configA, configD} {
 
 		idkey, cap := GenerateCaptcha("", vv)
@@ -54,7 +51,7 @@ func TestGenerateCaptcha(t *testing.T) {
 		tempDir, _ := ioutil.TempDir("", "")
 		CaptchaWriteToFile(cap, tempDir, idkey, ext)
 
-		//t.Log(idkey, globalStore.Get(idkey, false))
+		// t.Log(idkey, globalStore.Get(idkey, false))
 
 	}
 

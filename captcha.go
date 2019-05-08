@@ -71,6 +71,9 @@ func CaptchaWriteToBase64Encoding(cap CaptchaInterface) string {
 // fileExt is one of "png","wav"
 func CaptchaWriteToFile(cap CaptchaInterface, outputDir, fileName, fileExt string) error {
 	filePath := filepath.Join(outputDir, fileName+"."+fileExt)
+	if !pathExists(outputDir) {
+		_ = os.MkdirAll(outputDir, os.ModePerm)
+	}
 	file, err := os.Create(filePath)
 	if err != nil {
 		fmt.Printf("%s is invalid path.error:%v", filePath, err)
@@ -191,4 +194,15 @@ func GenerateCaptcha(idKey string, configuration interface{}) (id string, captch
 	globalStore.Set(idKey, verifyValue)
 
 	return idKey, captchaInstance
+}
+
+func pathExists(path string) bool {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true
+	}
+	if os.IsNotExist(err) {
+		return false
+	}
+	return false
 }

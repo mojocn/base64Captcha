@@ -9,6 +9,7 @@
 // fonts/RitaSmith.ttf
 // fonts/actionj.ttf
 // fonts/chromohv.ttf
+// fonts/readme.md
 // DO NOT EDIT!
 
 package base64Captcha
@@ -18,7 +19,9 @@ import (
 	"compress/gzip"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -89,7 +92,7 @@ func fonts3dumbTtf() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "fonts/3Dumb.ttf", size: 142224, mode: os.FileMode(493), modTime: time.Unix(1513756878, 0)}
+	info := bindataFileInfo{name: "fonts/3Dumb.ttf", size: 142224, mode: os.FileMode(493), modTime: time.Unix(1556650384, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -109,7 +112,7 @@ func fontsApothecaryfontTtf() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "fonts/ApothecaryFont.ttf", size: 62080, mode: os.FileMode(493), modTime: time.Unix(1513654101, 0)}
+	info := bindataFileInfo{name: "fonts/ApothecaryFont.ttf", size: 62080, mode: os.FileMode(493), modTime: time.Unix(1556650384, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -129,7 +132,7 @@ func fontsComismshTtf() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "fonts/Comismsh.ttf", size: 80132, mode: os.FileMode(493), modTime: time.Unix(1513654101, 0)}
+	info := bindataFileInfo{name: "fonts/Comismsh.ttf", size: 80132, mode: os.FileMode(493), modTime: time.Unix(1556650384, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -149,7 +152,7 @@ func fontsDennethreeDeeTtf() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "fonts/DENNEthree-dee.ttf", size: 83188, mode: os.FileMode(493), modTime: time.Unix(1513654101, 0)}
+	info := bindataFileInfo{name: "fonts/DENNEthree-dee.ttf", size: 83188, mode: os.FileMode(493), modTime: time.Unix(1556650384, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -169,7 +172,7 @@ func fontsDeborahfancydressTtf() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "fonts/DeborahFancyDress.ttf", size: 32520, mode: os.FileMode(493), modTime: time.Unix(1513654101, 0)}
+	info := bindataFileInfo{name: "fonts/DeborahFancyDress.ttf", size: 32520, mode: os.FileMode(493), modTime: time.Unix(1556650384, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -189,7 +192,7 @@ func fontsFlimFlamTtf() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "fonts/Flim-Flam.ttf", size: 140576, mode: os.FileMode(493), modTime: time.Unix(1513756878, 0)}
+	info := bindataFileInfo{name: "fonts/Flim-Flam.ttf", size: 140576, mode: os.FileMode(493), modTime: time.Unix(1556650384, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -209,7 +212,7 @@ func fontsRitasmithTtf() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "fonts/RitaSmith.ttf", size: 31240, mode: os.FileMode(420), modTime: time.Unix(1513754002, 0)}
+	info := bindataFileInfo{name: "fonts/RitaSmith.ttf", size: 31240, mode: os.FileMode(420), modTime: time.Unix(1556650384, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -229,7 +232,7 @@ func fontsActionjTtf() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "fonts/actionj.ttf", size: 34944, mode: os.FileMode(493), modTime: time.Unix(1513654101, 0)}
+	info := bindataFileInfo{name: "fonts/actionj.ttf", size: 34944, mode: os.FileMode(493), modTime: time.Unix(1556650384, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -249,7 +252,27 @@ func fontsChromohvTtf() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "fonts/chromohv.ttf", size: 45900, mode: os.FileMode(493), modTime: time.Unix(1513654101, 0)}
+	info := bindataFileInfo{name: "fonts/chromohv.ttf", size: 45900, mode: os.FileMode(493), modTime: time.Unix(1556650384, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _fontsReadmeMd = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x4a\xcf\x57\x48\x4f\x2d\x51\xd0\x2d\x55\x48\xcf\x2c\xc9\x28\x4d\xd2\x4b\xce\xcf\xd5\xcf\x2a\x49\x4d\x2d\x2d\x4f\xcd\xd3\x4f\xcf\xd7\x4d\xca\xcc\x4b\x49\x2c\x49\xd4\xd7\xd3\xd3\xe3\xe2\xe2\x42\x08\x28\xa4\xe5\xe7\x95\x14\xeb\x73\x71\x65\x94\x94\x14\x14\x5b\xe9\xeb\xe3\xd7\x0f\x08\x00\x00\xff\xff\x2f\x50\x0a\x58\x68\x00\x00\x00")
+
+func fontsReadmeMdBytes() ([]byte, error) {
+	return bindataRead(
+		_fontsReadmeMd,
+		"fonts/readme.md",
+	)
+}
+
+func fontsReadmeMd() (*asset, error) {
+	bytes, err := fontsReadmeMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "fonts/readme.md", size: 104, mode: os.FileMode(420), modTime: time.Unix(1556650384, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -269,34 +292,153 @@ func Asset(name string) ([]byte, error) {
 	return nil, fmt.Errorf("Asset %s not found", name)
 }
 
+// MustAsset is like Asset but panics when Asset would return an error.
+// It simplifies safe initialization of global variables.
+func MustAsset(name string) []byte {
+	a, err := Asset(name)
+	if err != nil {
+		panic("asset: Asset(" + name + "): " + err.Error())
+	}
+
+	return a
+}
+
+// AssetInfo loads and returns the asset info for the given name.
+// It returns an error if the asset could not be found or
+// could not be loaded.
+func AssetInfo(name string) (os.FileInfo, error) {
+	cannonicalName := strings.Replace(name, "\\", "/", -1)
+	if f, ok := _bindata[cannonicalName]; ok {
+		a, err := f()
+		if err != nil {
+			return nil, fmt.Errorf("AssetInfo %s can't read by error: %v", name, err)
+		}
+		return a.info, nil
+	}
+	return nil, fmt.Errorf("AssetInfo %s not found", name)
+}
+
+// AssetNames returns the names of the assets.
+func AssetNames() []string {
+	names := make([]string, 0, len(_bindata))
+	for name := range _bindata {
+		names = append(names, name)
+	}
+	return names
+}
+
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
-	"fonts/3Dumb.ttf":             fonts3dumbTtf,
-	"fonts/ApothecaryFont.ttf":    fontsApothecaryfontTtf,
-	"fonts/Comismsh.ttf":          fontsComismshTtf,
-	"fonts/DENNEthree-dee.ttf":    fontsDennethreeDeeTtf,
+	"fonts/3Dumb.ttf": fonts3dumbTtf,
+	"fonts/ApothecaryFont.ttf": fontsApothecaryfontTtf,
+	"fonts/Comismsh.ttf": fontsComismshTtf,
+	"fonts/DENNEthree-dee.ttf": fontsDennethreeDeeTtf,
 	"fonts/DeborahFancyDress.ttf": fontsDeborahfancydressTtf,
-	"fonts/Flim-Flam.ttf":         fontsFlimFlamTtf,
-	"fonts/RitaSmith.ttf":         fontsRitasmithTtf,
-	"fonts/actionj.ttf":           fontsActionjTtf,
-	"fonts/chromohv.ttf":          fontsChromohvTtf,
+	"fonts/Flim-Flam.ttf": fontsFlimFlamTtf,
+	"fonts/RitaSmith.ttf": fontsRitasmithTtf,
+	"fonts/actionj.ttf": fontsActionjTtf,
+	"fonts/chromohv.ttf": fontsChromohvTtf,
+	"fonts/readme.md": fontsReadmeMd,
+}
+
+// AssetDir returns the file names below a certain
+// directory embedded in the file by go-bindata.
+// For example if you run go-bindata on data/... and data contains the
+// following hierarchy:
+//     data/
+//       foo.txt
+//       img/
+//         a.png
+//         b.png
+// then AssetDir("data") would return []string{"foo.txt", "img"}
+// AssetDir("data/img") would return []string{"a.png", "b.png"}
+// AssetDir("foo.txt") and AssetDir("notexist") would return an error
+// AssetDir("") will return []string{"data"}.
+func AssetDir(name string) ([]string, error) {
+	node := _bintree
+	if len(name) != 0 {
+		cannonicalName := strings.Replace(name, "\\", "/", -1)
+		pathList := strings.Split(cannonicalName, "/")
+		for _, p := range pathList {
+			node = node.Children[p]
+			if node == nil {
+				return nil, fmt.Errorf("Asset %s not found", name)
+			}
+		}
+	}
+	if node.Func != nil {
+		return nil, fmt.Errorf("Asset %s not found", name)
+	}
+	rv := make([]string, 0, len(node.Children))
+	for childName := range node.Children {
+		rv = append(rv, childName)
+	}
+	return rv, nil
 }
 
 type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
-
 var _bintree = &bintree{nil, map[string]*bintree{
 	"fonts": &bintree{nil, map[string]*bintree{
-		"3Dumb.ttf":             &bintree{fonts3dumbTtf, map[string]*bintree{}},
-		"ApothecaryFont.ttf":    &bintree{fontsApothecaryfontTtf, map[string]*bintree{}},
-		"Comismsh.ttf":          &bintree{fontsComismshTtf, map[string]*bintree{}},
-		"DENNEthree-dee.ttf":    &bintree{fontsDennethreeDeeTtf, map[string]*bintree{}},
+		"3Dumb.ttf": &bintree{fonts3dumbTtf, map[string]*bintree{}},
+		"ApothecaryFont.ttf": &bintree{fontsApothecaryfontTtf, map[string]*bintree{}},
+		"Comismsh.ttf": &bintree{fontsComismshTtf, map[string]*bintree{}},
+		"DENNEthree-dee.ttf": &bintree{fontsDennethreeDeeTtf, map[string]*bintree{}},
 		"DeborahFancyDress.ttf": &bintree{fontsDeborahfancydressTtf, map[string]*bintree{}},
-		"Flim-Flam.ttf":         &bintree{fontsFlimFlamTtf, map[string]*bintree{}},
-		"RitaSmith.ttf":         &bintree{fontsRitasmithTtf, map[string]*bintree{}},
-		"actionj.ttf":           &bintree{fontsActionjTtf, map[string]*bintree{}},
-		"chromohv.ttf":          &bintree{fontsChromohvTtf, map[string]*bintree{}},
+		"Flim-Flam.ttf": &bintree{fontsFlimFlamTtf, map[string]*bintree{}},
+		"RitaSmith.ttf": &bintree{fontsRitasmithTtf, map[string]*bintree{}},
+		"actionj.ttf": &bintree{fontsActionjTtf, map[string]*bintree{}},
+		"chromohv.ttf": &bintree{fontsChromohvTtf, map[string]*bintree{}},
+		"readme.md": &bintree{fontsReadmeMd, map[string]*bintree{}},
 	}},
 }}
+
+// RestoreAsset restores an asset under the given directory
+func RestoreAsset(dir, name string) error {
+	data, err := Asset(name)
+	if err != nil {
+		return err
+	}
+	info, err := AssetInfo(name)
+	if err != nil {
+		return err
+	}
+	err = os.MkdirAll(_filePath(dir, filepath.Dir(name)), os.FileMode(0755))
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(_filePath(dir, name), data, info.Mode())
+	if err != nil {
+		return err
+	}
+	err = os.Chtimes(_filePath(dir, name), info.ModTime(), info.ModTime())
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// RestoreAssets restores an asset under the given directory recursively
+func RestoreAssets(dir, name string) error {
+	children, err := AssetDir(name)
+	// File
+	if err != nil {
+		return RestoreAsset(dir, name)
+	}
+	// Dir
+	for _, child := range children {
+		err = RestoreAssets(dir, filepath.Join(name, child))
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func _filePath(dir, name string) string {
+	cannonicalName := strings.Replace(name, "\\", "/", -1)
+	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
+}
+

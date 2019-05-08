@@ -1,44 +1,49 @@
 package base64Captcha
 
+import (
+	"fmt"
+	"os"
+)
+
 const (
 	imageStringDpi = 72.0
-	//TxtNumbers chacters for numbers.
+	// TxtNumbers chacters for numbers.
 	TxtNumbers = "012346789"
-	//TxtAlphabet characters for alphabet.
+	// TxtAlphabet characters for alphabet.
 	TxtAlphabet = "ABCDEFGHJKMNOQRSTUVXYZabcdefghjkmnoqrstuvxyz"
-	//TxtSimpleCharaters simple numbers and alphabet
+	// TxtSimpleCharaters simple numbers and alphabet
 	TxtSimpleCharaters = "13467ertyiadfhjkxcvbnERTYADFGHJKXCVBN"
 
-	//MimeTypeCaptchaAudio output base64 mine-type.
+	// MimeTypeCaptchaAudio output base64 mine-type.
 	MimeTypeCaptchaAudio = "audio/wav"
-	//MimeTypeCaptchaImage output base64 mine-type.
+	// MimeTypeCaptchaImage output base64 mine-type.
 	MimeTypeCaptchaImage = "image/png"
 
-	//FileExtCaptchaAudio output file extension.
+	// FileExtCaptchaAudio output file extension.
 	FileExtCaptchaAudio = "wav"
-	//FileExtCaptchaImage output file extension.
+	// FileExtCaptchaImage output file extension.
 	FileExtCaptchaImage = "png"
 )
 const (
-	//CaptchaComplexLower complex level lower.
+	// CaptchaComplexLower complex level lower.
 	CaptchaComplexLower = iota
-	//CaptchaComplexMedium complex level medium.
+	// CaptchaComplexMedium complex level medium.
 	CaptchaComplexMedium
-	//CaptchaComplexHigh complex level high.
+	// CaptchaComplexHigh complex level high.
 	CaptchaComplexHigh
 )
 const (
-	//CaptchaModeNumber mode number.
+	// CaptchaModeNumber mode number.
 	CaptchaModeNumber = iota
-	//CaptchaModeAlphabet mode alphabet.
+	// CaptchaModeAlphabet mode alphabet.
 	CaptchaModeAlphabet
-	//CaptchaModeArithmetic mode arithmetic.
+	// CaptchaModeArithmetic mode arithmetic.
 	CaptchaModeArithmetic
-	//CaptchaModeNumberAlphabet mode mix number and alphabet,this is also default mode.
+	// CaptchaModeNumberAlphabet mode mix number and alphabet,this is also default mode.
 	CaptchaModeNumberAlphabet
 )
 
-//GoTestOutputDir run go test command where the png and wav file output
+// GoTestOutputDir run go test command where the png and wav file output
 var GoTestOutputDir = "/Users/ericzhou/go/src/github.com/mojocn/base64Captcha/goTestOutPutPng"
 
 const (
@@ -57,3 +62,7 @@ const (
 	digitFontHeight    = 18
 	digitFontBlackChar = 1
 )
+
+func init() {
+	GoTestOutputDir = fmt.Sprintf("%s/src/github.com/mojocn/base64Captcha/goTestOutPutPng", os.Getenv("GOPATH"))
+}
