@@ -16,7 +16,7 @@ before_install:
   - pwd
   - ls -al
   - go get -t -v ./...
-  - go tool vet .
+  - go vet .
 
 script:
   - go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...

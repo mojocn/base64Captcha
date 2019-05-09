@@ -6,7 +6,7 @@ func TestAsset(t *testing.T) {
 
 	for idx, value := range _bindata {
 
-		t.Log(value, idx)
+		t.Log(idx)
 
 		ass, _ := value()
 
