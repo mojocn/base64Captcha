@@ -22,8 +22,7 @@ script:
   - go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
   - cd _examples
   - go build
-  - cd ../_examples_redis
-  - go run main.go
+
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
