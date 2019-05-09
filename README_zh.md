@@ -29,11 +29,17 @@ Base64是网络上最常见的用于传输8Bit字节代码的编码方式之一�
     go get -u github.com/mojocn/base64Captcha
 
 对于中国大陆Gopher `go get golang.org/x/image` 失败解决方案:
+#### 方法1
 ```bash
     mkdir -p $GOPATH/src/golang.org/x
     cd $GOPATH/src/golang.org/x
     git clone https://github.com/golang/image.git
 ```
+#### 方法2
+- go version > 1.11
+- set env `GOPROXY=https://goproxy.io`
+- ![](_examples/static/gomodproxy.png)
+
 ###  创建图像验证码
 ```
 import "github.com/mojocn/base64Captcha"

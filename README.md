@@ -29,11 +29,9 @@ give a string identifier to the package and it returns with a base64-encoding-pn
 
     go get -u github.com/mojocn/base64Captcha
 For Gopher from mainland China without VPN `go get golang.org/x/image` failure solution:
-```bash
-    mkdir -p $GOPATH/src/golang.org/x
-    cd $GOPATH/src/golang.org/x
-    git clone https://github.com/golang/image.git
-```
+- go version > 1.11
+- set env `GOPROXY=https://goproxy.io`
+- ![](_examples/static/gomodproxy.png)
 
 ### Create Captcha Code
 ```
