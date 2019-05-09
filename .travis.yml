@@ -10,7 +10,7 @@ go:
 - 1.11.x
 - 1.x
 env:
-  - CGO_ENABLED=0 GO111MODULE=on
+  - CGO_ENABLED=0 GO111MODULE=on CGO_ENABLED=1
 
 before_install:
   - pwd
