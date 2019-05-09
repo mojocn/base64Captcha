@@ -4,3 +4,4 @@ examples/nohup.out
 examples/examples
 goTestOutPutPng/*
 ex
+.codecov
