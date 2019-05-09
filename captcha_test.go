@@ -1,13 +1,14 @@
 package base64Captcha
 
 import (
+	"github.com/mojocn/base64Captcha/store"
+	"github.com/stretchr/testify/assert"
 	"io/ioutil"
+	"os"
 	"strings"
 	"testing"
+	"time"
 )
-
-const ExampleFontDirPath = "/Users/ericzhou/go/src/github.com/mojocn/base64Captcha/examples/fonts"
-const ExampleFontExtension = "ttf"
 
 var configD = ConfigDigit{
 	Height:     80,
@@ -52,7 +53,7 @@ func TestGenerateCaptcha(t *testing.T) {
 
 		CaptchaWriteToFile(cap, testDir, idkey, ext)
 
-		//t.Log(idkey, globalStore.Get(idkey, false))
+		// t.Log(idkey, globalStore.Get(idkey, false))
 
 	}
 	testDirAll, _ := ioutil.TempDir("", "all")
@@ -96,4 +97,39 @@ func TestVerifyCaptcha(t *testing.T) {
 	VerifyCaptcha("", "")
 	VerifyCaptcha("dsafasf", "ddd")
 
+}
+
+func TestPathExists(t *testing.T) {
+
+	testDir, _ := ioutil.TempDir("", "")
+
+	assert.True(t, pathExists(testDir))
+	assert.False(t, pathExists(testDir+"/NotExistFolder"))
+}
+
+func TestCaptchaWriteToFileCreateDirectory(t *testing.T) {
+
+	idKey, captcha := GenerateCaptcha("", configD)
+	testDir, _ := ioutil.TempDir("", "")
+	assert.Nil(t, CaptchaWriteToFile(captcha, testDir+"/NotExistFolder", idKey, "png"))
+}
+
+func TestCaptchaWriteToFileCreateFileFailed(t *testing.T) {
+
+	var err error
+	idKey, captcha := GenerateCaptcha("", configD)
+	testDir, _ := ioutil.TempDir("", "")
+	noPermissionDirPath := testDir + "/NoPermission"
+
+	err = os.Mkdir(noPermissionDirPath, os.ModeDir)
+	assert.Nil(t, err)
+
+	err = CaptchaWriteToFile(captcha, noPermissionDirPath, idKey, "png")
+	assert.NotNil(t, err)
+}
+
+func TestSetCustomStore(t *testing.T) {
+	s := store.NewMemoryStore(1000, 10*time.Minute)
+	SetCustomStore(s)
+	assert.Equal(t, globalStore, s)
 }

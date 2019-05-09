@@ -1,5 +1,7 @@
 language: go
 
+services: redis-server
+
 git:
   depth: 1
 
@@ -19,7 +21,7 @@ before_install:
   - go vet .
 
 script:
-  - go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
+  - make travis
   - cd _examples
   - go build
 
