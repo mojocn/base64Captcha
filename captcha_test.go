@@ -5,6 +5,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"os"
+	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -130,7 +131,11 @@ func TestCaptchaWriteToFileCreateFileFailed(t *testing.T) {
 
 	err = CaptchaWriteToFile(captcha, noPermissionDirPath, idKey, "png")
 	//has no permission must failed
-	assert.Nil(t, err)
+	if runtime.GOOS == "windows" {
+		assert.Nil(t, err)
+	} else {
+		assert.NotNil(t, err)
+	}
 }
 
 func TestSetCustomStore(t *testing.T) {
