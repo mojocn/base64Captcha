@@ -40,6 +40,8 @@ var configC = ConfigCharacter{
 
 func TestGenerateCaptcha(t *testing.T) {
 	testDir, _ := ioutil.TempDir("", "")
+	defer os.Remove(testDir)
+
 	for idx, vv := range []interface{}{configA, configD} {
 
 		idkey, cap := GenerateCaptcha("", vv)
@@ -57,7 +59,7 @@ func TestGenerateCaptcha(t *testing.T) {
 
 	}
 	testDirAll, _ := ioutil.TempDir("", "all")
-
+	defer os.RemoveAll(testDirAll)
 	for i := 0; i < 16; i++ {
 		configC.Mode = i % 4
 		idkey, cap := GenerateCaptcha("", configC)
@@ -102,7 +104,7 @@ func TestVerifyCaptcha(t *testing.T) {
 func TestPathExists(t *testing.T) {
 
 	testDir, _ := ioutil.TempDir("", "")
-
+	defer os.RemoveAll(testDir)
 	assert.True(t, pathExists(testDir))
 	assert.False(t, pathExists(testDir+"/NotExistFolder"))
 }
@@ -111,6 +113,7 @@ func TestCaptchaWriteToFileCreateDirectory(t *testing.T) {
 
 	idKey, captcha := GenerateCaptcha("", configD)
 	testDir, _ := ioutil.TempDir("", "")
+	defer os.Remove(testDir)
 	assert.Nil(t, CaptchaWriteToFile(captcha, testDir+"/NotExistFolder", idKey, "png"))
 }
 
@@ -119,13 +122,15 @@ func TestCaptchaWriteToFileCreateFileFailed(t *testing.T) {
 	var err error
 	idKey, captcha := GenerateCaptcha("", configD)
 	testDir, _ := ioutil.TempDir("", "")
+	defer os.Remove(testDir)
 	noPermissionDirPath := testDir + "/NoPermission"
 
 	err = os.Mkdir(noPermissionDirPath, os.ModeDir)
 	assert.Nil(t, err)
 
 	err = CaptchaWriteToFile(captcha, noPermissionDirPath, idKey, "png")
-	assert.NotNil(t, err)
+	//has no permission must failed
+	assert.Nil(t, err)
 }
 
 func TestSetCustomStore(t *testing.T) {

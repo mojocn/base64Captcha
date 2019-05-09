@@ -105,7 +105,7 @@ func randColor() color.RGBA {
 
 	red := r.Intn(255)
 	green := r.Intn(255)
-	blue := r.Intn(255)
+	var blue int
 	if (red + green) > 400 {
 		blue = 0
 	} else {

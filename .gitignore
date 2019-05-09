@@ -6,3 +6,4 @@ goTestOutPutPng/*
 ex
 .codecov
 coverage.*
+*.exe

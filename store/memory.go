@@ -105,7 +105,6 @@ func (s *memoryStore) collectOne(e *list.Element, specifyTime time.Time) *list.E
 		s.idByTime.Remove(e)
 		s.numStored--
 		return next
-	} else {
-		return nil
 	}
+	return nil
 }

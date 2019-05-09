@@ -27,7 +27,7 @@ func TestRedisStore_Get(t *testing.T) {
 	s := NewRedisStore(c, "test:", 5*time.Minute)
 	c.Set("test:"+id, value, 5*time.Minute)
 	assert.Equal(t, value, s.Get(id, false))
-	assert.Equal(t, value, c.Get("test:" + id).Val())
+	assert.Equal(t, value, c.Get("test:"+id).Val())
 }
 
 func TestRedisStore_GetAndClear(t *testing.T) {
@@ -40,7 +40,7 @@ func TestRedisStore_GetAndClear(t *testing.T) {
 	s := NewRedisStore(c, "test:", 5*time.Minute)
 	c.Set("test:"+id, value, 5*time.Minute)
 	assert.Equal(t, value, s.Get(id, true))
-	assert.Equal(t, int64(0), c.Exists("test:" + id).Val())
+	assert.Equal(t, int64(0), c.Exists("test:"+id).Val())
 }
 
 func TestNewRedisStoreByClient(t *testing.T) {

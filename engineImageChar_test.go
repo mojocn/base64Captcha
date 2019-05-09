@@ -2,13 +2,14 @@ package base64Captcha
 
 import (
 	"io/ioutil"
+	"os"
 	"strings"
 	"testing"
 )
 
 func TestEngineCharCreate(t *testing.T) {
 	tc, _ := ioutil.TempDir("", "audio")
-
+	defer os.Remove(tc)
 	for i := 0; i < 16; i++ {
 		configC.Mode = i % 4
 		boooo := i%2 == 0
