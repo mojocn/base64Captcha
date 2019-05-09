@@ -1,18 +1,30 @@
 language: go
 
+git:
+  depth: 1
+
 go:
-- 1.8.x
+
 - 1.9.x
 - 1.10.x
 - 1.11.x
+- 1.x
+env:
+  - CGO_ENABLED=0 GO111MODULE=on
 
 before_install:
+  - pwd
+  - ls -al
   - go get -t -v ./...
   - diff -u <(echo -n) <(gofmt -d -s .)
   - go tool vet .
 
 script:
   - go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
+  - cd _examples
+  - go build
+  - cd ../_examples_redis
+  - go run main.go
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
@@ -21,3 +33,4 @@ notifications:
   email:
     recipients:
       - neochau@gmail.com
+    on_success: never
