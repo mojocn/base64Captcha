@@ -39,7 +39,6 @@ const (
 )
 
 //GoTestOutputDir run go test command where the png and wav file output
-var GoTestOutputDir = "/Users/ericzhou/go/src/github.com/mojocn/base64Captcha/goTestOutPutPng"
 
 const (
 	// DefaultLen Default number of digits in captcha solution.

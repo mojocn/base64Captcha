@@ -32,10 +32,11 @@ func BenchmarkAudioWriteTo(b *testing.B) {
 }
 
 func TestEngineAudioCreate(t *testing.T) {
+	ta, _ := ioutil.TempDir("", "audio")
 	for i := 0; i < 10; i++ {
 		idKey := randomId()
 		au := EngineAudioCreate(idKey, configA)
-		if err := CaptchaWriteToFile(au, GoTestOutputDir+"/audio", idKey, "wav"); err != nil {
+		if err := CaptchaWriteToFile(au, ta, idKey, "wav"); err != nil {
 			t.Log(err)
 		}
 	}

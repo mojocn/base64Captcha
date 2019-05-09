@@ -1,10 +1,13 @@
 package base64Captcha
 
 import (
+	"io/ioutil"
+	"strings"
 	"testing"
 )
 
 func TestEngineCharCreate(t *testing.T) {
+	tc, _ := ioutil.TempDir("", "audio")
 
 	for i := 0; i < 16; i++ {
 		configC.Mode = i % 4
@@ -17,8 +20,11 @@ func TestEngineCharCreate(t *testing.T) {
 		configC.IsShowNoiseDot = boooo
 
 		im := EngineCharCreate(configC)
-		CaptchaWriteToFile(im, GoTestOutputDir+"/char", im.Content, "png")
-		t.Log(im.Content, im.VerifyValue)
+		fileName := strings.Trim(im.Content, "/+-+=?")
+		err := CaptchaWriteToFile(im, tc, fileName, "png")
+		if err != nil {
+			t.Error(err)
+		}
 	}
 }
 func TestMath(t *testing.T) {

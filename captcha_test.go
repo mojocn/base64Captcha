@@ -38,7 +38,7 @@ var configC = ConfigCharacter{
 }
 
 func TestGenerateCaptcha(t *testing.T) {
-	//GenerateCaptcha("", CaptchaItem{})
+	testDir, _ := ioutil.TempDir("", "")
 	for idx, vv := range []interface{}{configA, configD} {
 
 		idkey, cap := GenerateCaptcha("", vv)
@@ -46,44 +46,39 @@ func TestGenerateCaptcha(t *testing.T) {
 		if idx == 0 {
 			ext = "wav"
 		}
-		GoTestOutputDir, _ := ioutil.TempDir("", "")
 
-		CaptchaWriteToFile(cap, GoTestOutputDir, idkey, ext)
-		CaptchaWriteToFile(cap, GoTestOutputDir, idkey, ext)
+		CaptchaWriteToFile(cap, testDir, idkey, ext)
+		CaptchaWriteToFile(cap, testDir, idkey, ext)
 
-		tempDir, _ := ioutil.TempDir("", "")
-		CaptchaWriteToFile(cap, tempDir, idkey, ext)
+		CaptchaWriteToFile(cap, testDir, idkey, ext)
 
 		//t.Log(idkey, globalStore.Get(idkey, false))
 
 	}
+	testDirAll, _ := ioutil.TempDir("", "all")
 
 	for i := 0; i < 16; i++ {
 		configC.Mode = i % 4
 		idkey, cap := GenerateCaptcha("", configC)
 		ext := "png"
-		err := CaptchaWriteToFile(cap, GoTestOutputDir+"/all", "char_"+idkey, ext)
-		if err == nil {
-			t.Log(idkey, globalStore.Get(idkey, false))
-		} else {
-			t.Error(idkey)
+		err := CaptchaWriteToFile(cap, testDirAll, "char_"+idkey, ext)
+		if err != nil {
+			t.Error(err)
 		}
 	}
 }
 
 func TestCaptchaWriteToBase64Encoding(t *testing.T) {
-	idkey, cap := GenerateCaptcha("", configD)
+	_, cap := GenerateCaptcha("", configD)
 	base64string := CaptchaWriteToBase64Encoding(cap)
-	if strings.Contains(base64string, MimeTypeCaptchaImage) {
-		t.Log(base64string, idkey)
-	} else {
+	if !strings.Contains(base64string, MimeTypeCaptchaImage) {
+
 		t.Error("encodeing base64 string failed.")
 	}
-	idkeyA, capA := GenerateCaptcha("", configA)
+	_, capA := GenerateCaptcha("", configA)
 	base64stringA := CaptchaWriteToBase64Encoding(capA)
-	if strings.Contains(base64stringA, MimeTypeCaptchaAudio) {
-		t.Log(base64string, idkeyA)
-	} else {
+	if !strings.Contains(base64stringA, MimeTypeCaptchaAudio) {
+
 		t.Error("encodeing base64 string failed.")
 	}
 

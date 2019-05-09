@@ -72,6 +72,11 @@ func CaptchaWriteToBase64Encoding(cap CaptchaInterface) string {
 //fileExt is one of "png","wav"
 func CaptchaWriteToFile(cap CaptchaInterface, outputDir, fileName, fileExt string) error {
 	filePath := filepath.Join(outputDir, fileName+"."+fileExt)
+	//dir := filepath.Dir(filePath)
+	//err := os.MkdirAll(dir,os.ModePerm)
+	//if err != nil {
+	//	return err
+	//}
 	file, err := os.Create(filePath)
 	if err != nil {
 		fmt.Printf("%s is invalid path.error:%v", filePath, err)
