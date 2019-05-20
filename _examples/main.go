@@ -9,8 +9,8 @@ import (
 	"net/http"
 )
 
-//ConfigJsonBody json request body.
-type ConfigJsonBody struct {
+//configJsonBody json request body.
+type configJsonBody struct {
 	Id              string
 	CaptchaType     string
 	VerifyValue     string
@@ -24,7 +24,7 @@ func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	//parse request parameters
 	//接收客户端发送来的请求参数
 	decoder := json.NewDecoder(r.Body)
-	var postParameters ConfigJsonBody
+	var postParameters configJsonBody
 	err := decoder.Decode(&postParameters)
 	if err != nil {
 		log.Println(err)
@@ -63,7 +63,7 @@ func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
 	//parse request parameters
 	//接收客户端发送来的请求参数
 	decoder := json.NewDecoder(r.Body)
-	var postParameters ConfigJsonBody
+	var postParameters configJsonBody
 	err := decoder.Decode(&postParameters)
 	if err != nil {
 		log.Println(err)

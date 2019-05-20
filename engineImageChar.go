@@ -54,6 +54,10 @@ type ConfigCharacter struct {
 	// CaptchaLen Default number of digits in captcha solution.
 	// 默认数字验证长度6.
 	CaptchaLen int
+
+	//BgColor captcha image background color (optional)
+	//背景颜色
+	BgColor *color.RGBA
 }
 type point struct {
 	X int
@@ -338,8 +342,13 @@ func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool) error 
 
 //EngineCharCreate create captcha with config struct.
 func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
-
-	captchaImage, err := newCaptchaImage(config.Width, config.Height, randLightColor())
+	var bgc color.RGBA
+	if config.BgColor != nil {
+		bgc = *config.BgColor
+	} else {
+		bgc = randLightColor()
+	}
+	captchaImage, err := newCaptchaImage(config.Width, config.Height, bgc)
 
 	//背景有像素点干扰
 	if config.IsShowNoiseDot {
