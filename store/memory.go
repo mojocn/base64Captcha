@@ -53,7 +53,7 @@ func NewMemoryStore(collectNum int, expiration time.Duration) Store {
 	return s
 }
 
-func (s *memoryStore) Set(id string, value string) {
+func (s *memoryStore) Set(id string, value string) (err error) {
 	s.Lock()
 	s.digitsById[id] = value
 	s.idByTime.PushBack(idByTimeValue{time.Now(), id})
@@ -62,9 +62,10 @@ func (s *memoryStore) Set(id string, value string) {
 	if s.numStored > s.collectNum {
 		go s.collect()
 	}
+	return nil
 }
 
-func (s *memoryStore) Get(id string, clear bool) (value string) {
+func (s *memoryStore) Get(id string, clear bool) (value string, err error) {
 	if !clear {
 		// When we don't need to clear captcha, acquire read lock.
 		s.RLock()

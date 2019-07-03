@@ -26,8 +26,10 @@ func TestRedisStore_Get(t *testing.T) {
 	value := fmt.Sprintf("%d", rand.Int63())
 	s := NewRedisStore(c, "test:", 5*time.Minute)
 	c.Set("test:"+id, value, 5*time.Minute)
-	assert.Equal(t, value, s.Get(id, false))
-	assert.Equal(t, value, c.Get("test:"+id).Val())
+	result, err := s.Get(id, false)
+	assert.Nil(t, err)
+	assert.Equal(t, value, result)
+	assert.Equal(t, value, c.Get("test:" + id).Val())
 }
 
 func TestRedisStore_GetAndClear(t *testing.T) {
@@ -39,8 +41,10 @@ func TestRedisStore_GetAndClear(t *testing.T) {
 	value := fmt.Sprintf("%d", rand.Int63())
 	s := NewRedisStore(c, "test:", 5*time.Minute)
 	c.Set("test:"+id, value, 5*time.Minute)
-	assert.Equal(t, value, s.Get(id, true))
-	assert.Equal(t, int64(0), c.Exists("test:"+id).Val())
+	result, err := s.Get(id, true)
+	assert.Nil(t, err)
+	assert.Equal(t, value, result)
+	assert.Equal(t, int64(0), c.Exists("test:" + id).Val())
 }
 
 func TestNewRedisStoreByClient(t *testing.T) {
@@ -62,7 +66,8 @@ func TestRedisStore_Set(t *testing.T) {
 	s := NewRedisStore(redis.NewClient(&redis.Options{
 		Addr: "127.0.0.1:6379",
 	}), "test:", 5*time.Minute)
-	s.Set(id, value)
+	err := s.Set(id, value)
+	assert.Nil(t, err)
 	verifyCode, err := c.Get("test:" + id).Result()
 	assert.Nil(t, err)
 	assert.Equal(t, value, verifyCode)
@@ -74,7 +79,9 @@ func TestRedisStore_GetFailed(t *testing.T) {
 	s := NewRedisStore(redis.NewClient(&redis.Options{
 		Addr: "127.0.0.1:6379",
 	}), "test:", 5*time.Minute)
-	assert.Equal(t, "", s.Get(id, false))
+	value, err := s.Get(id, false)
+	assert.NotNil(t, err)
+	assert.Equal(t, "", value)
 }
 
 func TestRedisStore_GetFailed2(t *testing.T) {
@@ -83,5 +90,7 @@ func TestRedisStore_GetFailed2(t *testing.T) {
 	s := NewRedisStore(redis.NewClient(&redis.Options{
 		Addr: "127.0.0.1:6379",
 	}), "test:", 5*time.Minute)
-	assert.Equal(t, "", s.Get(id, true))
+	value, err := s.Get(id, true)
+	assert.NotNil(t, err)
+	assert.Equal(t, "", value)
 }

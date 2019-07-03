@@ -1,6 +1,8 @@
 package base64Captcha
 
 import (
+	"fmt"
+	"github.com/go-redis/redis"
 	"github.com/mojocn/base64Captcha/store"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
@@ -72,6 +74,19 @@ func TestGenerateCaptcha(t *testing.T) {
 	}
 }
 
+func TestGenerateCaptchaOnFailed(t *testing.T) {
+
+	preStore := globalStore
+	s := store.NewRedisStore(redis.NewClient(&redis.Options{
+		Addr: "127.0.0.1:6378",
+	}), "test:", 5*time.Minute)
+	SetCustomStore(s)
+	idkey, capt := GenerateCaptcha("", configA)
+	assert.Equal(t, "", idkey)
+	assert.Nil(t, capt)
+	SetCustomStore(preStore)
+}
+
 func TestCaptchaWriteToBase64Encoding(t *testing.T) {
 	_, cap := GenerateCaptcha("", configD)
 	base64string := CaptchaWriteToBase64Encoding(cap)
@@ -90,7 +105,9 @@ func TestCaptchaWriteToBase64Encoding(t *testing.T) {
 
 func TestVerifyCaptcha(t *testing.T) {
 	idkey, _ := GenerateCaptcha("", configD)
-	verifyValue := globalStore.Get(idkey, false)
+	verifyValue, err := globalStore.Get(idkey, false)
+	assert.Nil(t, err)
+	fmt.Printf("idKey: %s, verifyValue: %s", idkey, verifyValue)
 	if VerifyCaptcha(idkey, verifyValue) {
 		t.Log(idkey, verifyValue)
 	} else {
@@ -99,7 +116,110 @@ func TestVerifyCaptcha(t *testing.T) {
 
 	VerifyCaptcha("", "")
 	VerifyCaptcha("dsafasf", "ddd")
+}
 
+func TestVerifyCaptchaOnFailed(t *testing.T) {
+
+	preStore := globalStore
+	s := store.NewRedisStore(redis.NewClient(&redis.Options{
+		Addr: "127.0.0.1:6378",
+	}), "test:", 5*time.Minute)
+	SetCustomStore(s)
+	assert.False(t, VerifyCaptcha("sss", "32321"))
+	SetCustomStore(preStore)
+}
+
+func TestVerifyCaptchaV2(t *testing.T) {
+	idkey, _, err := GenerateCaptchaV2("", configD)
+	assert.Nil(t, err)
+	verifyValue, err := globalStore.Get(idkey, false)
+	assert.Nil(t, err)
+	fmt.Printf("idKey: %s, verifyValue: %s", idkey, verifyValue)
+	result, err := VerifyCaptchaV2(idkey, verifyValue)
+	assert.Nil(t, err)
+	if result {
+		t.Log(idkey, verifyValue)
+	} else {
+		t.Error("verify captcha content is failed.")
+	}
+
+	VerifyCaptchaV2("", "")
+	VerifyCaptchaV2("dsafasf", "ddd")
+}
+
+func TestVerifyCaptchaV2OnFailed(t *testing.T) {
+
+	preStore := globalStore
+	s := store.NewRedisStore(redis.NewClient(&redis.Options{
+		Addr: "127.0.0.1:6378",
+	}), "test:", 5*time.Minute)
+	SetCustomStore(s)
+	result, err := VerifyCaptchaV2("sss", "32321")
+	assert.NotNil(t, err)
+	assert.False(t, result)
+	SetCustomStore(preStore)
+}
+
+func TestVerifyCaptchaAndIsClear(t *testing.T) {
+
+	idkey, _ := GenerateCaptcha("", configD)
+	verifyValue, err := globalStore.Get(idkey, false)
+	assert.Nil(t, err)
+	fmt.Printf("idKey: %s, verifyValue: %s", idkey, verifyValue)
+	if VerifyCaptchaAndIsClear(idkey, verifyValue, true) {
+		t.Log(idkey, verifyValue)
+	} else {
+		t.Error("verify captcha content is failed.")
+	}
+
+	VerifyCaptcha("", "")
+	VerifyCaptcha("dsafasf", "ddd")
+}
+
+func TestVerifyCaptchaAndIsClearOnFailed(t *testing.T) {
+
+	preStore := globalStore
+	s := store.NewRedisStore(redis.NewClient(&redis.Options{
+		Addr: "127.0.0.1:6378",
+	}), "test:", 5*time.Minute)
+	SetCustomStore(s)
+	assert.False(t, VerifyCaptchaAndIsClear("sss", "wded", true))
+	SetCustomStore(preStore)
+}
+
+func TestVerifyCaptchaAndIsClearV2(t *testing.T) {
+
+	idkey, _ := GenerateCaptcha("", configD)
+	verifyValue, err := globalStore.Get(idkey, false)
+	assert.Nil(t, err)
+	fmt.Printf("idKey: %s, verifyValue: %s", idkey, verifyValue)
+	result, err := VerifyCaptchaAndIsClearV2(idkey, verifyValue, true)
+	assert.Nil(t, err)
+	if result {
+		t.Log(idkey, verifyValue)
+	} else {
+		t.Error("verify captcha content is failed.")
+	}
+
+	result, err = VerifyCaptchaV2("", "")
+	assert.Nil(t, err)
+	assert.False(t, result)
+	result, err = VerifyCaptchaV2("dsafasf", "ddd")
+	assert.Nil(t, err)
+	assert.False(t, result)
+}
+
+func TestVerifyCaptchaAndIsClearV2OnFailed(t *testing.T) {
+
+	preStore := globalStore
+	s := store.NewRedisStore(redis.NewClient(&redis.Options{
+		Addr: "127.0.0.1:6378",
+	}), "test:", 5*time.Minute)
+	SetCustomStore(s)
+	result, err := VerifyCaptchaAndIsClearV2("sss", "dddd", true)
+	assert.NotNil(t, err)
+	assert.False(t, result)
+	SetCustomStore(preStore)
 }
 
 func TestPathExists(t *testing.T) {
@@ -130,7 +250,7 @@ func TestCaptchaWriteToFileCreateFileFailed(t *testing.T) {
 	assert.Nil(t, err)
 
 	err = CaptchaWriteToFile(captcha, noPermissionDirPath, idKey, "png")
-	//has no permission must failed
+	// has no permission must failed
 	if runtime.GOOS == "windows" {
 		assert.Nil(t, err)
 	} else {

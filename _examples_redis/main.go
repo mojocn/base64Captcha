@@ -19,15 +19,16 @@ type customizeRdsStore struct {
 }
 
 // customizeRdsStore implementing Set method of  Store interface
-func (s *customizeRdsStore) Set(id string, value string) {
-	err := s.redisClient.Set(id, value, time.Minute*10).Err()
+func (s *customizeRdsStore) Set(id string, value string) (err error) {
+	err = s.redisClient.Set(id, value, time.Minute*10).Err()
 	if err != nil {
 		panic(err)
 	}
+	return
 }
 
 // customizeRdsStore implementing Get method of  Store interface
-func (s *customizeRdsStore) Get(id string, clear bool) (value string) {
+func (s *customizeRdsStore) Get(id string, clear bool) (value string, err error) {
 	val, err := s.redisClient.Get(id).Result()
 	if err != nil {
 		panic(err)
@@ -38,7 +39,7 @@ func (s *customizeRdsStore) Get(id string, clear bool) (value string) {
 			panic(err)
 		}
 	}
-	return val
+	return val, err
 }
 
 func init() {
@@ -49,9 +50,9 @@ func init() {
 		DB:       0,  // use default DB
 	})
 	// init redis store
-	customeStore := customizeRdsStore{client}
+	customerStore := customizeRdsStore{client}
 
-	base64Captcha.SetCustomStore(&customeStore)
+	base64Captcha.SetCustomStore(&customerStore)
 
 }
 

@@ -28,13 +28,12 @@ func NewRedisStore(client *redis.Client, prefix string, expiration time.Duration
 	return s
 }
 
-func (s *redisStore) Set(id string, value string) {
-	s.client.Set(s.prefix+id, value, s.expiration)
+func (s *redisStore) Set(id string, value string) (err error) {
+	return s.client.Set(s.prefix+id, value, s.expiration).Err()
 }
 
-func (s *redisStore) Get(id string, clear bool) (value string) {
+func (s *redisStore) Get(id string, clear bool) (value string, err error) {
 
-	var err error
 	if clear {
 		value, err = s.getAndClear(id)
 	} else {
@@ -42,7 +41,7 @@ func (s *redisStore) Get(id string, clear bool) (value string) {
 	}
 
 	if err != nil {
-		return ""
+		return "", err
 	}
 
 	return

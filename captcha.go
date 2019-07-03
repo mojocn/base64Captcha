@@ -98,8 +98,25 @@ type CaptchaItem struct {
 
 // VerifyCaptcha by given id key and remove the captcha value in store, return boolean value.
 // 验证图像验证码,返回boolean.
+func VerifyCaptchaV2(identifier, verifyValue string) (bool, error) {
+	result, err := VerifyCaptchaAndIsClearV2(identifier, verifyValue, true)
+	if err != nil {
+		return false, err
+	}
+
+	return result, nil
+}
+
+// @deprecated
+// Please use VerifyCaptchaV2, this function can't let you know the internal error because there is no return error.
 func VerifyCaptcha(identifier, verifyValue string) bool {
-	return VerifyCaptchaAndIsClear(identifier, verifyValue, true)
+	result, err := VerifyCaptchaAndIsClearV2(identifier, verifyValue, true)
+	if err != nil {
+		log.Printf("get store error, %v", err)
+		return false
+	}
+
+	return result
 }
 
 // VerifyCaptchaAndIsClear verify captcha, return boolean value.
@@ -107,12 +124,28 @@ func VerifyCaptcha(identifier, verifyValue string) bool {
 // verifyValue is the captcha image value,
 // isClear is whether to clear the value in store.
 // 验证图像验证码,返回boolean.
-func VerifyCaptchaAndIsClear(identifier, verifyValue string, isClear bool) bool {
+func VerifyCaptchaAndIsClearV2(identifier, verifyValue string, isClear bool) (bool, error) {
 	if verifyValue == "" {
+		return false, nil
+	}
+	storeValue, err := globalStore.Get(identifier, isClear)
+	if err != nil {
+		return false, err
+	}
+	return strings.ToLower(storeValue) == strings.ToLower(verifyValue), nil
+}
+
+// @deprecated
+// Please use VerifyCaptchaAndIsClearV2, this function can't let you know the internal error because there is no return error.
+func VerifyCaptchaAndIsClear(identifier, verifyValue string, isClear bool) bool {
+
+	result, err := VerifyCaptchaAndIsClearV2(identifier, verifyValue, isClear)
+	if err != nil {
+		log.Printf("get store error, %v", err)
 		return false
 	}
-	storeValue := globalStore.Get(identifier, isClear)
-	return strings.ToLower(storeValue) == strings.ToLower(verifyValue)
+
+	return result
 }
 
 // GenerateCaptcha create captcha by config struct and id.
@@ -165,12 +198,35 @@ func VerifyCaptchaAndIsClear(identifier, verifyValue string, isClear bool) bool 
 // 	idKeyD,capD := base64Captcha.GenerateCaptcha("",configD)
 // 	//write to base64 string.
 // 	base64stringD := base64Captcha.CaptchaWriteToBase64Encoding(capD)
-func GenerateCaptcha(idKey string, configuration interface{}) (id string, captchaInstance CaptchaInterface) {
+func GenerateCaptchaV2(idKey string, configuration interface{}) (id string, captchaInstance CaptchaInterface, err error) {
+
 	if idKey == "" {
 		idKey = randomId()
 	}
-	id = idKey
-	var verifyValue string
+
+	verifyValue, captchaInstance := getCaptchaInstance(idKey, configuration)
+
+	err = globalStore.Set(idKey, verifyValue)
+
+	return idKey, captchaInstance, err
+}
+
+// @deprecated
+// Please use GenerateCaptchaV2, this function can't let you know the internal error because there is no return error.
+func GenerateCaptcha(idKey string, configuration interface{}) (id string, captchaInstance CaptchaInterface) {
+
+	var err error
+	id, captchaInstance, err = GenerateCaptchaV2(idKey, configuration)
+	if err != nil {
+		log.Printf("set store error, %v", err)
+		return "", nil
+	}
+
+	return
+}
+
+func getCaptchaInstance(idKey string, configuration interface{}) (verifyValue string, captchaInstance CaptchaInterface) {
+
 	switch config := configuration.(type) {
 	case ConfigAudio:
 		audio := EngineAudioCreate(idKey, config)
@@ -190,10 +246,7 @@ func GenerateCaptcha(idKey string, configuration interface{}) (id string, captch
 	default:
 		log.Fatal("config type not supported", config)
 	}
-
-	globalStore.Set(idKey, verifyValue)
-
-	return idKey, captchaInstance
+	return
 }
 
 func pathExists(path string) bool {

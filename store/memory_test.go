@@ -15,6 +15,7 @@
 package store
 
 import (
+	"container/list"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"math/rand"
@@ -28,26 +29,33 @@ var (
 )
 
 func TestSetGet(t *testing.T) {
+	var err error
 	s := NewMemoryStore(GCLimitNumber, Expiration)
 	id := "captcha id"
 	d := "random-string"
-	s.Set(id, d)
-	d2 := s.Get(id, false)
+	err = s.Set(id, d)
+	assert.Nil(t, err)
+	d2, err := s.Get(id, false)
+	assert.Nil(t, err)
 	if d2 != d {
 		t.Errorf("saved %v, getDigits returned got %v", d, d2)
 	}
 }
 
 func TestGetClear(t *testing.T) {
+	var err error
 	s := NewMemoryStore(GCLimitNumber, Expiration)
 	id := "captcha id"
 	d := "932839jfffjkdss"
-	s.Set(id, d)
-	d2 := s.Get(id, true)
+	err = s.Set(id, d)
+	assert.Nil(t, err)
+	d2, err := s.Get(id, true)
+	assert.Nil(t, err)
 	if d != d2 {
 		t.Errorf("saved %v, getDigitsClear returned got %v", d, d2)
 	}
-	d2 = s.Get(id, false)
+	d2, err = s.Get(id, false)
+	assert.Nil(t, err)
 	if d2 != "" {
 		t.Errorf("getDigitClear didn't clear (%q=%v)", id, d2)
 	}
@@ -68,7 +76,8 @@ func TestCollect(t *testing.T) {
 	// Must be already collected
 	nc := 0
 	for i := range ids {
-		d2 := s.Get(ids[i], false)
+		d2, err := s.Get(ids[i], false)
+		assert.Nil(t, err)
 		if d2 != "" {
 			t.Errorf("%d: not collected", i)
 			nc++
@@ -90,7 +99,7 @@ func BenchmarkSetCollect(b *testing.B) {
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < 1000; j++ {
-			s.Set(ids[j], d)
+			_ = s.Set(ids[j], d)
 		}
 		s.(*memoryStore).collect()
 	}
@@ -99,18 +108,34 @@ func BenchmarkSetCollect(b *testing.B) {
 func TestMemoryStore_SetGoCollect(t *testing.T) {
 	s := NewMemoryStore(10, -1)
 	for i := 0; i <= 100; i++ {
-		s.Set(fmt.Sprint(i), fmt.Sprint(i))
+		err := s.Set(fmt.Sprint(i), fmt.Sprint(i))
+		assert.Nil(t, err)
 	}
 }
 
 func TestMemoryStore_CollectNotExpire(t *testing.T) {
 	s := NewMemoryStore(10, time.Hour)
 	for i := 0; i < 50; i++ {
-		s.Set(fmt.Sprint(i), fmt.Sprint(i))
+		err := s.Set(fmt.Sprint(i), fmt.Sprint(i))
+		assert.Nil(t, err)
 	}
 
 	// let background goroutine to go
 	time.Sleep(time.Second)
+	result, err := s.Get("0", false)
+	assert.Nil(t, err)
+	assert.Equal(t, "0", result)
+}
 
-	assert.Equal(t, "0", s.Get("0", false))
+func TestMemoryStore_CollectOneFailed(t *testing.T) {
+
+	s := NewMemoryStore(10, time.Hour)
+	mem, ok := s.(*memoryStore)
+	assert.NotNil(t, mem)
+	assert.True(t, ok)
+	anotherTypeList := list.New()
+	anotherTypeList.PushBack(time.Now())
+	now := time.Now()
+	result := mem.collectOne(anotherTypeList.Front(), now)
+	assert.Nil(t, result)
 }
