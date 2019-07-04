@@ -7,6 +7,7 @@
     <meta name="Description" content="Base64 Captcha"/>
     <link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.0.11/theme-chalk/index.css">
     <style>
+
         .el-header, .el-footer {
             background-color: #B3C0D1;
             color: #333;
@@ -59,6 +60,8 @@
         .el-form-item {
             margin-bottom: 6px;
         }
+
+
 
 
 
@@ -233,19 +236,17 @@
                                            @change="generateCaptcha"></el-slider>
                             </div>
                             <div class="block">
-                                <div class="block">
-                                    <span class="demonstration">RGBA.B(0~255)</span>
-                                    <el-slider v-model="form.ConfigCharacter.BgColor.B" :min="0" :max="255"
-                                               show-input
-                                               @change="generateCaptcha"></el-slider>
-                                </div>
-                                <div class="block">
-                                    <div class="block">
-                                        <span class="demonstration">RGBA.A(1~254)</span>
-                                        <el-slider v-model="form.ConfigCharacter.BgColor.A" :min="1" :max="254"
-                                                   show-input
-                                                   @change="generateCaptcha"></el-slider>
-                                    </div>
+                                <span class="demonstration">RGBA.B(0~255)</span>
+                                <el-slider v-model="form.ConfigCharacter.BgColor.B" :min="0" :max="255"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </div>
+                            <div class="block">
+                                <span class="demonstration">RGBA.A(1~254)</span>
+                                <el-slider v-model="form.ConfigCharacter.BgColor.A" :min="1" :max="254"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </div>
 
                         </el-form-item>
 
@@ -433,6 +434,8 @@
             this.generateCaptcha()
         }
     })
+
+
 
 
 

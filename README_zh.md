@@ -151,7 +151,6 @@ func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 
 	//or you can do this
 	//你也可以是用默认参数 生成图像验证码
-	//base64Png := captcha.GenerateCaptchaPngBase64StringDefault(captchaId)
 
 	//set json response
 	//设置json响应

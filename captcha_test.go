@@ -2,10 +2,8 @@ package base64Captcha
 
 import (
 	"github.com/mojocn/base64Captcha/store"
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"os"
-	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -106,16 +104,24 @@ func TestPathExists(t *testing.T) {
 
 	testDir, _ := ioutil.TempDir("", "")
 	defer os.RemoveAll(testDir)
-	assert.True(t, pathExists(testDir))
-	assert.False(t, pathExists(testDir+"/NotExistFolder"))
+	if pathExists(testDir) == false {
+		t.Error(testDir, "mkdir failed")
+	}
+
+	if pathExists(testDir+"/NotExistFolder") == true {
+		t.Error(testDir+"/NotExistFolder", "failed")
+
+	}
 }
 
 func TestCaptchaWriteToFileCreateDirectory(t *testing.T) {
-
 	idKey, captcha := GenerateCaptcha("", configD)
 	testDir, _ := ioutil.TempDir("", "")
 	defer os.Remove(testDir)
-	assert.Nil(t, CaptchaWriteToFile(captcha, testDir+"/NotExistFolder", idKey, "png"))
+	err := CaptchaWriteToFile(captcha, testDir+"/NotExistFolder", idKey, "png")
+	if err != nil {
+		t.Error(err)
+	}
 }
 
 func TestCaptchaWriteToFileCreateFileFailed(t *testing.T) {
@@ -127,19 +133,21 @@ func TestCaptchaWriteToFileCreateFileFailed(t *testing.T) {
 	noPermissionDirPath := testDir + "/NoPermission"
 
 	err = os.Mkdir(noPermissionDirPath, os.ModeDir)
-	assert.Nil(t, err)
+	if err != nil {
+		t.Error(err)
+	}
 
 	err = CaptchaWriteToFile(captcha, noPermissionDirPath, idKey, "png")
 	//has no permission must failed
-	if runtime.GOOS == "windows" {
-		assert.Nil(t, err)
-	} else {
-		assert.NotNil(t, err)
+	if err != nil {
+		t.Error(err)
 	}
 }
 
 func TestSetCustomStore(t *testing.T) {
 	s := store.NewMemoryStore(1000, 10*time.Minute)
 	SetCustomStore(s)
-	assert.Equal(t, globalStore, s)
+	if s != globalStore {
+		t.Error("SetCustomStore failed")
+	}
 }

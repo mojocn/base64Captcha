@@ -16,7 +16,6 @@ package store
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"testing"
 	"time"
@@ -112,5 +111,7 @@ func TestMemoryStore_CollectNotExpire(t *testing.T) {
 	// let background goroutine to go
 	time.Sleep(time.Second)
 
-	assert.Equal(t, "0", s.Get("0", false))
+	if v := s.Get("0", false); v != "0" {
+		t.Error("mem store get failed")
+	}
 }

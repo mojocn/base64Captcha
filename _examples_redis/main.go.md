@@ -1,3 +1,4 @@
+```go
 // example of HTTP server that uses the captcha package.
 package main
 
@@ -22,7 +23,7 @@ type customizeRdsStore struct {
 func (s *customizeRdsStore) Set(id string, value string) {
 	err := s.redisClient.Set(id, value, time.Minute*10).Err()
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 }
 
@@ -30,12 +31,14 @@ func (s *customizeRdsStore) Set(id string, value string) {
 func (s *customizeRdsStore) Get(id string, clear bool) (value string) {
 	val, err := s.redisClient.Get(id).Result()
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		return ""
 	}
 	if clear {
 		err := s.redisClient.Del(id).Err()
 		if err != nil {
-			panic(err)
+		log.Println(err)
+		return ""
 		}
 	}
 	return val
@@ -149,3 +152,4 @@ func main() {
 		log.Fatal(err)
 	}
 }
+```
