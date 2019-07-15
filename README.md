@@ -19,7 +19,7 @@ give a string identifier to the package and it returns with a base64-encoding-pn
 * [English](https://godoc.org/github.com/mojocn/base64Captcha)
 * [中文文档](https://github.com/mojocn/base64Captcha/blob/master/README_zh.md)
 
-#### [Playground Powered by Vuejs+elementUI+Axios](http://captcha.mojotv.cn)
+#### [Playground Powered by Vuejs+elementUI+Axios](http://home.mojotv.cn:8777)
 
 [![golang base64 captcha package](https://i.imgur.com/bsnXDNj.png?1)](https://www.youtube.com/watch?v=Yf0xDn2Q1Ek)
 
@@ -31,7 +31,6 @@ give a string identifier to the package and it returns with a base64-encoding-pn
 For Gopher from mainland China without VPN `go get golang.org/x/image` failure solution:
 - go version > 1.11
 - set env `GOPROXY=https://goproxy.io`
-- ![](_examples/static/gomodproxy.png)
 
 ### Create Captcha Code
 ```
@@ -350,7 +349,7 @@ server {
         access_log  /home/wwwlogs/captcha.mojotv.cn.log;
 }
 ```
-#### Go to [http://localhost:777](http://localhost:7777)
+#### Go to [http://localhost:777](http://home.mojotv.cn:8777)
 
 Congratulations! You've just built your first **base64Captcha-APIs** app.
 Any question you can leave a message. If you like the package please star this repo
