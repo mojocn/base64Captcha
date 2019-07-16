@@ -63,7 +63,7 @@ func newAudio(id string, digits []byte, lang string) *Audio {
 	numsnd := make([][]byte, len(digits))
 	for i, n := range digits {
 		snd := a.randomizedDigitSound(n)
-		setSoundLevel(snd, 2)
+		setSoundLevel(snd, 1.5)
 		numsnd[i] = snd
 	}
 	// Random intervals between digits (including beginning).

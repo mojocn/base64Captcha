@@ -6,6 +6,7 @@ package base64Captcha
 
 import (
 	"io/ioutil"
+	"os"
 	"testing"
 )
 
@@ -33,11 +34,13 @@ func BenchmarkAudioWriteTo(b *testing.B) {
 
 func TestEngineAudioCreate(t *testing.T) {
 	ta, _ := ioutil.TempDir("", "audio")
-	//defer os.RemoveAll(ta)
-	for i := 0; i < 10; i++ {
+	defer os.RemoveAll(ta)
+
+	//todo:: fix zh zero sound
+	for i := 0; i < 100; i++ {
 		idKey := randomId()
 		au := EngineAudioCreate(idKey, configA)
-		if err := CaptchaWriteToFile(au, ta, idKey, "wav"); err != nil {
+		if err := CaptchaWriteToFile(au, ta, au.VerifyValue, "wav"); err != nil {
 			t.Log(err)
 		}
 	}
