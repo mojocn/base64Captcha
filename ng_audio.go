@@ -63,13 +63,14 @@ func newAudio(id string, digits []byte, lang string) *Audio {
 	numsnd := make([][]byte, len(digits))
 	for i, n := range digits {
 		snd := a.randomizedDigitSound(n)
+		setSoundLevel(snd, 2)
 		numsnd[i] = snd
 	}
 	// Random intervals between digits (including beginning).
 	intervals := make([]int, len(digits)+1)
 	intdur := 0
 	for i := range intervals {
-		dur := a.rng.Int(sampleRate, sampleRate*3) // 1 to 3 seconds
+		dur := a.rng.Int(sampleRate, sampleRate*2) // 1 to 2 seconds
 		intdur += dur
 		intervals[i] = dur
 	}
@@ -106,9 +107,9 @@ func (a *Audio) makeBackgroundSound(length int) []byte {
 	b := a.makeWhiteNoise(length, 4)
 	for i := 0; i < length/(sampleRate/10); i++ {
 		snd := reversedSound(a.digitSounds[a.rng.Intn(10)])
-		snd = changeSpeed(snd, a.rng.Float(0.8, 1.4))
+		//snd = changeSpeed(snd, a.rng.Float(0.8, 1.2))
 		place := a.rng.Intn(len(b) - len(snd))
-		setSoundLevel(snd, a.rng.Float(0.2, 0.5))
+		setSoundLevel(snd, a.rng.Float(0.04, 0.08))
 		mixSound(b[place:], snd)
 	}
 	return b
