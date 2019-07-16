@@ -91,7 +91,7 @@ func newAudio(id string, digits []byte, lang string) *Audio {
 		mixSound(bg[pos:], v)
 		pos += len(v) + intervals[i+1]
 	}
-	//a.body.Write(bg)
+	a.body.Write(bg)
 	// Write ending (one beep).
 	a.body.Write(endingBeepSound)
 	return a
@@ -116,7 +116,7 @@ func (a *Audio) makeBackgroundSound(length int) []byte {
 
 func (a *Audio) randomizedDigitSound(n byte) []byte {
 	s := a.randomSpeed(a.digitSounds[n])
-	setSoundLevel(s, a.rng.Float(0.75, 1.2))
+	setSoundLevel(s, a.rng.Float(0.85, 1.2))
 	return s
 }
 
@@ -131,7 +131,7 @@ func (a *Audio) longestDigitSndLen() int {
 }
 
 func (a *Audio) randomSpeed(b []byte) []byte {
-	pitch := a.rng.Float(0.9, 1.2)
+	pitch := a.rng.Float(0.95, 1.1)
 	return changeSpeed(b, pitch)
 }
 
