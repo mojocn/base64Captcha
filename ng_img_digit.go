@@ -278,9 +278,9 @@ func max3(x, y, z uint8) (m uint8) {
 	return
 }
 
-// BinaryEncodeing encodes an image to PNG and returns
+// BinaryEncoding encodes an image to PNG and returns
 // the result as a byte slice.
-func (m *CaptchaImageDigit) BinaryEncodeing() []byte {
+func (m *CaptchaImageDigit) BinaryEncoding() []byte {
 	var buf bytes.Buffer
 	if err := png.Encode(&buf, m.Paletted); err != nil {
 		panic(err.Error())
@@ -290,6 +290,6 @@ func (m *CaptchaImageDigit) BinaryEncodeing() []byte {
 
 // WriteTo writes captcha image in PNG format into the given writer.
 func (m *CaptchaImageDigit) WriteTo(w io.Writer) (int64, error) {
-	n, err := w.Write(m.BinaryEncodeing())
+	n, err := w.Write(m.BinaryEncoding())
 	return int64(n), err
 }

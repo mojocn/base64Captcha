@@ -48,8 +48,8 @@ func SetCustomStore(s store.Store) {
 
 // CaptchaInterface captcha interface for captcha engine to to write staff
 type CaptchaInterface interface {
-	// BinaryEncodeing covert to bytes
-	BinaryEncodeing() []byte
+	// BinaryEncoding covert to bytes
+	BinaryEncoding() []byte
 	// WriteTo output captcha entity
 	WriteTo(w io.Writer) (n int64, err error)
 }
@@ -57,7 +57,7 @@ type CaptchaInterface interface {
 // CaptchaWriteToBase64Encoding converts captcha to base64 encoding string.
 // mimeType is one of "audio/wav" "image/png".
 func CaptchaWriteToBase64Encoding(cap CaptchaInterface) string {
-	binaryData := cap.BinaryEncodeing()
+	binaryData := cap.BinaryEncoding()
 	var mimeType string
 	if _, ok := cap.(*Audio); ok {
 		mimeType = MimeTypeCaptchaAudio

@@ -401,9 +401,9 @@ func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
 	return captchaImage
 }
 
-//BinaryEncodeing save captcha image to binary.
+//BinaryEncoding save captcha image to binary.
 //保存图片到io.
-func (captcha *CaptchaImageChar) BinaryEncodeing() []byte {
+func (captcha *CaptchaImageChar) BinaryEncoding() []byte {
 	var buf bytes.Buffer
 	if err := png.Encode(&buf, captcha.nrgba); err != nil {
 		panic(err.Error())
@@ -413,6 +413,6 @@ func (captcha *CaptchaImageChar) BinaryEncodeing() []byte {
 
 // WriteTo writes captcha image in PNG format into the given writer.
 func (captcha *CaptchaImageChar) WriteTo(w io.Writer) (int64, error) {
-	n, err := w.Write(captcha.BinaryEncodeing())
+	n, err := w.Write(captcha.BinaryEncoding())
 	return int64(n), err
 }

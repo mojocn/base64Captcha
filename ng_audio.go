@@ -248,9 +248,9 @@ func (a *Audio) WriteTo(w io.Writer) (n int64, err error) {
 	return
 }
 
-// BinaryEncodeing encodes an sound to wave and returns
+// BinaryEncoding encodes an sound to wave and returns
 // the result as a byte slice.
-func (a *Audio) BinaryEncodeing() []byte {
+func (a *Audio) BinaryEncoding() []byte {
 	var buf bytes.Buffer
 	if _, err := a.WriteTo(&buf); err != nil {
 		panic(err.Error())
