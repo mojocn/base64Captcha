@@ -26,22 +26,21 @@ import (
 
 //ConfigDigit config for captcha-engine-digit.
 type ConfigDigit struct {
-
 	// Height png height in pixel.
 	// 图像验证码的高度像素.
-	Height int
+	Height int  `yaml:"height"`
 	// Width Captcha png width in pixel.
 	// 图像验证码的宽度像素
-	Width int
+	Width int `yaml:"width"`
 	// DefaultLen Default number of digits in captcha solution.
 	// 默认数字验证长度6.
-	CaptchaLen int
+	CaptchaLen int`yaml:"captchaLen"`
 	// MaxSkew max absolute skew factor of a single digit.
 	// 图像验证码的最大干扰洗漱.
-	MaxSkew float64
+	MaxSkew float64`yaml:"max_skew"`
 	// DotCount Number of background circles.
 	// 图像验证码干扰圆点的数量.
-	DotCount int
+	DotCount int `yaml:"dot_count"`
 }
 
 // CaptchaImageDigit digits captcha Struct
