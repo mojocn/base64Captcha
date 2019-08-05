@@ -28,36 +28,36 @@ type CaptchaImageChar struct {
 type ConfigCharacter struct {
 	// Height png height in pixel.
 	// 图像验证码的高度像素.
-	Height int
+	Height int   `yaml:"height"`
 	// Width Captcha png width in pixel.
 	// 图像验证码的宽度像素
-	Width int
+	Width int   `yaml:"width"`
 	//Mode : base64captcha.CaptchaModeNumber=0, base64captcha.CaptchaModeAlphabet=1, base64captcha.CaptchaModeArithmetic=2, base64captcha.CaptchaModeNumberAlphabet=3.
-	Mode int
+	Mode int   `yaml:"mode"`
 	//IsUseSimpleFont is use simply font(...base64Captcha/fonts/RitaSmith.ttf).
-	IsUseSimpleFont bool
+	IsUseSimpleFont bool   `yaml:"is_use_simple_font"`
 	//ComplexOfNoiseText text noise count.
-	ComplexOfNoiseText int
+	ComplexOfNoiseText int   `yaml:"complex_of_noise_text"`
 	//ComplexOfNoiseDot dot noise count.
-	ComplexOfNoiseDot int
+	ComplexOfNoiseDot int   `yaml:"complex_of_noise_dot"`
 	//IsShowHollowLine is show hollow line.
-	IsShowHollowLine bool
+	IsShowHollowLine bool   `yaml:"is_show_hollow_line"`
 	//IsShowNoiseDot is show noise dot.
-	IsShowNoiseDot bool
+	IsShowNoiseDot bool   `yaml:"is_show_noise_dot"`
 	//IsShowNoiseText is show noise text.
-	IsShowNoiseText bool
+	IsShowNoiseText bool   `yaml:"is_show_noise_text"`
 	//IsShowSlimeLine is show slime line.
-	IsShowSlimeLine bool
+	IsShowSlimeLine bool   `yaml:"is_show_slime_line"`
 	//IsShowSineLine is show sine line.
-	IsShowSineLine bool
+	IsShowSineLine bool   `yaml:"is_show_sine_line"`
 
 	// CaptchaLen Default number of digits in captcha solution.
 	// 默认数字验证长度6.
-	CaptchaLen int
+	CaptchaLen int`yaml:"captcha_len"`
 
 	//BgColor captcha image background color (optional)
 	//背景颜色
-	BgColor *color.RGBA
+	BgColor *color.RGBA `yaml:"bg_color"`
 }
 type point struct {
 	X int

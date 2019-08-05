@@ -15,9 +15,9 @@ import (
 //ConfigAudio captcha config for captcha-engine-audio.
 type ConfigAudio struct {
 	// CaptchaLen Default number of digits in captcha solution.
-	CaptchaLen int
+	CaptchaLen int   `yaml:"captcha_len"`
 	// Language possible values for lang are "en", "ja", "ru", "zh".
-	Language string
+	Language string   `yaml:"language"`
 }
 
 const sampleRate = 8000 // Hz
