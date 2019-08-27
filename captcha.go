@@ -46,6 +46,11 @@ func SetCustomStore(s store.Store) {
 	globalStore = s
 }
 
+// GetCustomStore
+func GetCustomStore() store.Store {
+	return globalStore
+}
+
 // CaptchaInterface captcha interface for captcha engine to to write staff
 type CaptchaInterface interface {
 	// BinaryEncoding covert to bytes
