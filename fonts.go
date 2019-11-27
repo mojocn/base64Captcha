@@ -19,6 +19,16 @@ func readFontsToSliceOfTrueTypeFonts() []*truetype.Font {
 	}
 	return fonts
 }
+
+func readCJKFonts() []*truetype.Font {
+	fonts := make([]*truetype.Font, 0)
+	assetFontNames := []string{ "fonts/wqy-microhei.ttc" }
+	for _, assetName := range assetFontNames {
+		fonts = appendAssetFontToTrueTypeFonts(assetName, fonts)
+	}
+	return fonts
+}
+
 func appendAssetFontToTrueTypeFonts(assetName string, fonts []*truetype.Font) []*truetype.Font {
 	fontBytes, _ := Asset(assetName)
 	//font file bytes to trueTypeFont
@@ -28,10 +38,10 @@ func appendAssetFontToTrueTypeFonts(assetName string, fonts []*truetype.Font) []
 }
 
 //randFontFamily choose random font family.选择随机的字体
-func randFontFamily() *truetype.Font {
-	fontCount := len(trueTypeFontFamilys)
+func randFontFamily(from []*truetype.Font) *truetype.Font {
+	fontCount := len(from)
 	index := rand.Intn(fontCount)
-	return trueTypeFontFamilys[index]
+	return from[index]
 }
 
 var digitFontData = [][]byte{

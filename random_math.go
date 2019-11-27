@@ -8,13 +8,38 @@ import (
 	"time"
 )
 
+//randFromRuneArray: create random text from sourceRuneArrays
+func randFromRuneArray(num int, sourceRuneArrays[][]rune) string {
+	target_runes := []rune{}
+	for len(target_runes) < num {
+		ftarget := randRuneArrayNext(sourceRuneArrays)
+		// 切除超过需要字符的部分
+		icut := num - len(target_runes)
+		if icut > len(ftarget) {
+			icut = len(ftarget)
+		}
+		target_runes = append(target_runes, ftarget[0:icut]...)
+	}
+	return string(target_runes)
+}
+
+//randRuneArrayNext: select random one from input
+func randRuneArrayNext(input [][]rune) []rune {
+	r := randSeed()
+	i := r.Intn(len(input))
+	return input[i]
+}
+
+
 //randText create random text. 生成随机文本.
 func randText(num int, sourceChars string) string {
-	textNum := len(sourceChars)
+	itemrunes := []rune(sourceChars)
+	textNum := len(itemrunes)
+
 	text := ""
 	r := randSeed()
 	for i := 0; i < num; i++ {
-		text = text + string(sourceChars[r.Intn(textNum)])
+		text = text + string(itemrunes[r.Intn(textNum)])
 	}
 	return text
 }
