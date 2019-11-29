@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/golang/freetype"
+	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/font"
 	"image"
 	"image/color"
@@ -13,9 +14,11 @@ import (
 	"log"
 	"math"
 	"math/rand"
+	"errors"
 )
 
 var trueTypeFontFamilys = readFontsToSliceOfTrueTypeFonts()
+var cjkFontFamilys = readCJKFonts()
 
 //CaptchaImageChar captcha-engine-char return type.
 type CaptchaImageChar struct {
@@ -32,11 +35,18 @@ type ConfigCharacter struct {
 	// Width Captcha png width in pixel.
 	// 图像验证码的宽度像素
 	Width int
-	//Mode : base64captcha.CaptchaModeNumber=0, base64captcha.CaptchaModeAlphabet=1, base64captcha.CaptchaModeArithmetic=2, base64captcha.CaptchaModeNumberAlphabet=3.
+	//Mode :
+	//    base64captcha.CaptchaModeNumber=0,
+	//    base64captcha.CaptchaModeAlphabet=1,
+	//    base64captcha.CaptchaModeArithmetic=2,
+	//    base64captcha.CaptchaModeNumberAlphabet=3,
+	//    base64captcha.CaptchaModeChinese=4,
+	//    base64captcha.CaptchaModeUseRunePairs=5
 	Mode int
 	//IsUseSimpleFont is use simply font(...base64Captcha/fonts/RitaSmith.ttf).
 	IsUseSimpleFont bool
 	//ComplexOfNoiseText text noise count.
+	//   CaptchaComplexLower /  CaptchaComplexMedium  /  CaptchaComplexHigh
 	ComplexOfNoiseText int
 	//ComplexOfNoiseDot dot noise count.
 	ComplexOfNoiseDot int
@@ -50,6 +60,13 @@ type ConfigCharacter struct {
 	IsShowSlimeLine bool
 	//IsShowSineLine is show sine line.
 	IsShowSineLine bool
+
+	//CaptchaRunePairs make a list of rune for Chaptcha random selection.
+	// 随机字符串可选内容
+	CaptchaRunePairs [][]rune
+	//UseCJKFonts: ask if shell uses CJKFonts (now includeing 文泉驿微米黑)
+	// 是否使用CJK字体
+	UseCJKFonts bool
 
 	// CaptchaLen Default number of digits in captcha solution.
 	// 默认数字验证长度6.
@@ -248,21 +265,34 @@ func (captcha *CaptchaImageChar) drawNoise(complex int) *CaptchaImageChar {
 	return captcha
 }
 
+func (captcha *CaptchaImageChar) getNoiseDensityByComplex(complex int) int {
+	densitydefault := 1500
+	complexToDensity := map[int]int {
+		CaptchaComplexLower: 2000,
+		CaptchaComplexMedium: 1500,
+		CaptchaComplexHigh: 1000,
+	}
+	if density, ok := complexToDensity[complex]; ok {
+		return density
+	} else {
+		return densitydefault
+	}
+}
+
+func (captcha *CaptchaImageChar) getTextFont(justUseFirst bool, family[]*truetype.Font) *truetype.Font {
+	fontToUse:=family[0]
+	if !justUseFirst {
+		fontToUse = randFontFamily(family)
+	} 
+	return fontToUse
+}
+
 //drawTextNoise draw noises which are single character.
 //画文字噪点.
-func (captcha *CaptchaImageChar) drawTextNoise(complex int, isSimpleFont bool) error {
-	density := 1500
-	if complex == CaptchaComplexLower {
-		density = 2000
-	} else if complex == CaptchaComplexMedium {
-		density = 1500
-	} else if complex == CaptchaComplexHigh {
-		density = 1000
-	}
+func (captcha *CaptchaImageChar) drawTextNoiseWithFontFamilySelection(complex int, isSimpleFont bool, family[]*truetype.Font) error {
+	density := captcha.getNoiseDensityByComplex(complex)
 
 	maxSize := (captcha.ImageHeight * captcha.ImageWidth) / density
-
-	//r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	c := freetype.NewContext()
 	c.SetDPI(imageStringDpi)
@@ -273,7 +303,6 @@ func (captcha *CaptchaImageChar) drawTextNoise(complex int, isSimpleFont bool) e
 	rawFontSize := float64(captcha.ImageHeight) / (1 + float64(rand.Intn(7))/float64(10))
 
 	for i := 0; i < maxSize; i++ {
-
 		rw := rand.Intn(captcha.ImageWidth)
 		rh := rand.Intn(captcha.ImageHeight)
 
@@ -282,16 +311,8 @@ func (captcha *CaptchaImageChar) drawTextNoise(complex int, isSimpleFont bool) e
 
 		c.SetSrc(image.NewUniform(randLightColor()))
 		c.SetFontSize(fontSize)
-
-		if isSimpleFont {
-			c.SetFont(trueTypeFontFamilys[0])
-		} else {
-			f := randFontFamily()
-			c.SetFont(f)
-		}
-
+		c.SetFont(captcha.getTextFont(isSimpleFont, family))
 		pt := freetype.Pt(rw, rh)
-
 		if _, err := c.DrawString(text, pt); err != nil {
 			log.Println(err)
 		}
@@ -300,13 +321,17 @@ func (captcha *CaptchaImageChar) drawTextNoise(complex int, isSimpleFont bool) e
 }
 
 //drawText draw captcha string to image.把文字写入图像验证码
-func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool) error {
+func (captcha *CaptchaImageChar) drawTextWithFontFamily(text string, isSimpleFont bool, fontToSelection[]*truetype.Font) error {
 	c := freetype.NewContext()
 	c.SetDPI(imageStringDpi)
 
 	c.SetClip(captcha.nrgba.Bounds())
 	c.SetDst(captcha.nrgba)
 	c.SetHinting(font.HintingFull)
+
+	if len(text) == 0 {
+		panic("Text Shell Not be empty")
+	}
 
 	fontWidth := captcha.ImageWidth / len(text)
 
@@ -316,25 +341,55 @@ func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool) error 
 
 		c.SetSrc(image.NewUniform(randDeepColor()))
 		c.SetFontSize(fontSize)
-
-		if isSimpleFont {
-			c.SetFont(trueTypeFontFamilys[0])
-		} else {
-			f := randFontFamily()
-			c.SetFont(f)
-		}
+		useFont := captcha.getTextFont(isSimpleFont, fontToSelection)
+		c.SetFont(useFont)
 
 		x := int(fontWidth)*i + int(fontWidth)/int(fontSize)
-
 		y := 5 + rand.Intn(captcha.ImageHeight/2) + int(fontSize/2)
-
 		pt := freetype.Pt(x, y)
-
 		if _, err := c.DrawString(string(s), pt); err != nil {
 			log.Println(err)
 		}
-		//pt.Y += c.pointToFixed(*size * *spacing)
-		//pt.X += c.pointToFixed(*size);
+	}
+	return nil
+
+}
+
+
+
+func getTextContentByMode(config ConfigCharacter) (captchaContent string,verifyValue string) {
+	switch config.Mode {
+	case CaptchaModeAlphabet:
+		captchaContent = randText(config.CaptchaLen, TxtAlphabet)
+		verifyValue = captchaContent
+	case CaptchaModeArithmetic:
+		captchaContent, verifyValue = randArithmetic()
+	case CaptchaModeNumber:
+		captchaContent = randText(config.CaptchaLen, TxtNumbers)
+		verifyValue = captchaContent
+	//随机中文字符串
+	case CaptchaModeChinese:
+		captchaContent = randText(config.CaptchaLen, TxtChineseCharaters)
+		verifyValue = captchaContent
+	case CaptchaModeUseRunePairs:
+		captchaContent = randFromRuneArray(config.CaptchaLen, config.CaptchaRunePairs)
+		verifyValue = captchaContent
+	default:
+		captchaContent = randText(config.CaptchaLen, TxtSimpleCharaters)
+		verifyValue = captchaContent
+	}
+	return
+}
+
+func checkConfigCharacter(config ConfigCharacter) error {
+	if config.CaptchaLen <= 0 {
+		return errors.New("config.CaptchaLen shell be positive")
+	}
+	if config.Mode == CaptchaModeChinese && !config.UseCJKFonts {
+		return errors.New("shell use cjk fonts in CaptchaModeChinese")
+	}
+	if config.UseCJKFonts && len(cjkFontFamilys) == 0 {
+		return errors.New("no cjk Fonts found")
 	}
 	return nil
 
@@ -342,6 +397,9 @@ func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool) error 
 
 //EngineCharCreate create captcha with config struct.
 func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
+	if err:=checkConfigCharacter(config); err != nil {
+		panic(err)
+	}
 	var bgc color.RGBA
 	if config.BgColor != nil {
 		bgc = *config.BgColor
@@ -361,7 +419,7 @@ func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
 	}
 	//背景有文字干扰
 	if config.IsShowNoiseText {
-		captchaImage.drawTextNoise(config.ComplexOfNoiseText, config.IsUseSimpleFont)
+		captchaImage.drawTextNoiseWithFontFamilySelection(config.ComplexOfNoiseText, config.IsUseSimpleFont, trueTypeFontFamilys)
 	}
 
 	//画 细直线 (n 条)
@@ -373,26 +431,17 @@ func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
 	if config.IsShowSineLine {
 		captchaImage.drawSineLine()
 	}
-	var captchaContent string
+	captchaContent, verifyValue := getTextContentByMode(config)
+	captchaImage.VerifyValue = verifyValue
 
-	switch config.Mode {
-	case CaptchaModeAlphabet:
-		captchaContent = randText(config.CaptchaLen, TxtAlphabet)
-		captchaImage.VerifyValue = captchaContent
-	case CaptchaModeArithmetic:
-		captchaContent, captchaImage.VerifyValue = randArithmetic()
-
-	case CaptchaModeNumber:
-		captchaContent = randText(config.CaptchaLen, TxtNumbers)
-		captchaImage.VerifyValue = captchaContent
-	default:
-		captchaContent = randText(config.CaptchaLen, TxtSimpleCharaters)
-		captchaImage.VerifyValue = captchaContent
-	}
 	//写入string
-	captchaImage.drawText(captchaContent, config.IsUseSimpleFont)
+	if config.UseCJKFonts {
+		captchaImage.drawTextWithFontFamily(captchaContent, config.IsUseSimpleFont, cjkFontFamilys)
+	} else {
+		captchaImage.drawTextWithFontFamily(captchaContent, config.IsUseSimpleFont, trueTypeFontFamilys)
+	}
+
 	captchaImage.Content = captchaContent
-	//captchaImage.drawText(randText(4))
 
 	if err != nil {
 		fmt.Println(err)
