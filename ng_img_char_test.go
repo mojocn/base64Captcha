@@ -68,39 +68,12 @@ func TestEngineCharCreatePanics(t *testing.T) {
 		_ = EngineCharCreate(configBad)
 		t.Error("shell not be here")
 	})
-	t.Run("CaptchaModeChinese without UseCJKFonts", func(t *testing.T) {
-		configBad := configC
-		configBad.Mode = CaptchaModeChinese
-		configBad.UseCJKFonts = false
-		defer func() {
-			if err := recover(); err != nil {
-				//good panic
-				return
-			}
-		}()
-		_ = EngineCharCreate(configBad)
-		t.Error("shell not be here")
-	})
+
 }
 
 func TestMath(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		q, r := randArithmetic()
 		t.Log(q, "--->", r)
-	}
-}
-
-func TestEngineCharCreateStrList(t *testing.T) {
-	tc, _ := ioutil.TempDir("", "audio")
-	defer os.Remove(tc)
-
-	configC.Mode = CaptchaModeUseRunePairs
-	configC.UseCJKFonts = true
-	configC.CaptchaLen = 9
-	im := EngineCharCreate(configC)
-	fileName := strings.Trim(im.Content, "/+-+=?")
-	err := CaptchaWriteToFile(im, tc, fileName, "png")
-	if err != nil {
-		t.Error(err)
 	}
 }

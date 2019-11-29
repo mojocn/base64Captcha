@@ -189,6 +189,14 @@
                                        @change="generateCaptcha"></el-slider>
                         </el-form-item>
 
+
+
+                        <el-form-item label="ConfigCharacter.ChineseCharacterSource" v-show="form.ConfigCharacter.Mode == 4">
+                            <el-input v-model="form.ConfigCharacter.ChineseCharacterSource"
+                                   type="textarea"
+                                   @change="generateCaptcha"></el-input>
+                        </el-form-item>
+
                         <el-form-item label="ConfigCharacter.Width">
                             <el-slider v-model="form.ConfigCharacter.Width" :min="20" :max="480" :step="5"
                                        show-input

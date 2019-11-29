@@ -63,7 +63,7 @@ type ConfigCharacter struct {
 
 	//CaptchaRunePairs make a list of rune for Captcha random selection.
 	// 随机字符串可选内容
-	CaptchaChineseCharacterSource string
+	ChineseCharacterSource string
 
 	//UseCJKFonts: ask if shell uses CJKFonts (now including 文泉驿微米黑)
 	// 是否使用CJK字体
@@ -368,10 +368,10 @@ func getTextContentByMode(config ConfigCharacter) (captchaContent string, verify
 		verifyValue = captchaContent
 	//随机中文字符串
 	case CaptchaModeChinese:
-		if config.CaptchaChineseCharacterSource == "" {
-			config.CaptchaChineseCharacterSource = TxtChineseCharaters
+		if config.ChineseCharacterSource == "" {
+			config.ChineseCharacterSource = TxtChineseCharaters
 		}
-		captchaContent = randText(config.CaptchaLen, config.CaptchaChineseCharacterSource)
+		captchaContent = randText(config.CaptchaLen, config.ChineseCharacterSource)
 		verifyValue = captchaContent
 
 	default:
