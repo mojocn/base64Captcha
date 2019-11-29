@@ -2,6 +2,7 @@ package base64Captcha
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
@@ -14,7 +15,6 @@ import (
 	"log"
 	"math"
 	"math/rand"
-	"errors"
 )
 
 var trueTypeFontFamilys = readFontsToSliceOfTrueTypeFonts()
@@ -61,10 +61,11 @@ type ConfigCharacter struct {
 	//IsShowSineLine is show sine line.
 	IsShowSineLine bool
 
-	//CaptchaRunePairs make a list of rune for Chaptcha random selection.
+	//CaptchaRunePairs make a list of rune for Captcha random selection.
 	// 随机字符串可选内容
-	CaptchaRunePairs [][]rune
-	//UseCJKFonts: ask if shell uses CJKFonts (now includeing 文泉驿微米黑)
+	CaptchaChineseCharacterSource string
+
+	//UseCJKFonts: ask if shell uses CJKFonts (now including 文泉驿微米黑)
 	// 是否使用CJK字体
 	UseCJKFonts bool
 
@@ -267,10 +268,10 @@ func (captcha *CaptchaImageChar) drawNoise(complex int) *CaptchaImageChar {
 
 func (captcha *CaptchaImageChar) getNoiseDensityByComplex(complex int) int {
 	densitydefault := 1500
-	complexToDensity := map[int]int {
-		CaptchaComplexLower: 2000,
+	complexToDensity := map[int]int{
+		CaptchaComplexLower:  2000,
 		CaptchaComplexMedium: 1500,
-		CaptchaComplexHigh: 1000,
+		CaptchaComplexHigh:   1000,
 	}
 	if density, ok := complexToDensity[complex]; ok {
 		return density
@@ -279,17 +280,17 @@ func (captcha *CaptchaImageChar) getNoiseDensityByComplex(complex int) int {
 	}
 }
 
-func (captcha *CaptchaImageChar) getTextFont(justUseFirst bool, family[]*truetype.Font) *truetype.Font {
-	fontToUse:=family[0]
+func (captcha *CaptchaImageChar) getTextFont(justUseFirst bool, family []*truetype.Font) *truetype.Font {
+	fontToUse := family[0]
 	if !justUseFirst {
 		fontToUse = randFontFamily(family)
-	} 
+	}
 	return fontToUse
 }
 
 //drawTextNoise draw noises which are single character.
 //画文字噪点.
-func (captcha *CaptchaImageChar) drawTextNoiseWithFontFamilySelection(complex int, isSimpleFont bool, family[]*truetype.Font) error {
+func (captcha *CaptchaImageChar) drawTextNoiseWithFontFamilySelection(complex int, isSimpleFont bool, family []*truetype.Font) error {
 	density := captcha.getNoiseDensityByComplex(complex)
 
 	maxSize := (captcha.ImageHeight * captcha.ImageWidth) / density
@@ -321,7 +322,7 @@ func (captcha *CaptchaImageChar) drawTextNoiseWithFontFamilySelection(complex in
 }
 
 //drawText draw captcha string to image.把文字写入图像验证码
-func (captcha *CaptchaImageChar) drawTextWithFontFamily(text string, isSimpleFont bool, fontToSelection[]*truetype.Font) error {
+func (captcha *CaptchaImageChar) drawTextWithFontFamily(text string, isSimpleFont bool, fontToSelection []*truetype.Font) error {
 	c := freetype.NewContext()
 	c.SetDPI(imageStringDpi)
 
@@ -355,9 +356,7 @@ func (captcha *CaptchaImageChar) drawTextWithFontFamily(text string, isSimpleFon
 
 }
 
-
-
-func getTextContentByMode(config ConfigCharacter) (captchaContent string,verifyValue string) {
+func getTextContentByMode(config ConfigCharacter) (captchaContent string, verifyValue string) {
 	switch config.Mode {
 	case CaptchaModeAlphabet:
 		captchaContent = randText(config.CaptchaLen, TxtAlphabet)
@@ -369,11 +368,12 @@ func getTextContentByMode(config ConfigCharacter) (captchaContent string,verifyV
 		verifyValue = captchaContent
 	//随机中文字符串
 	case CaptchaModeChinese:
-		captchaContent = randText(config.CaptchaLen, TxtChineseCharaters)
+		if config.CaptchaChineseCharacterSource == "" {
+			config.CaptchaChineseCharacterSource = TxtChineseCharaters
+		}
+		captchaContent = randText(config.CaptchaLen, config.CaptchaChineseCharacterSource)
 		verifyValue = captchaContent
-	case CaptchaModeUseRunePairs:
-		captchaContent = randFromRuneArray(config.CaptchaLen, config.CaptchaRunePairs)
-		verifyValue = captchaContent
+
 	default:
 		captchaContent = randText(config.CaptchaLen, TxtSimpleCharaters)
 		verifyValue = captchaContent
@@ -381,12 +381,12 @@ func getTextContentByMode(config ConfigCharacter) (captchaContent string,verifyV
 	return
 }
 
-func checkConfigCharacter(config ConfigCharacter) error {
+func checkConfigCharacter(config *ConfigCharacter) error {
 	if config.CaptchaLen <= 0 {
 		return errors.New("config.CaptchaLen shell be positive")
 	}
-	if config.Mode == CaptchaModeChinese && !config.UseCJKFonts {
-		return errors.New("shell use cjk fonts in CaptchaModeChinese")
+	if config.Mode == CaptchaModeChinese {
+		config.UseCJKFonts = true
 	}
 	if config.UseCJKFonts && len(cjkFontFamilys) == 0 {
 		return errors.New("no cjk Fonts found")
@@ -397,7 +397,7 @@ func checkConfigCharacter(config ConfigCharacter) error {
 
 //EngineCharCreate create captcha with config struct.
 func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
-	if err:=checkConfigCharacter(config); err != nil {
+	if err := checkConfigCharacter(&config); err != nil {
 		panic(err)
 	}
 	var bgc color.RGBA

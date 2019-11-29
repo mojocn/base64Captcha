@@ -11,7 +11,7 @@ func TestEngineCharCreate(t *testing.T) {
 	tc, _ := ioutil.TempDir("", "audio")
 	defer os.Remove(tc)
 	for i := 0; i < 16; i++ {
-		configC.Mode = i % 5
+		configC.Mode = 5
 		boooo := i%2 == 0
 		configC.IsUseSimpleFont = boooo
 		configC.IsShowSlimeLine = boooo
@@ -41,8 +41,8 @@ func TestEngineCharCreateShowNoiseText(t *testing.T) {
 	configC.Mode = CaptchaModeNumber
 	configC.IsShowNoiseText = true
 	random_int := 0x123345
-	for _, complex:= range []int{CaptchaComplexLower, CaptchaComplexMedium, CaptchaComplexHigh, random_int} {
-		configC. ComplexOfNoiseText=complex
+	for _, complex := range []int{CaptchaComplexLower, CaptchaComplexMedium, CaptchaComplexHigh, random_int} {
+		configC.ComplexOfNoiseText = complex
 		im := EngineCharCreate(configC)
 		fileName := strings.Trim(im.Content, "/+-+=?")
 		err := CaptchaWriteToFile(im, tc, fileName, "png")
@@ -55,12 +55,12 @@ func TestEngineCharCreateShowNoiseText(t *testing.T) {
 func TestEngineCharCreatePanics(t *testing.T) {
 	tc, _ := ioutil.TempDir("", "TestEngineCharCreateShowNoiseText")
 	defer os.Remove(tc)
-	
+
 	t.Run("TestCaptchaLen_EQ_0", func(t *testing.T) {
 		configBad := configC
 		configBad.CaptchaLen = 0
 		defer func() {
-			if err:=recover(); err!= nil {
+			if err := recover(); err != nil {
 				//good panic
 				return
 			}
@@ -73,7 +73,7 @@ func TestEngineCharCreatePanics(t *testing.T) {
 		configBad.Mode = CaptchaModeChinese
 		configBad.UseCJKFonts = false
 		defer func() {
-			if err:=recover(); err!= nil {
+			if err := recover(); err != nil {
 				//good panic
 				return
 			}
@@ -90,20 +90,13 @@ func TestMath(t *testing.T) {
 	}
 }
 
-
-
 func TestEngineCharCreateStrList(t *testing.T) {
 	tc, _ := ioutil.TempDir("", "audio")
 	defer os.Remove(tc)
-	
+
 	configC.Mode = CaptchaModeUseRunePairs
 	configC.UseCJKFonts = true
-	configC.CaptchaRunePairs = [][]rune {
-		[]rune("文件"),
-		[]rune("下载"),
-		[]rune("测试"),
-	}
-	configC.CaptchaLen=9
+	configC.CaptchaLen = 9
 	im := EngineCharCreate(configC)
 	fileName := strings.Trim(im.Content, "/+-+=?")
 	err := CaptchaWriteToFile(im, tc, fileName, "png")
