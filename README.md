@@ -56,7 +56,12 @@ func demoCodeCaptchaCreate() {
 	var configC = base64Captcha.ConfigCharacter{
 		Height:             60,
 		Width:              240,
-		//const CaptchaModeNumber:数字,CaptchaModeAlphabet:字母,CaptchaModeArithmetic:算术,CaptchaModeNumberAlphabet:数字字母混合.
+		//const CaptchaModeNumber:数字
+		//      CaptchaModeAlphabet:字母
+		//      CaptchaModeArithmetic:算术
+		//      CaptchaModeNumberAlphabet:数字字母混合.
+		//      CaptchaModeChinese: 中文字符串
+		//      CaptchaModeUseSequencedCharacters:  在指定词组中随机（内部保持词组有序)
 		Mode:               base64Captcha.CaptchaModeNumber,
 		ComplexOfNoiseText: base64Captcha.CaptchaComplexLower,
 		ComplexOfNoiseDot:  base64Captcha.CaptchaComplexLower,
@@ -66,8 +71,32 @@ func demoCodeCaptchaCreate() {
 		IsShowNoiseText:    false,
 		IsShowSlimeLine:    false,
 		IsShowSineLine:     false,
+		// 随机中文字符串来源，在CaptchaModeChinese时有效。
+		ChineseCharacterSource： "",
+		// 随机词组，在CaptchaModeUseSequencedCharacters时有效
+		SequencedCharacters: []string {"中文","英文","其他"},
 		CaptchaLen:         6,
 	}
+	//创建声音验证码
+	//GenerateCaptcha 第一个参数为空字符串,包会自动在服务器一个随机种子给你产生随机uiid.
+	idKeyA, capA := base64Captcha.GenerateCaptcha("", configA)
+	//以base64编码
+	base64stringA := base64Captcha.CaptchaWriteToBase64Encoding(capA)
+	//创建字符公式验证码.
+	//GenerateCaptcha 第一个参数为空字符串,包会自动在服务器一个随机种子给你产生随机uiid.
+	idKeyC, capC := base64Captcha.GenerateCaptcha("", configC)
+	//以base64编码
+	base64stringC := base64Captcha.CaptchaWriteToBase64Encoding(capC)
+	//创建数字验证码.
+	//GenerateCaptcha 第一个参数为空字符串,包会自动在服务器一个随机种子给你产生随机uiid.
+	idKeyD, capD := base64Captcha.GenerateCaptcha("", configD)
+	//以base64编码
+	base64stringD := base64Captcha.CaptchaWriteToBase64Encoding(capD)
+    
+	fmt.Println(idKeyA, base64stringA, "\n")
+	fmt.Println(idKeyC, base64stringC, "\n")
+	fmt.Println(idKeyD, base64stringD, "\n")
+}
 	//create a audio captcha.
 	//GenerateCaptcha first parameter is empty string,so the package will generate a random uuid for you.
 	idKeyA, capA := base64Captcha.GenerateCaptcha("", configA)
@@ -283,21 +312,29 @@ func main() {
     ```
 - ConfigCharacter captcha config for captcha-engine-characters.
     ```
+    //ConfigCharacter captcha config for captcha-engine-characters.
     type ConfigCharacter struct {
-        // Height png height in pixel.
+        //  Height png height in pixel.
         // 图像验证码的高度像素.
         Height int
         // Width Captcha png width in pixel.
         // 图像验证码的宽度像素
         Width int
-        //Mode : base64captcha.CaptchaModeNumber=0, base64captcha.CaptchaModeAlphabet=1, base64captcha.CaptchaModeArithmetic=2, base64captcha.CaptchaModeNumberAlphabet=3.
+        //Mode :
+        //    base64captcha.CaptchaModeNumber=0,
+        //    base64captcha.CaptchaModeAlphabet=1,
+        //    base64captcha.CaptchaModeArithmetic=2,
+        //    base64captcha.CaptchaModeNumberAlphabet=3,
+        //    base64captcha.CaptchaModeChinese=4,
+        //    base64captcha.CaptchaModeUseSequencedCharacters=5
         Mode int
+        //IsUseSimpleFont is use simply font(...base64Captcha/fonts/RitaSmith.ttf).
+        IsUseSimpleFont bool
         //ComplexOfNoiseText text noise count.
+        //   CaptchaComplexLower /  CaptchaComplexMedium  /  CaptchaComplexHigh
         ComplexOfNoiseText int
         //ComplexOfNoiseDot dot noise count.
         ComplexOfNoiseDot int
-        //IsUseSimpleFont is only use this (...fonts/RitaSmith.ttf)font.
-        IsUseSimpleFont bool
         //IsShowHollowLine is show hollow line.
         IsShowHollowLine bool
         //IsShowNoiseDot is show noise dot.
@@ -308,9 +345,27 @@ func main() {
         IsShowSlimeLine bool
         //IsShowSineLine is show sine line.
         IsShowSineLine bool
+
+        //CaptchaRunePairs make a list of rune for Captcha random selection.
+        // 随机字符串可选内容
+        ChineseCharacterSource string
+
+        // SequencedCharacters make a list of sequenced runes for Captcha random selection
+        //   Choose Mode base64captcha.CaptchaModeUseSequencedCharacters
+        //   随机字符串可选内容，词组内部保证顺序，使用模式CaptchaModeUseSequencedCharacters 使用
+        SequencedCharacters []string
+
+        //UseCJKFonts: ask if shell uses CJKFonts (now including 文泉驿微米黑)
+        // 是否使用CJK字体
+        UseCJKFonts bool
+
         // CaptchaLen Default number of digits in captcha solution.
         // 默认数字验证长度6.
         CaptchaLen int
+
+        //BgColor captcha image background color (optional)
+        //背景颜色
+        BgColor *color.RGBA
     }
     ```
 -  CaptchaInterface

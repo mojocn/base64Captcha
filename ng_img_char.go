@@ -41,7 +41,7 @@ type ConfigCharacter struct {
 	//    base64captcha.CaptchaModeArithmetic=2,
 	//    base64captcha.CaptchaModeNumberAlphabet=3,
 	//    base64captcha.CaptchaModeChinese=4,
-	//    base64captcha.CaptchaModeUseRunePairs=5
+	//    base64captcha.CaptchaModeUseSequencedCharacters=5
 	Mode int
 	//IsUseSimpleFont is use simply font(...base64Captcha/fonts/RitaSmith.ttf).
 	IsUseSimpleFont bool
@@ -64,6 +64,11 @@ type ConfigCharacter struct {
 	//CaptchaRunePairs make a list of rune for Captcha random selection.
 	// 随机字符串可选内容
 	ChineseCharacterSource string
+
+	// SequencedCharacters make a list of sequenced runes for Captcha random selection
+	//   Choose Mode base64captcha.CaptchaModeUseSequencedCharacters
+	//   随机字符串可选内容，词组内部保证顺序，使用模式CaptchaModeUseSequencedCharacters 使用
+	SequencedCharacters []string
 
 	//UseCJKFonts: ask if shell uses CJKFonts (now including 文泉驿微米黑)
 	// 是否使用CJK字体
@@ -373,7 +378,10 @@ func getTextContentByMode(config ConfigCharacter) (captchaContent string, verify
 		}
 		captchaContent = randText(config.CaptchaLen, config.ChineseCharacterSource)
 		verifyValue = captchaContent
-
+	// 随机字符（内部保证顺序）
+	case CaptchaModeUseSequencedCharacters:
+		captchaContent = randFromStringArray(config.CaptchaLen, config.SequencedCharacters)
+		verifyValue = captchaContent
 	default:
 		captchaContent = randText(config.CaptchaLen, TxtSimpleCharaters)
 		verifyValue = captchaContent
@@ -390,6 +398,9 @@ func checkConfigCharacter(config *ConfigCharacter) error {
 	}
 	if config.UseCJKFonts && len(cjkFontFamilys) == 0 {
 		return errors.New("no cjk Fonts found")
+	}
+	if config.Mode == CaptchaModeUseSequencedCharacters && len(config.SequencedCharacters) == 0 {
+		return errors.New("shell fill config.SequencedCharacters when config.Mode==CaptchaModeUseSequencedCharacters")
 	}
 	return nil
 
