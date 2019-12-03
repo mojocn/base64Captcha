@@ -64,6 +64,8 @@ const (
 	CaptchaModeNumberAlphabet
 	//CaptchaModeChinese made chinese captcha .
 	CaptchaModeChinese
+	//CaptchaModeUseSequencedCharacters uses Sequenced Characters.
+	CaptchaModeUseSequencedCharacters
 )
 
 //GoTestOutputDir run go test command where the png and wav file output

@@ -53,7 +53,12 @@ func demoCodeCaptchaCreate() {
 	var configC = base64Captcha.ConfigCharacter{
 		Height:             60,
 		Width:              240,
-		//const CaptchaModeNumber:数字,CaptchaModeAlphabet:字母,CaptchaModeArithmetic:算术,CaptchaModeNumberAlphabet:数字字母混合.
+		//const CaptchaModeNumber:数字
+		//      CaptchaModeAlphabet:字母
+		//      CaptchaModeArithmetic:算术
+		//      CaptchaModeNumberAlphabet:数字字母混合.
+		//      CaptchaModeChinese: 中文字符串
+		//      CaptchaModeUseSequencedCharacters:  在指定词组中随机（内部保持词组有序)
 		Mode:               base64Captcha.CaptchaModeNumber,
 		ComplexOfNoiseText: base64Captcha.CaptchaComplexLower,
 		ComplexOfNoiseDot:  base64Captcha.CaptchaComplexLower,
@@ -62,6 +67,10 @@ func demoCodeCaptchaCreate() {
 		IsShowNoiseText:    false,
 		IsShowSlimeLine:    false,
 		IsShowSineLine:     false,
+		// 随机中文字符串来源，在CaptchaModeChinese时有效。
+		ChineseCharacterSource： "",
+		// 随机词组，在CaptchaModeUseSequencedCharacters时有效
+		SequencedCharacters: []string {"中文","英文","其他"},
 		CaptchaLen:         6,
 	}
 	//创建声音验证码
