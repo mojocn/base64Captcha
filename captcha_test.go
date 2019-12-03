@@ -1,12 +1,13 @@
 package base64Captcha
 
 import (
-	"github.com/mojocn/base64Captcha/store"
 	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/mojocn/base64Captcha/store"
 )
 
 var configD = ConfigDigit{
@@ -149,5 +150,70 @@ func TestSetCustomStore(t *testing.T) {
 	SetCustomStore(s)
 	if s != globalStore {
 		t.Error("SetCustomStore failed")
+	}
+}
+
+func TestCaptchaWriteToFile(t *testing.T) {
+	type args struct {
+		cap       CaptchaInterface
+		outputDir string
+		fileName  string
+		fileExt   string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := CaptchaWriteToFile(tt.args.cap, tt.args.outputDir, tt.args.fileName, tt.args.fileExt); (err != nil) != tt.wantErr {
+				t.Errorf("CaptchaWriteToFile() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestVerifyCaptchaAndIsClear(t *testing.T) {
+	type args struct {
+		identifier  string
+		verifyValue string
+		isClear     bool
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := VerifyCaptchaAndIsClear(tt.args.identifier, tt.args.verifyValue, tt.args.isClear); got != tt.want {
+				t.Errorf("VerifyCaptchaAndIsClear() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_pathExists(t *testing.T) {
+	type args struct {
+		path string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := pathExists(tt.args.path); got != tt.want {
+				t.Errorf("pathExists() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }

@@ -240,29 +240,8 @@
 
                         </el-form-item>
                         <el-form-item label="bg color">
-                            <div class="block">
-                                <span class="demonstration">RGBA.R(0~255)</span>
-                                <el-slider v-model="form.ConfigCharacter.BgColor.R" :min="0" :max="255" show-input
-                                           @change="generateCaptcha"></el-slider>
-                            </div>
 
-                            <div class="block">
-                                <span class="demonstration">RGBA.G(0~255)</span>
-                                <el-slider v-model="form.ConfigCharacter.BgColor.G" :min="0" :max="255" show-input
-                                           @change="generateCaptcha"></el-slider>
-                            </div>
-                            <div class="block">
-                                <span class="demonstration">RGBA.B(0~255)</span>
-                                <el-slider v-model="form.ConfigCharacter.BgColor.B" :min="0" :max="255"
-                                           show-input
-                                           @change="generateCaptcha"></el-slider>
-                            </div>
-                            <div class="block">
-                                <span class="demonstration">RGBA.A(1~254)</span>
-                                <el-slider v-model="form.ConfigCharacter.BgColor.A" :min="1" :max="254"
-                                           show-input
-                                           @change="generateCaptcha"></el-slider>
-                            </div>
+                            <el-color-picker v-model="form.ConfigCharacter.BgHashColor"  @change="generateCaptcha"></el-color-picker>
 
                         </el-form-item>
 
@@ -379,7 +358,7 @@
                         IsShowSlimeLine: false,
                         IsShowSineLine: false,
                         CaptchaLen: 6,
-                        BgColor:{R:3, G:102, B:214, A:255}
+                        BgHashColor:"#fff",
                     },
                     ConfigDigit: {
                         Height: 80,

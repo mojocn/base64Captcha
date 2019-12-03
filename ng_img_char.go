@@ -78,10 +78,14 @@ type ConfigCharacter struct {
 	// 默认数字验证长度6.
 	CaptchaLen int
 
+	//BgHashColor image background hash string color eg: #fff
+	BgHashColor string
+
 	//BgColor captcha image background color (optional)
 	//背景颜色
 	BgColor *color.RGBA
 }
+
 type point struct {
 	X int
 	Y int
@@ -272,7 +276,7 @@ func (captcha *CaptchaImageChar) drawNoise(complex int) *CaptchaImageChar {
 }
 
 func (captcha *CaptchaImageChar) getNoiseDensityByComplex(complex int) int {
-	densitydefault := 1500
+	densityDefault := 1500
 	complexToDensity := map[int]int{
 		CaptchaComplexLower:  2000,
 		CaptchaComplexMedium: 1500,
@@ -281,7 +285,7 @@ func (captcha *CaptchaImageChar) getNoiseDensityByComplex(complex int) int {
 	if density, ok := complexToDensity[complex]; ok {
 		return density
 	} else {
-		return densitydefault
+		return densityDefault
 	}
 }
 
@@ -377,10 +381,12 @@ func getTextContentByMode(config ConfigCharacter) (captchaContent string, verify
 			config.ChineseCharacterSource = TxtChineseCharaters
 		}
 		captchaContent = randText(config.CaptchaLen, config.ChineseCharacterSource)
+		config.UseCJKFonts = true
 		verifyValue = captchaContent
 	// 随机字符（内部保证顺序）
 	case CaptchaModeUseSequencedCharacters:
 		captchaContent = randFromStringArray(config.CaptchaLen, config.SequencedCharacters)
+		config.UseCJKFonts = true
 		verifyValue = captchaContent
 	default:
 		captchaContent = randText(config.CaptchaLen, TxtSimpleCharaters)
@@ -390,10 +396,20 @@ func getTextContentByMode(config ConfigCharacter) (captchaContent string, verify
 }
 
 func checkConfigCharacter(config *ConfigCharacter) error {
+	//read config bg color from hash color string
+	if config.BgHashColor != "" {
+		bg, err := parseHexColor(config.BgHashColor)
+		if err != nil {
+			return err
+		}
+		config.BgColor = &bg
+	}
+
 	if config.CaptchaLen <= 0 {
 		return errors.New("config.CaptchaLen shell be positive")
 	}
-	if config.Mode == CaptchaModeChinese {
+	// make sure these two mod use Chinese font
+	if config.Mode == CaptchaModeChinese || config.Mode == CaptchaModeUseSequencedCharacters {
 		config.UseCJKFonts = true
 	}
 	if config.UseCJKFonts && len(cjkFontFamilys) == 0 {
