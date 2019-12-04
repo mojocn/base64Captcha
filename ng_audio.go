@@ -7,7 +7,6 @@ package base64Captcha
 import (
 	"bytes"
 	"encoding/binary"
-
 	"io"
 	"math"
 )

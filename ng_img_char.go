@@ -340,7 +340,7 @@ func (captcha *CaptchaImageChar) drawTextWithFontFamily(text string, isSimpleFon
 	c.SetHinting(font.HintingFull)
 
 	if len(text) == 0 {
-		panic("Text Shell Not be empty")
+		panic("Text must not be empty")
 	}
 
 	fontWidth := captcha.ImageWidth / len(text)
@@ -422,7 +422,7 @@ func checkConfigCharacter(config *ConfigCharacter) error {
 
 }
 
-//EngineCharCreate create captcha with config struct.
+//EngineCharCreate create CaptchaImageChar with config struct.
 func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
 	if err := checkConfigCharacter(&config); err != nil {
 		panic(err)
