@@ -18,8 +18,8 @@ import (
 	"image"
 )
 
-//driverDigit config for captcha-engine-digit.
-type driverDigit struct {
+//DriverDigit config for captcha-engine-digit.
+type DriverDigit struct {
 	// Height png height in pixel.
 	// 图像验证码的高度像素.
 	Height int
@@ -37,17 +37,19 @@ type driverDigit struct {
 	DotCount int
 }
 
-func NewDriverDigit() *driverDigit {
-	return &driverDigit{}
+func NewDriverDigit(height int, width int, length int, maxSkew float64, dotCount int) *DriverDigit {
+	return &DriverDigit{Height: height, Width: width, Length: length, MaxSkew: maxSkew, DotCount: dotCount}
 }
 
-func (d *driverDigit) GenerateQuestionAnswer() (q, a string) {
+var DefaultDriverDigit = NewDriverDigit(80, 240, 5, 0.7, 80)
+
+func (d *DriverDigit) GenerateQuestionAnswer() (q, a string) {
 	digits := randomDigits(d.Length)
 	a = parseDigitsToString(digits)
 	return a, a
 }
 
-func (d *driverDigit) GenerateItem(content string) (item Item, err error) {
+func (d *DriverDigit) GenerateItem(content string) (item Item, err error) {
 	// Initialize PRNG.
 	itemDigit := NewItemDigit(d.Width, d.Height)
 	//parse digits to string

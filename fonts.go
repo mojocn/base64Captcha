@@ -19,8 +19,8 @@ var fontsSimple = loadFontsByNames([]string{
 	"fonts/chromohv.ttf",
 })
 
+//var fontemoji = loadFontByName("fonts/seguiemj.ttf")
 var fontsAll = append(fontsSimple, fontChinese)
-
 var fontChinese = loadFontByName("fonts/wqy-microhei.ttc")
 
 func loadFontByName(name string) *truetype.Font {
@@ -44,11 +44,11 @@ func loadFontsByNames(assetFontNames []string) []*truetype.Font {
 	return fonts
 }
 
-//randFontFamily choose random font family.选择随机的字体
-func randFontFamily(from []*truetype.Font) *truetype.Font {
-	fontCount := len(from)
+//randFontFrom choose random font family.选择随机的字体
+func randFontFrom(fonts []*truetype.Font) *truetype.Font {
+	fontCount := len(fonts)
 	index := rand.Intn(fontCount)
-	return from[index]
+	return fonts[index]
 }
 
 var digitFontData = [][]byte{

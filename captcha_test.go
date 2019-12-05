@@ -27,10 +27,8 @@ func TestCaptcha_GenerateB64s(t *testing.T) {
 		Store  Store
 	}
 
-	dDigit := driverDigit{80, 240, 5, 0.7, 5}
+	dDigit := DriverDigit{80, 240, 5, 0.7, 5}
 	audioDriver := NewDriverAudio(rand.Intn(5), "en")
-	driverChar := NewDriverString(80, 240, 4, OptionShowHollowLine|OptionShowSlimeLine|OptionShowSineLine, 4, nil, fontsAll)
-	driverChinese := NewDriverLanguage(*driverChar,"zh-CN")
 	tests := []struct {
 		name     string
 		fields   fields
@@ -40,8 +38,6 @@ func TestCaptcha_GenerateB64s(t *testing.T) {
 	}{
 		{"mem-digit", fields{&dDigit, DefaultMemStore}, "xxxx", "", false},
 		{"mem-audio", fields{audioDriver, DefaultMemStore}, "xxxx", "", false},
-		{"mem-char", fields{driverChar, DefaultMemStore}, "xxxx", "", false},
-		{"mem-chinese", fields{driverChinese, DefaultMemStore}, "xxxx", "", false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -194,7 +194,7 @@ func (item *ItemChar) drawNoise(noiseText string, fonts []*truetype.Font) error 
 		fontSize := rawFontSize/2 + float64(rand.Intn(5))
 		c.SetSrc(image.NewUniform(randLightColor()))
 		c.SetFontSize(fontSize)
-		c.SetFont(randFontFamily(fonts))
+		c.SetFont(randFontFrom(fonts))
 		pt := freetype.Pt(rw, rh)
 		if _, err := c.DrawString(string(char), pt); err != nil {
 			log.Println(err)
@@ -205,7 +205,7 @@ func (item *ItemChar) drawNoise(noiseText string, fonts []*truetype.Font) error 
 
 //drawText draw captcha string to image.把文字写入图像验证码
 
-func (item *ItemChar) DrawText(text string, fontToSelection []*truetype.Font) error {
+func (item *ItemChar) DrawText(text string, fonts []*truetype.Font) error {
 	c := freetype.NewContext()
 	c.SetDPI(imageStringDpi)
 	c.SetClip(item.nrgba.Bounds())
@@ -222,8 +222,8 @@ func (item *ItemChar) DrawText(text string, fontToSelection []*truetype.Font) er
 		fontSize := float64(item.height) / (1 + float64(rand.Intn(7))/float64(9))
 		c.SetSrc(image.NewUniform(randDeepColor()))
 		c.SetFontSize(fontSize)
-		//useFont := randFontFamily(fontToSelection)
-		c.SetFont(fontChinese)
+		//useFont := randFontFrom(fonts)
+		c.SetFont(randFontFrom(fonts))
 		x := int(fontWidth)*i + int(fontWidth)/int(fontSize)
 		//todo y 坐标要修复
 		y := 5 + rand.Intn(item.height/2) + int(fontSize/2)
@@ -253,7 +253,7 @@ func (item *ItemChar) WriteTo(w io.Writer) (int64, error) {
 
 // WriteTo writes captcha image in PNG format into the given writer.
 func (item *ItemChar) EncodeB64string() string {
-	return fmt.Sprintf("data:%s;base64,%s", MimeTypeCaptchaImage, base64.StdEncoding.EncodeToString(item.BinaryEncoding()))
+	return fmt.Sprintf("data:%s;base64,%s", MimeTypeImage, base64.StdEncoding.EncodeToString(item.BinaryEncoding()))
 }
 
 type point struct {

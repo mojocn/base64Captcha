@@ -39,7 +39,7 @@ func TestDriverString_GenerateItem(t *testing.T) {
 				ShowLineOptions: tt.fields.ShowNoiseOption,
 				Length:          tt.fields.CaptchaLen,
 				BgColor:         tt.fields.BgColor,
-				Fonts:           tt.fields.Fonts,
+				fontsArray:      tt.fields.Fonts,
 			}
 			gotItem, err := d.GenerateItem(tt.args.content)
 			if (err != nil) != tt.wantErr {

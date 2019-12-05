@@ -231,5 +231,5 @@ func (m *ItemDigit) WriteTo(w io.Writer) (int64, error) {
 }
 
 func (m *ItemDigit) EncodeB64string() string {
-	return fmt.Sprintf("data:%s;base64,%s", MimeTypeCaptchaImage, base64.StdEncoding.EncodeToString(m.EncodeBinary()))
+	return fmt.Sprintf("data:%s;base64,%s", MimeTypeImage, base64.StdEncoding.EncodeToString(m.EncodeBinary()))
 }

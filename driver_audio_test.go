@@ -27,7 +27,7 @@ func TestDriverAudio_GenerateItem(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			d := &driverAudio{
+			d := &DriverAudio{
 				Length:   tt.fields.CaptchaLen,
 				Language: tt.fields.Language,
 			}

@@ -10,14 +10,15 @@ import (
 var langMap = map[string][]int{
 	//"zh-CN": []int{19968, 40869},
 	"latin":  []int{0x0000, 0x007f},
-	"zh-CN":  []int{0x4e00, 0x9fa5},
+	"zh":     []int{0x4e00, 0x9fa5},
 	"ko":     []int{12593, 12686},
 	"jp":     []int{12449, 12531}, //[]int{12353, 12435}
 	"ru":     []int{1025, 1169},
 	"th":     []int{0x0e00, 0x0e7f},
 	"greek":  []int{0x0380, 0x03ff},
 	"arabic": []int{0x0600, 0x06ff},
-	"Hebrew": []int{0x0590, 0x05ff},
+	"hebrew": []int{0x0590, 0x05ff},
+	//"emotion": []int{0x1f601, 0x1f64f},
 }
 
 func generateRandomRune(size int, code string) string {
@@ -35,13 +36,34 @@ func generateRandomRune(size int, code string) string {
 	return string(randRune)
 }
 
-func NewDriverLanguage(driverString DriverString, languageCode string) *DriverLanguage {
-	return &DriverLanguage{DriverString: driverString, LanguageCode: languageCode}
+type DriverLanguage struct {
+	// Height png height in pixel.
+	// 图像验证码的高度像素.
+	Height int
+	// Width Captcha png width in pixel.
+	// 图像验证码的宽度像素
+	Width int
+
+	//NoiseCount text noise count.
+	NoiseCount int
+
+	ShowLineOptions int
+	//CaptchaRunePairs make a list of rune for Captcha random selection.
+	// 随机字符串可选内容
+
+	// Length Default number of digits in captcha solution.
+	// 默认数字验证长度6.
+	Length int
+
+	//BgColor captcha image background color (optional)
+	//背景颜色
+	BgColor      *color.RGBA
+	Fonts        []*truetype.Font
+	LanguageCode string
 }
 
-type DriverLanguage struct {
-	DriverString
-	LanguageCode string
+func NewDriverLanguage(height int, width int, noiseCount int, showLineOptions int, length int, bgColor *color.RGBA, fonts []*truetype.Font, languageCode string) *DriverLanguage {
+	return &DriverLanguage{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, BgColor: bgColor, Fonts: fonts, LanguageCode: languageCode}
 }
 
 func (d *DriverLanguage) GenerateQuestionAnswer() (content, answer string) {

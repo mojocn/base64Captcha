@@ -35,15 +35,10 @@ const (
 		"眼王按格养易置派层片始却专状育厂京识适属" +
 		"圆包火住调满县局照参红细引听该铁价严龙飞"
 
-	//MimeTypeCaptchaAudio output base64 mine-type.
-	MimeTypeCaptchaAudio = "audio/wav"
-	//MimeTypeCaptchaImage output base64 mine-type.
-	MimeTypeCaptchaImage = "image/png"
-
-	//FileExtCaptchaAudio output file extension.
-	FileExtCaptchaAudio = "wav"
-	//FileExtCaptchaImage output file extension.
-	FileExtCaptchaImage = "png"
+	//MimeTypeAudio output base64 mine-type.
+	MimeTypeAudio = "audio/wav"
+	//MimeTypeImage output base64 mine-type.
+	MimeTypeImage = "image/png"
 
 	Emoji = "😀😃💯😄🤖😻😅🤣😂🧑🙃😉😊😇😍👴🤩😘😗☺👽♀😙♂😋😛🎨😜🤪😝🤑🤗🤭🤫🤔🤐🤨😐🙉😶😏💗🙄😬🤥😌😪🤤😷🤢🤮🤯😵🤠😎🧐😨😰😱😭😖😡🤬👿☠💀💥💢"
 )
@@ -68,9 +63,9 @@ const (
 
 const (
 	//IsShowHollowLine is show hollow line.
-	OptionShowHollowLine = 1 << iota
+	OptionShowHollowLine = 2
 	//IsShowSlimeLine is show slime line.
-	OptionShowSlimeLine
+	OptionShowSlimeLine = 4
 	//IsShowSineLine is show sine line.
-	OptionShowSineLine
+	OptionShowSineLine = 8
 )

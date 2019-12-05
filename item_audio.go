@@ -172,6 +172,6 @@ func (a *ItemAudio) EncodeB64string() string {
 	if _, err := a.WriteTo(&buf); err != nil {
 		panic(err)
 	}
-	return fmt.Sprintf("data:%s;base64,%s", MimeTypeCaptchaAudio, base64.StdEncoding.EncodeToString(buf.Bytes()))
+	return fmt.Sprintf("data:%s;base64,%s", MimeTypeAudio, base64.StdEncoding.EncodeToString(buf.Bytes()))
 
 }

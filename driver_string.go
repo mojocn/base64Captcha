@@ -3,6 +3,7 @@ package base64Captcha
 import (
 	"github.com/golang/freetype/truetype"
 	"image/color"
+	"strings"
 )
 
 //DriverChar captcha config for captcha-engine-characters.
@@ -25,21 +26,28 @@ type DriverString struct {
 	// 默认数字验证长度6.
 	Length int
 
+	Source string
+
 	//BgColor captcha image background color (optional)
 	//背景颜色
-	BgColor *color.RGBA
-	Fonts   []*truetype.Font
+	BgColor    *color.RGBA
+	Fonts      []string
+	fontsArray []*truetype.Font
 }
 
-func NewDriverString(height int, width int, noiseCount int, showLineOptions int, length int, bgColor *color.RGBA, fonts []*truetype.Font) *DriverString {
-	return &DriverString{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, BgColor: bgColor, Fonts: fonts}
+func NewDriverString(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fonts []*truetype.Font) *DriverString {
+	return &DriverString{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsArray: fonts}
 }
 
 func (d *DriverString) GenerateQuestionAnswer() (content, answer string) {
-	content = randText(d.Length, TxtAlphabet+TxtNumbers)
+	content = randText(d.Length, d.Source)
 	return content, content
 }
 func (d *DriverString) GenerateItem(content string) (item Item, err error) {
+	for _, fff := range d.Fonts {
+		ft := loadFontByName("fonts/" + fff)
+		d.fontsArray = append(d.fontsArray, ft)
+	}
 	var bgc color.RGBA
 	if d.BgColor != nil {
 		bgc = *d.BgColor
@@ -65,7 +73,8 @@ func (d *DriverString) GenerateItem(content string) (item Item, err error) {
 
 	//draw noise
 	if d.NoiseCount > 0 {
-		noise := randText(d.NoiseCount, TxtNumbers+TxtAlphabet+",.[]<>")
+		source := TxtNumbers + TxtAlphabet + ",.[]<>"
+		noise := randText(d.NoiseCount, strings.Repeat(source, d.NoiseCount))
 		err = itemChar.drawNoise(noise, fontsAll)
 		if err != nil {
 			return
@@ -73,7 +82,7 @@ func (d *DriverString) GenerateItem(content string) (item Item, err error) {
 	}
 
 	//draw content
-	err = itemChar.DrawText(content, fontsAll)
+	err = itemChar.DrawText(content, d.fontsArray)
 	if err != nil {
 		return
 	}

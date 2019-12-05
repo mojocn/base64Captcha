@@ -2,12 +2,28 @@ package base64Captcha
 
 import (
 	"fmt"
+	"github.com/golang/freetype/truetype"
 	"image/color"
 	"math/rand"
 )
 
 //DriverChar captcha config for captcha-engine-characters.
-type DriverMath DriverString
+type DriverMath struct {
+	Height int
+	// Width Captcha png width in pixel.
+	// 图像验证码的宽度像素
+	Width int
+
+	//NoiseCount text noise count.
+	NoiseCount int
+
+	ShowLineOptions int
+	//CaptchaRunePairs make a list of rune for Captcha random selection.
+	// 随机字符串可选内容
+
+	BgColor *color.RGBA
+	Fonts   []*truetype.Font
+}
 
 func (d *DriverMath) GenerateQuestionAnswer() (question, answer string) {
 	operators := []string{"+", "-", "x"}

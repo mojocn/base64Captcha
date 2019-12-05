@@ -40,7 +40,7 @@ func TestDriverDigit_GenerateItem(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			d := &driverDigit{
+			d := &DriverDigit{
 				Height:   tt.fields.Height,
 				Width:    tt.fields.Width,
 				Length:   tt.fields.CaptchaLen,
@@ -49,7 +49,7 @@ func TestDriverDigit_GenerateItem(t *testing.T) {
 			}
 			gotItem, err := d.GenerateItem(tt.args.content)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("driverDigit.GenerateItem() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("DriverDigit.GenerateItem() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			ItemWriteToFile(gotItem, "_builds", tt.args.content, "png")
