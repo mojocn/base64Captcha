@@ -289,9 +289,9 @@ func (captcha *CaptchaImageChar) getNoiseDensityByComplex(complex int) int {
 	}
 }
 
-func (captcha *CaptchaImageChar) getTextFont(justUseFirst bool, family []*truetype.Font) *truetype.Font {
+func (captcha *CaptchaImageChar) getTextFont(useFirstFont bool, family []*truetype.Font) *truetype.Font {
 	fontToUse := family[0]
-	if !justUseFirst {
+	if !useFirstFont {
 		fontToUse = randFontFamily(family)
 	}
 	return fontToUse
