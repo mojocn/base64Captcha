@@ -44,36 +44,13 @@ const (
 	FileExtCaptchaAudio = "wav"
 	//FileExtCaptchaImage output file extension.
 	FileExtCaptchaImage = "png"
-)
-const (
-	//CaptchaComplexLower complex level lower.
-	CaptchaComplexLower = iota
-	//CaptchaComplexMedium complex level medium.
-	CaptchaComplexMedium
-	//CaptchaComplexHigh complex level high.
-	CaptchaComplexHigh
-)
-const (
-	//CaptchaModeNumber mode number.
-	CaptchaModeNumber = iota
-	//CaptchaModeAlphabet mode alphabet.
-	CaptchaModeAlphabet
-	//CaptchaModeArithmetic mode arithmetic.
-	CaptchaModeArithmetic
-	//CaptchaModeNumberAlphabet mode mix number and alphabet,this is also default mode.
-	CaptchaModeNumberAlphabet
-	//CaptchaModeChinese made chinese captcha .
-	CaptchaModeChinese
-	//CaptchaModeUseSequencedCharacters uses Sequenced Characters.
-	CaptchaModeUseSequencedCharacters
+
+	Emoji = "😀😃💯😄🤖😻😅🤣😂🧑🙃😉😊😇😍👴🤩😘😗☺👽♀😙♂😋😛🎨😜🤪😝🤑🤗🤭🤫🤔🤐🤨😐🙉😶😏💗🙄😬🤥😌😪🤤😷🤢🤮🤯😵🤠😎🧐😨😰😱😭😖😡🤬👿☠💀💥💢"
 )
 
 //GoTestOutputDir run go test command where the png and wav file output
 
 const (
-	// DefaultLen Default number of digits in captcha solution.
-	// 默认数字验证长度.
-	DefaultLen = 6
 	// MaxSkew max absolute skew factor of a single digit.
 	// 图像验证码的最大干扰洗漱.
 	MaxSkew = 0.7
@@ -85,4 +62,15 @@ const (
 	digitFontWidth     = 11
 	digitFontHeight    = 18
 	digitFontBlackChar = 1
+)
+
+//var cjkFontFamilies = readCJKFonts()
+
+const (
+	//IsShowHollowLine is show hollow line.
+	OptionShowHollowLine = 1 << iota
+	//IsShowSlimeLine is show slime line.
+	OptionShowSlimeLine
+	//IsShowSineLine is show sine line.
+	OptionShowSineLine
 )

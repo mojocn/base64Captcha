@@ -14,9 +14,9 @@ type configJsonBody struct {
 	Id              string
 	CaptchaType     string
 	VerifyValue     string
-	ConfigAudio     base64Captcha.ConfigAudio
-	ConfigCharacter base64Captcha.ConfigCharacter
-	ConfigDigit     base64Captcha.ConfigDigit
+	ConfigAudio     base64Captcha.driverAudio
+	ConfigCharacter base64Captcha.DriverChar
+	ConfigDigit     base64Captcha.driverDigit
 }
 
 // base64Captcha create http handler
