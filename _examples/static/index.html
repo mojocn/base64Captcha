@@ -62,13 +62,6 @@
         }
 
 
-
-
-
-
-
-
-
     </style>
     <!-- Place this tag in your head or just before your close body tag. -->
     <script src="https://buttons.github.io/buttons.js"></script>
@@ -139,139 +132,274 @@
             <el-tabs v-model="form.CaptchaType"
                      style="width: 70%;margin-left: auto;margin-right: auto;"
                      type="border-card" @tab-click="handleClick">
-                <el-tab-pane label="Capcha-Engine-Digit-Config" name="digit">
+                <el-tab-pane label="DriverDigit" name="digit">
 
                     <el-form
                             label-width="280px"
                             label-position="left">
 
-                        <el-form-item label="ConfigDigit.CaptchaLen">
-                            <el-slider v-model="form.ConfigDigit.CaptchaLen" :min="1" :max="10" show-input
+                        <el-form-item label="DriverDigit.Length">
+                            <el-slider v-model="form.DriverDigit.Length" :min="1" :max="10" show-input
                                        @change="generateCaptcha"></el-slider>
                         </el-form-item>
 
-                        <el-form-item label="ConfigDigit.Width">
-                            <el-slider v-model="form.ConfigDigit.Width" :min="20" :max="480" :step="5"
+                        <el-form-item label="DriverDigit.Width">
+                            <el-slider v-model="form.DriverDigit.Width" :min="20" :max="480" :step="5"
                                        show-input
                                        @change="generateCaptcha"></el-slider>
                         </el-form-item>
-                        <el-form-item label="ConfigDigit.Height">
-                            <el-slider v-model="form.ConfigDigit.Height" :min="20" :max="180" :step="5"
+                        <el-form-item label="DriverDigit.Height">
+                            <el-slider v-model="form.DriverDigit.Height" :min="20" :max="180" :step="5"
                                        show-input
                                        @change="generateCaptcha"></el-slider>
                         </el-form-item>
-                        <el-form-item label="ConfigDigit.MaxSkew">
-                            <el-slider v-model="form.ConfigDigit.MaxSkew" :step="0.05" :min="0.1" :max="1"
+                        <el-form-item label="DriverDigit.MaxSkew">
+                            <el-slider v-model="form.DriverDigit.MaxSkew" :step="0.05" :min="0.1" :max="1"
                                        show-input
                                        @change="generateCaptcha"></el-slider>
                         </el-form-item>
-                        <el-form-item label="ConfigDigit.DotCount">
-                            <el-slider v-model="form.ConfigDigit.DotCount" :min="2" :max="100" show-input
+                        <el-form-item label="DriverDigit.DotCount">
+                            <el-slider v-model="form.DriverDigit.DotCount" :min="2" :max="100" show-input
                                        @change="generateCaptcha"></el-slider>
                         </el-form-item>
                     </el-form>
 
                 </el-tab-pane>
-                <el-tab-pane label="Capcha-Engine-Character-Config" name="character">
+                <el-tab-pane label="DriverString" name="string">
 
                     <el-form
                             label-width="280px"
                             label-position="left">
-                        <el-form-item label="ConfigCharacter.Mode">
-                            <el-slider v-model="form.ConfigCharacter.Mode" :min="0" :max="5"
-                                       show-input
-                                       show-stops
-                                       :format-tooltip="formatTooltip"
-                                       @change="generateCaptcha"></el-slider>
-                        </el-form-item>
-                        <el-form-item label="ConfigCharacter.CaptchaLen" v-show="form.ConfigCharacter.Mode !== 2">
-                            <el-slider v-model="form.ConfigCharacter.CaptchaLen" :min="1" :max="10" show-input
+
+                        <el-form-item label="DriverString.Length">
+                            <el-slider v-model="form.DriverString.Length" :min="1" :max="10" show-input
                                        @change="generateCaptcha"></el-slider>
                         </el-form-item>
 
-                        <el-form-item label="ConfigCharacter.ChineseCharacterSource" v-show="form.ConfigCharacter.Mode == 4">
-                            <el-input v-model="form.ConfigCharacter.ChineseCharacterSource"
-                                   type="textarea"
-                                   @change="generateCaptcha"></el-input>
+                        <el-form-item label="DriverString.Source">
+                            <el-input v-model.trim="form.DriverString.Source"
+                                      type="textarea"
+                                      @change="generateCaptcha"></el-input>
                         </el-form-item>
 
-                        <el-form-item label="ConfigCharacter.SequencedCharacters" v-show="form.ConfigCharacter.Mode == 5">
-                            <el-input v-model="configCharacterSequencedCharacters"
-                            type="textarea"
-                            @change="generateCaptcha"></el-input>
-                        </el-form-item>
 
-                        <el-form-item label="ConfigCharacter.Width">
-                            <el-slider v-model="form.ConfigCharacter.Width" :min="20" :max="480" :step="5"
+                        <el-form-item label="DriverString.Width">
+                            <el-slider v-model="form.DriverString.Width" :min="20" :max="480" :step="5"
                                        show-input
                                        @change="generateCaptcha"></el-slider>
                         </el-form-item>
-                        <el-form-item label="ConfigCharacter.Height">
-                            <el-slider v-model="form.ConfigCharacter.Height" :min="20" :max="180" :step="5"
+                        <el-form-item label="DriverString.Height">
+                            <el-slider v-model="form.DriverString.Height" :min="20" :max="180" :step="5"
                                        show-input
                                        @change="generateCaptcha"></el-slider>
                         </el-form-item>
-                        <el-form-item label="ConfigCharacter.UseCJKFonts">
-                            <el-checkbox v-model="form.ConfigCharacter.UseCJKFonts" @change="generateCaptcha">
-                                UseCJKFonts
-                            </el-checkbox>
-                        </el-form-item>
-                        <el-form-item label="ConfigCharacter.IsUseSimpleFont">
-                            <el-checkbox v-model="form.ConfigCharacter.IsUseSimpleFont" @change="generateCaptcha">
-                                ...base64Captcha/fonts/RitaSmith.ttf
-                            </el-checkbox>
-                        </el-form-item>
-                        <el-form-item label="Captcha Layer">
-                            <el-checkbox v-model="form.ConfigCharacter.IsShowHollowLine" @change="generateCaptcha">
-                                IsShowHollowLine
-                            </el-checkbox>
-                            <el-checkbox v-model="form.ConfigCharacter.IsShowNoiseDot" @change="generateCaptcha">
-                                IsShowNoiseDot
-                            </el-checkbox>
-                            <el-checkbox v-model="form.ConfigCharacter.IsShowNoiseText" @change="generateCaptcha">
-                                IsShowNoiseText
-                            </el-checkbox>
-                            <el-checkbox v-model="form.ConfigCharacter.IsShowSlimeLine" @change="generateCaptcha">
-                                IsShowSlimeLine
-                            </el-checkbox>
-                            <el-checkbox v-model="form.ConfigCharacter.IsShowSineLine" @change="generateCaptcha">
-                                IsShowSlimeLine
-                            </el-checkbox>
 
-                        </el-form-item>
-                        <el-form-item label="bg color">
-
-                            <el-color-picker v-model="form.ConfigCharacter.BgHashColor"  @change="generateCaptcha"></el-color-picker>
-
-                        </el-form-item>
-
-
-                        <el-form-item label="ConfigCharacter.ComplexOfNoiseText"
-                                      v-if="form.ConfigCharacter.IsShowNoiseText">
-                            <el-slider v-model="form.ConfigCharacter.ComplexOfNoiseText" :min="0" :max="2" show-input
+                        <el-form-item label="DriverString.NoiseCount">
+                            <el-slider v-model="form.DriverString.NoiseCount" :min="0" :max="480" :step="5"
+                                       show-input
                                        @change="generateCaptcha"></el-slider>
                         </el-form-item>
-                        <el-form-item label="ConfigCharacter.ComplexOfNoiseDot"
-                                      v-if="form.ConfigCharacter.IsShowNoiseDot">
-                            <el-slider v-model="form.ConfigCharacter.ComplexOfNoiseDot" :min="0" :max="2" show-input
-                                       @change="generateCaptcha"></el-slider>
+
+                        <el-form-item label="DriverString.ShowLineOptions">
+
+                            <el-checkbox-group v-model="form.ShowLineOptions" @change="generateCaptcha">
+                                <el-checkbox label="2">OptionShowHollowLine</el-checkbox>
+                                <el-checkbox label="4">OptionShowSlimeLine</el-checkbox>
+                                <el-checkbox label="8">OptionShowSlimeLine</el-checkbox>
+                            </el-checkbox-group>
+
                         </el-form-item>
+                        <el-form-item label="DriverString.Fonts">
+
+                            <el-checkbox-group v-model="form.DriverString.Fonts" @change="generateCaptcha">
+                                <el-checkbox  v-for="f in fonts" :label="f" :key="f">{{f}}</el-checkbox>
+                            </el-checkbox-group>
+
+                        </el-form-item>
+                        <el-form-item label="DriverString.BgColor.">
+                            <el-form-item label="R">
+                                <el-slider v-model="form.DriverString.BgColor.R" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                            <el-form-item label="G">
+                                <el-slider v-model="form.DriverString.BgColor.G" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                            <el-form-item label="B">
+                                <el-slider v-model="form.DriverString.BgColor.B" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                            <el-form-item label="A">
+                                <el-slider v-model="form.DriverString.BgColor.A" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                        </el-form-item>
+
+
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane label="Capcha-Engine-Audio-Config" name="audio">
+                <el-tab-pane label="DriverMath" name="math">
 
                     <el-form
                             label-width="280px"
                             label-position="left">
 
-                        <el-form-item label="ConfigAudio.CaptchaLen">
-                            <el-slider v-model="form.ConfigAudio.CaptchaLen" :min="1" :max="10" show-input
+
+
+
+                        <el-form-item label="DriverMath.Width">
+                            <el-slider v-model="form.DriverMath.Width" :min="20" :max="480" :step="5"
+                                       show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+                        <el-form-item label="DriverMath.Height">
+                            <el-slider v-model="form.DriverMath.Height" :min="20" :max="180" :step="5"
+                                       show-input
                                        @change="generateCaptcha"></el-slider>
                         </el-form-item>
 
-                        <el-form-item label="ConfigAudio.Language">
+                        <el-form-item label="DriverMath.NoiseCount">
+                            <el-slider v-model="form.DriverMath.NoiseCount" :min="0" :max="480" :step="5"
+                                       show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
 
-                            <el-radio-group v-model="form.ConfigAudio.Language" @change="generateCaptcha">
+                        <el-form-item label="DriverMath.ShowLineOptions">
+
+                            <el-checkbox-group v-model="form.ShowLineOptions" @change="generateCaptcha">
+                                <el-checkbox label="2">OptionShowHollowLine</el-checkbox>
+                                <el-checkbox label="4">OptionShowSlimeLine</el-checkbox>
+                                <el-checkbox label="8">OptionShowSineLine</el-checkbox>
+                            </el-checkbox-group>
+
+                        </el-form-item>
+                        <el-form-item label="DriverMath.Fonts">
+
+                            <el-checkbox-group v-model="form.DriverMath.Fonts" @change="generateCaptcha">
+                                <el-checkbox  v-for="f in fonts" :label="f" :key="f">{{f}}</el-checkbox>
+                            </el-checkbox-group>
+
+                        </el-form-item>
+                        <el-form-item label="DriverMath.BgColor.">
+                            <el-form-item label="R">
+                                <el-slider v-model="form.DriverMath.BgColor.R" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                            <el-form-item label="G">
+                                <el-slider v-model="form.DriverMath.BgColor.G" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                            <el-form-item label="B">
+                                <el-slider v-model="form.DriverMath.BgColor.B" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                            <el-form-item label="A">
+                                <el-slider v-model="form.DriverMath.BgColor.A" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                        </el-form-item>
+
+
+                    </el-form>
+                </el-tab-pane>
+                <el-tab-pane label="DriverChinese" name="chinese">
+
+                    <el-form
+                            label-width="280px"
+                            label-position="left">
+
+                        <el-form-item label="DriverChinese.Length">
+                            <el-slider v-model="form.DriverChinese.Length" :min="1" :max="10" show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+
+                        <el-form-item label="DriverChinese.Source">
+                            <el-input v-model.trim="form.DriverChinese.Source"
+                                      type="textarea"
+                                      @change="generateCaptcha"></el-input>
+                        </el-form-item>
+
+
+                        <el-form-item label="DriverChinese.Width">
+                            <el-slider v-model="form.DriverChinese.Width" :min="20" :max="480" :step="5"
+                                       show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+                        <el-form-item label="DriverChinese.Height">
+                            <el-slider v-model="form.DriverChinese.Height" :min="20" :max="180" :step="5"
+                                       show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+
+                        <el-form-item label="DriverChinese.NoiseCount">
+                            <el-slider v-model="form.DriverChinese.NoiseCount" :min="0" :max="480" :step="5"
+                                       show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+
+                        <el-form-item label="DriverChinese.ShowLineOptions">
+
+                            <el-checkbox-group v-model="form.ShowLineOptions" @change="generateCaptcha">
+                                <el-checkbox label="2">OptionShowHollowLine</el-checkbox>
+                                <el-checkbox label="4">OptionShowSlimeLine</el-checkbox>
+                                <el-checkbox label="8">OptionShowSlimeLine</el-checkbox>
+                            </el-checkbox-group>
+
+                        </el-form-item>
+                        <el-form-item label="DriverChinese.Fonts">
+
+                            <el-checkbox-group v-model="form.DriverChinese.Fonts" @change="generateCaptcha">
+                                <el-checkbox  v-for="f in fonts" :label="f" :key="f">{{f}}</el-checkbox>
+                            </el-checkbox-group>
+
+                        </el-form-item>
+                        <el-form-item label="DriverChinese.BgColor.">
+                            <el-form-item label="R">
+                                <el-slider v-model="form.DriverChinese.BgColor.R" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                            <el-form-item label="G">
+                                <el-slider v-model="form.DriverChinese.BgColor.G" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                            <el-form-item label="B">
+                                <el-slider v-model="form.DriverChinese.BgColor.B" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                            <el-form-item label="A">
+                                <el-slider v-model="form.DriverChinese.BgColor.A" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                        </el-form-item>
+
+
+                    </el-form>
+                </el-tab-pane>
+                <el-tab-pane label="DriverAudio" name="audio">
+                    <el-form
+                            label-width="280px"
+                            label-position="left">
+
+                        <el-form-item label="DriverAudio.Length">
+                            <el-slider v-model="form.DriverAudio.Length" :min="1" :max="10" show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+
+                        <el-form-item label="DriverAudio.Language">
+
+                            <el-radio-group v-model="form.DriverAudio.Language" @change="generateCaptcha">
                                 <el-radio-button label="en"></el-radio-button>
                                 <el-radio-button label="zh"></el-radio-button>
                                 <el-radio-button label="ru"></el-radio-button>
@@ -320,10 +448,8 @@
         <el-footer
                 style="line-height: 60px"
         > https://github.com/dejavuzhou/felix
-            <a href="https://github.com/dejavuzhou/felix" type="success">https://github.com/dejavuzhou/felix</a>
-            <a href="https://tech.mojotv.cn" type="success">Golang Tech Blog Go语言教程</a>
-            <a href="https://libragen.cn" type="success">Facebook　Libra 区块链中文网</a>
-
+            <a href="https://github.com/mojocn" type="success">https://github.com/mojocn</a>
+            <a href="https://mojotv.cn" type="success">Golang Tech Blog </a>
         </el-footer>
     </el-container>
 
@@ -336,34 +462,60 @@
         el: '#app',
         data: function () {
             return {
+                fonts: [
+                    "3Dumb.ttf",
+                    "ApothecaryFont.ttf",
+                    "Comismsh.ttf",
+                    "DENNEthree-dee.ttf",
+                    "DeborahFancyDress.ttf",
+                    "Flim-Flam.ttf",
+                    "RitaSmith.ttf",
+                    "actionj.ttf",
+                    "chromohv.ttf",
+                    "wqy-microhei.ttc",
+                ],
                 form: {
-                    CaptchaType: "character",
+                    ShowLineOptions: [],
+                    CaptchaType: "string",
                     Id: '',
                     VerifyValue: '',
-                    ConfigAudio: {
-                        CaptchaLen: 6,
+                    DriverAudio: {
+                        Length: 6,
                         Language: 'zh'
                     },
-                    ConfigCharacter: {
+                    DriverString: {
                         Height: 60,
                         Width: 240,
-                        Mode: 2,
-                        SequencedCharacters: ["文件", "下载", "测试", "词组", "验证", "顺序"],
-                        ComplexOfNoiseText: 0,
-                        ComplexOfNoiseDot: 0,
-                        IsUseSimpleFont: true,
-                        IsShowHollowLine: false,
-                        IsShowNoiseDot: false,
-                        IsShowNoiseText: false,
-                        IsShowSlimeLine: false,
-                        IsShowSineLine: false,
-                        CaptchaLen: 6,
-                        BgHashColor:"#fff",
+                        ShowLineOptions: 0,
+                        NoiseCount: 0,
+                        Source: "1234567890qwertyuioplkjhgfdsazxcvbnm",
+                        Length: 6,
+                        Fonts: ["wqy-microhei.ttc"],
+                        BgColor: {R: 0, G: 0, B: 0, A: 0},
                     },
-                    ConfigDigit: {
+                    DriverMath: {
+                        Height: 60,
+                        Width: 240,
+                        ShowLineOptions: 0,
+                        NoiseCount: 0,
+                        Length: 6,
+                        Fonts: ["wqy-microhei.ttc"],
+                        BgColor: {R: 0, G: 0, B: 0, A: 0},
+                    },
+                    DriverChinese: {
+                        Height: 60,
+                        Width: 320,
+                        ShowLineOptions: 0,
+                        NoiseCount: 0,
+                        Source: "设想,你在,处理,消费者,的音,频输,出音,频可,能无,论什,么都,没有,任何,输出,或者,它可,能是,单声道,立体声,或是,环绕立,体声的,,不想要,的值",
+                        Length: 2,
+                        Fonts: ["wqy-microhei.ttc"],
+                        BgColor: {R: 125, G: 125, B: 0, A: 118},
+                    },
+                    DriverDigit: {
                         Height: 80,
                         Width: 240,
-                        CaptchaLen: 5,
+                        Length: 5,
                         MaxSkew: 0.7,
                         DotCount: 80
                     }
@@ -373,81 +525,89 @@
             }
         },
         computed: {
-            configCharacterSequencedCharacters: {
-                get: function() {
-                    return this.form.ConfigCharacter.SequencedCharacters.join(',')
+            DriverStringSequencedCharacters: {
+                get: function () {
+                    return this.form.DriverString.SequencedCharacters.join(',')
                 },
-                set: function(newValue) {
-                    this.form.ConfigCharacter.SequencedCharacters = newValue.split(',')
+                set: function (newValue) {
+                    this.form.DriverString.SequencedCharacters = newValue.split(',')
                 }
             }
         },
         methods: {
+            doShowLineOptions(val) {
+                if (val > 0) {
+                    this.ShowLineOptions = this.form.ShowLineOptions | val;
+                } else {
+
+                }
+            },
             formatTooltip: function (val) {
-                var items = ['CaptchaModeNumber', 'CaptchaModeAlphabet', 'CaptchaModeArithmetic', 
-                            'CaptchaModeNumberAlphabet', 'CaptchaModeChinese', 'CaptchaModeUseSequencedCharacters'];
+                var items = ['CaptchaModeNumber', 'CaptchaModeAlphabet', 'CaptchaModeArithmetic',
+                    'CaptchaModeNumberAlphabet', 'CaptchaModeChinese', 'CaptchaModeUseSequencedCharacters'];
                 return items[val];
             },
             handleClick: function (tab, event) {
                 this.generateCaptcha();
-            },            
+            },
             generateCaptcha: function () {
                 this.loading = true;
                 //generate uuid string so the serve can verify numbers in the png
                 //you can generate the captchaId in other way
                 var that = this;
+                var opt = 0;
+                this.form.ShowLineOptions.forEach(item => {
+                    opt = opt | item;
+                });
+                this.form.DriverString.ShowLineOptions = opt;
+                this.form.DriverMath.ShowLineOptions = opt;
+                //this.form.DriverChineseWords.ShowLineOptions = opt;
 
                 // the api/getCaptcha endpoint only recieve captchaId paramenter
                 axios.post('/api/getCaptcha', that.form)
-                        .then(function (response) {
-                            that.loading = false;
-                            that.form.Id = response.data.captchaId;
-                            that.blob = response.data.data;
-                        })
-                        .catch(function (error) {
-                            that.loading = false;
-                            that.$notify({
-                                title: 500,
-                                message: 'net work or server error',
-                                type: "error"
-                            });
+                    .then(function (response) {
+                        that.loading = false;
+                        that.form.Id = response.data.captchaId;
+                        that.blob = response.data.data;
+                    })
+                    .catch(function (error) {
+                        that.loading = false;
+                        that.$notify({
+                            title: 500,
+                            message: 'net work or server error',
+                            type: "error"
                         });
+                    });
             },
             submitForm: function () {
                 var that = this;
                 this.loading = true;
                 axios.post('/api/verifyCaptcha', that.form)
-                        .then(function (response) {
-                            that.loading = false;
-                            that.$notify({
-                                title: response.data.msg,
-                                message: response.data.data,
-                                type: response.data.code
-                            });
-                            if (response.data.code === "success") {
-                                that.generateCaptcha(false)
-                            }
-                        })
-                        .catch(function (error) {
-                            that.loading = false;
-                            that.$notify({
-                                title: 500,
-                                message: 'net work or server error',
-                                type: "error"
-                            });
+                    .then(function (response) {
+                        that.loading = false;
+                        that.$notify({
+                            title: response.data.msg,
+                            message: response.data.data,
+                            type: response.data.code
                         });
+                        if (response.data.code === "success") {
+                            that.generateCaptcha(false)
+                        }
+                    })
+                    .catch(function (error) {
+                        that.loading = false;
+                        that.$notify({
+                            title: 500,
+                            message: 'net work or server error',
+                            type: "error"
+                        });
+                    });
             }
         },
         mounted: function () {
             this.generateCaptcha()
         }
     })
-
-
-
-
-
-
 
 
 </script>

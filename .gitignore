@@ -7,3 +7,5 @@ ex
 .codecov
 coverage.*
 *.exe
+_builds/*
+_builds
