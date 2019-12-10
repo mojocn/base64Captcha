@@ -11,12 +11,14 @@ import (
 
 //configJsonBody json request body.
 type configJsonBody struct {
-	Id           string
-	CaptchaType  string
-	VerifyValue  string
-	DriverAudio  *base64Captcha.DriverAudio
-	DriverString *base64Captcha.DriverString
-	DriverDigit  *base64Captcha.DriverDigit
+	Id            string
+	CaptchaType   string
+	VerifyValue   string
+	DriverAudio   *base64Captcha.DriverAudio
+	DriverString  *base64Captcha.DriverString
+	DriverChinese *base64Captcha.DriverChinese
+	DriverMath    *base64Captcha.DriverMath
+	DriverDigit   *base64Captcha.DriverDigit
 }
 
 var store = base64Captcha.DefaultMemStore
@@ -41,8 +43,12 @@ func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	switch param.CaptchaType {
 	case "audio":
 		driver = param.DriverAudio
-	case "character":
-		driver = param.DriverString
+	case "string":
+		driver = param.DriverString.ConvertFonts()
+	case "math":
+		driver = param.DriverMath.ConvertFonts()
+	case "chinese":
+		driver = param.DriverChinese.ConvertFonts()
 	default:
 		driver = param.DriverDigit
 	}

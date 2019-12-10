@@ -4,6 +4,7 @@ import (
 	"image/color"
 	"math"
 	"math/rand"
+	"strings"
 )
 
 //randFromStringArray: create random text from sourceStringArray, ensure sequenced
@@ -29,13 +30,14 @@ func randStringArrayNext(input []string) string {
 
 //randText create random text. 生成随机文本.
 func randText(size int, sourceChars string) string {
+	if size >= len(sourceChars) {
+		sourceChars = strings.Repeat(sourceChars, size)
+	}
 	sourceRunes := []rune(sourceChars)
 	sourceLength := len(sourceRunes)
-	if size >= sourceLength {
-		panic("randText's arg must be less than sourceChars size")
-	}
+
 	text := make([]rune, size)
-	for i := 0; i < size; i++ {
+	for i, _ := range text {
 		text[i] = sourceRunes[rand.Intn(sourceLength)]
 	}
 	return string(text)

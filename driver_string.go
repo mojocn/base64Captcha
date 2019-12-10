@@ -35,8 +35,28 @@ type DriverString struct {
 	fontsArray []*truetype.Font
 }
 
-func NewDriverString(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fonts []*truetype.Font) *DriverString {
-	return &DriverString{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsArray: fonts}
+func NewDriverString(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fonts []string) *DriverString {
+	tfs := []*truetype.Font{}
+	for _, fff := range fonts {
+		tf := loadFontByName("fonts/" + fff)
+		tfs = append(tfs, tf)
+	}
+	if len(tfs) == 0 {
+		tfs = fontsAll
+	}
+	return &DriverString{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsArray: tfs}
+}
+func (d *DriverString) ConvertFonts() *DriverString {
+	tfs := []*truetype.Font{}
+	for _, fff := range d.Fonts {
+		tf := loadFontByName("fonts/" + fff)
+		tfs = append(tfs, tf)
+	}
+	if len(tfs) == 0 {
+		tfs = fontsAll
+	}
+	d.fontsArray = tfs
+	return d
 }
 
 func (d *DriverString) GenerateQuestionAnswer() (content, answer string) {
@@ -44,10 +64,7 @@ func (d *DriverString) GenerateQuestionAnswer() (content, answer string) {
 	return content, content
 }
 func (d *DriverString) GenerateItem(content string) (item Item, err error) {
-	for _, fff := range d.Fonts {
-		ft := loadFontByName("fonts/" + fff)
-		d.fontsArray = append(d.fontsArray, ft)
-	}
+
 	var bgc color.RGBA
 	if d.BgColor != nil {
 		bgc = *d.BgColor
@@ -75,7 +92,7 @@ func (d *DriverString) GenerateItem(content string) (item Item, err error) {
 	if d.NoiseCount > 0 {
 		source := TxtNumbers + TxtAlphabet + ",.[]<>"
 		noise := randText(d.NoiseCount, strings.Repeat(source, d.NoiseCount))
-		err = itemChar.drawNoise(noise, fontsAll)
+		err = itemChar.drawNoise(noise, d.fontsArray)
 		if err != nil {
 			return
 		}

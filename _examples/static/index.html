@@ -165,7 +165,7 @@
                     </el-form>
 
                 </el-tab-pane>
-                <el-tab-pane label="DriverString" name="character">
+                <el-tab-pane label="DriverString" name="string">
 
                     <el-form
                             label-width="280px"
@@ -234,6 +234,151 @@
                             </el-form-item>
                             <el-form-item label="A">
                                 <el-slider v-model="form.DriverString.BgColor.A" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                        </el-form-item>
+
+
+                    </el-form>
+                </el-tab-pane>
+                <el-tab-pane label="DriverMath" name="math">
+
+                    <el-form
+                            label-width="280px"
+                            label-position="left">
+
+
+
+
+                        <el-form-item label="DriverMath.Width">
+                            <el-slider v-model="form.DriverMath.Width" :min="20" :max="480" :step="5"
+                                       show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+                        <el-form-item label="DriverMath.Height">
+                            <el-slider v-model="form.DriverMath.Height" :min="20" :max="180" :step="5"
+                                       show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+
+                        <el-form-item label="DriverMath.NoiseCount">
+                            <el-slider v-model="form.DriverMath.NoiseCount" :min="0" :max="480" :step="5"
+                                       show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+
+                        <el-form-item label="DriverMath.ShowLineOptions">
+
+                            <el-checkbox-group v-model="form.ShowLineOptions" @change="generateCaptcha">
+                                <el-checkbox label="2">OptionShowHollowLine</el-checkbox>
+                                <el-checkbox label="4">OptionShowSlimeLine</el-checkbox>
+                                <el-checkbox label="8">OptionShowSineLine</el-checkbox>
+                            </el-checkbox-group>
+
+                        </el-form-item>
+                        <el-form-item label="DriverMath.Fonts">
+
+                            <el-checkbox-group v-model="form.DriverMath.Fonts" @change="generateCaptcha">
+                                <el-checkbox  v-for="f in fonts" :label="f" :key="f">{{f}}</el-checkbox>
+                            </el-checkbox-group>
+
+                        </el-form-item>
+                        <el-form-item label="DriverMath.BgColor.">
+                            <el-form-item label="R">
+                                <el-slider v-model="form.DriverMath.BgColor.R" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                            <el-form-item label="G">
+                                <el-slider v-model="form.DriverMath.BgColor.G" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                            <el-form-item label="B">
+                                <el-slider v-model="form.DriverMath.BgColor.B" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                            <el-form-item label="A">
+                                <el-slider v-model="form.DriverMath.BgColor.A" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                        </el-form-item>
+
+
+                    </el-form>
+                </el-tab-pane>
+                <el-tab-pane label="DriverChinese" name="chinese">
+
+                    <el-form
+                            label-width="280px"
+                            label-position="left">
+
+                        <el-form-item label="DriverChinese.Length">
+                            <el-slider v-model="form.DriverChinese.Length" :min="1" :max="10" show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+
+                        <el-form-item label="DriverChinese.Source">
+                            <el-input v-model.trim="form.DriverChinese.Source"
+                                      type="textarea"
+                                      @change="generateCaptcha"></el-input>
+                        </el-form-item>
+
+
+                        <el-form-item label="DriverChinese.Width">
+                            <el-slider v-model="form.DriverChinese.Width" :min="20" :max="480" :step="5"
+                                       show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+                        <el-form-item label="DriverChinese.Height">
+                            <el-slider v-model="form.DriverChinese.Height" :min="20" :max="180" :step="5"
+                                       show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+
+                        <el-form-item label="DriverChinese.NoiseCount">
+                            <el-slider v-model="form.DriverChinese.NoiseCount" :min="0" :max="480" :step="5"
+                                       show-input
+                                       @change="generateCaptcha"></el-slider>
+                        </el-form-item>
+
+                        <el-form-item label="DriverChinese.ShowLineOptions">
+
+                            <el-checkbox-group v-model="form.ShowLineOptions" @change="generateCaptcha">
+                                <el-checkbox label="2">OptionShowHollowLine</el-checkbox>
+                                <el-checkbox label="4">OptionShowSlimeLine</el-checkbox>
+                                <el-checkbox label="8">OptionShowSlimeLine</el-checkbox>
+                            </el-checkbox-group>
+
+                        </el-form-item>
+                        <el-form-item label="DriverChinese.Fonts">
+
+                            <el-checkbox-group v-model="form.DriverChinese.Fonts" @change="generateCaptcha">
+                                <el-checkbox  v-for="f in fonts" :label="f" :key="f">{{f}}</el-checkbox>
+                            </el-checkbox-group>
+
+                        </el-form-item>
+                        <el-form-item label="DriverChinese.BgColor.">
+                            <el-form-item label="R">
+                                <el-slider v-model="form.DriverChinese.BgColor.R" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                            <el-form-item label="G">
+                                <el-slider v-model="form.DriverChinese.BgColor.G" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                            <el-form-item label="B">
+                                <el-slider v-model="form.DriverChinese.BgColor.B" :min="0" :max="254" :step="1"
+                                           show-input
+                                           @change="generateCaptcha"></el-slider>
+                            </el-form-item>
+                            <el-form-item label="A">
+                                <el-slider v-model="form.DriverChinese.BgColor.A" :min="0" :max="254" :step="1"
                                            show-input
                                            @change="generateCaptcha"></el-slider>
                             </el-form-item>
@@ -331,7 +476,7 @@
                 ],
                 form: {
                     ShowLineOptions: [],
-                    CaptchaType: "character",
+                    CaptchaType: "string",
                     Id: '',
                     VerifyValue: '',
                     DriverAudio: {
@@ -341,7 +486,6 @@
                     DriverString: {
                         Height: 60,
                         Width: 240,
-                        Mode: 2,
                         ShowLineOptions: 0,
                         NoiseCount: 0,
                         Source: "1234567890qwertyuioplkjhgfdsazxcvbnm",
@@ -352,10 +496,21 @@
                     DriverMath: {
                         Height: 60,
                         Width: 240,
-                        Mode: 2,
                         ShowLineOptions: 0,
                         NoiseCount: 0,
+                        Length: 6,
+                        Fonts: ["wqy-microhei.ttc"],
                         BgColor: {R: 0, G: 0, B: 0, A: 0},
+                    },
+                    DriverChinese: {
+                        Height: 60,
+                        Width: 320,
+                        ShowLineOptions: 0,
+                        NoiseCount: 0,
+                        Source: "设想,你在,处理,消费者,的音,频输,出音,频可,能无,论什,么都,没有,任何,输出,或者,它可,能是,单声道,立体声,或是,环绕立,体声的,,不想要,的值",
+                        Length: 2,
+                        Fonts: ["wqy-microhei.ttc"],
+                        BgColor: {R: 125, G: 125, B: 0, A: 118},
                     },
                     DriverDigit: {
                         Height: 80,
@@ -406,6 +561,7 @@
                 });
                 this.form.DriverString.ShowLineOptions = opt;
                 this.form.DriverMath.ShowLineOptions = opt;
+                //this.form.DriverChineseWords.ShowLineOptions = opt;
 
                 // the api/getCaptcha endpoint only recieve captchaId paramenter
                 axios.post('/api/getCaptcha', that.form)

@@ -5,6 +5,7 @@ import (
 	"github.com/golang/freetype/truetype"
 	"image/color"
 	"math/rand"
+	"strings"
 )
 
 //DriverChar captcha config for captcha-engine-characters.
@@ -21,10 +22,23 @@ type DriverMath struct {
 	//CaptchaRunePairs make a list of rune for Captcha random selection.
 	// 随机字符串可选内容
 
-	BgColor *color.RGBA
-	Fonts   []*truetype.Font
+	BgColor    *color.RGBA
+	Fonts      []string
+	fontsArray []*truetype.Font
 }
 
+func (d *DriverMath) ConvertFonts() *DriverMath {
+	tfs := []*truetype.Font{}
+	for _, fff := range d.Fonts {
+		tf := loadFontByName("fonts/" + fff)
+		tfs = append(tfs, tf)
+	}
+	if len(tfs) == 0 {
+		tfs = fontsAll
+	}
+	d.fontsArray = tfs
+	return d
+}
 func (d *DriverMath) GenerateQuestionAnswer() (question, answer string) {
 	operators := []string{"+", "-", "x"}
 	var mathResult int32
@@ -70,7 +84,7 @@ func (d *DriverMath) GenerateItem(question string) (item Item, err error) {
 
 	//背景有文字干扰
 	if d.NoiseCount > 0 {
-		noise := randText(d.NoiseCount, TxtNumbers)
+		noise := randText(d.NoiseCount, strings.Repeat(TxtNumbers, d.NoiseCount))
 		err = itemChar.drawNoise(noise, fontsAll)
 		if err != nil {
 			return
@@ -88,7 +102,7 @@ func (d *DriverMath) GenerateItem(question string) (item Item, err error) {
 	}
 
 	//draw question
-	err = itemChar.DrawText(question, fontsAll)
+	err = itemChar.DrawText(question, d.fontsArray)
 	if err != nil {
 		return
 	}

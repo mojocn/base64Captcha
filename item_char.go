@@ -41,7 +41,7 @@ func (item *ItemChar) drawHollowLine() *ItemChar {
 	first := item.width / 20
 	end := first * 19
 
-	lineColor := color.RGBA{R: 245, G: 250, B: 251, A: 255}
+	lineColor := randLightColor()
 
 	x1 := float64(rand.Intn(first))
 	//y1 := float64(rand.Intn(y)+y);
@@ -100,7 +100,7 @@ func (item *ItemChar) drawSineLine() *ItemChar {
 	px1 := 0
 	px2 := int(random(int64(float64(item.width)*0.8), int64(item.width)))
 
-	c := color.RGBA{R: uint8(rand.Intn(150)), G: uint8(rand.Intn(150)), B: uint8(rand.Intn(150)), A: uint8(255)}
+	c := randDeepColor()
 
 	for px := px1; px < px2; px++ {
 		if w != 0 {
