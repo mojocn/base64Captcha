@@ -3,45 +3,52 @@ package base64Captcha
 import (
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
+	"log"
 	"math/rand"
 )
 
-//FontFamilyOfBytes read all font to bytes.
+var fontsSimple = loadFontsByNames([]string{
+	"fonts/3Dumb.ttf",
+	"fonts/ApothecaryFont.ttf",
+	"fonts/Comismsh.ttf",
+	"fonts/DENNEthree-dee.ttf",
+	"fonts/DeborahFancyDress.ttf",
+	"fonts/Flim-Flam.ttf",
+	"fonts/RitaSmith.ttf",
+	"fonts/actionj.ttf",
+	"fonts/chromohv.ttf",
+})
 
-//readFontsToSliceOfTrueTypeFonts import fonts from dir.
-//make the simple-font(RitaSmith.ttf) the first font of trueTypeFonts.
-func readFontsToSliceOfTrueTypeFonts() []*truetype.Font {
-	fonts := make([]*truetype.Font, 0)
-	//RitaSmith.ttf is first element for font simple mode.
-	assetFontNames := []string{"fonts/RitaSmith.ttf", "fonts/actionj.ttf", "fonts/chromohv.ttf", "fonts/Flim-Flam.ttf", "fonts/DeborahFancyDress.ttf", "fonts/DENNEthree-dee.ttf", "fonts/Comismsh.ttf", "fonts/ApothecaryFont.ttf", "fonts/3Dumb.ttf"}
-	for _, assetName := range assetFontNames {
-		fonts = appendAssetFontToTrueTypeFonts(assetName, fonts)
-	}
-	return fonts
-}
+//var fontemoji = loadFontByName("fonts/seguiemj.ttf")
+var fontsAll = append(fontsSimple, fontChinese)
+var fontChinese = loadFontByName("fonts/wqy-microhei.ttc")
 
-func readCJKFonts() []*truetype.Font {
-	fonts := make([]*truetype.Font, 0)
-	assetFontNames := []string{ "fonts/wqy-microhei.ttc" }
-	for _, assetName := range assetFontNames {
-		fonts = appendAssetFontToTrueTypeFonts(assetName, fonts)
-	}
-	return fonts
-}
-
-func appendAssetFontToTrueTypeFonts(assetName string, fonts []*truetype.Font) []*truetype.Font {
-	fontBytes, _ := Asset(assetName)
+func loadFontByName(name string) *truetype.Font {
+	fontBytes, _ := Asset(name)
 	//font file bytes to trueTypeFont
-	trueTypeFont, _ := freetype.ParseFont(fontBytes)
-	fonts = append(fonts, trueTypeFont)
+	trueTypeFont, err := freetype.ParseFont(fontBytes)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return trueTypeFont
+}
+
+//loadFontsByNames import fonts from dir.
+//make the simple-font(RitaSmith.ttf) the first font of trueTypeFonts.
+func loadFontsByNames(assetFontNames []string) []*truetype.Font {
+	fonts := make([]*truetype.Font, 0)
+	for _, assetName := range assetFontNames {
+		f := loadFontByName(assetName)
+		fonts = append(fonts, f)
+	}
 	return fonts
 }
 
-//randFontFamily choose random font family.选择随机的字体
-func randFontFamily(from []*truetype.Font) *truetype.Font {
-	fontCount := len(from)
+//randFontFrom choose random font family.选择随机的字体
+func randFontFrom(fonts []*truetype.Font) *truetype.Font {
+	fontCount := len(fonts)
 	index := rand.Intn(fontCount)
-	return from[index]
+	return fonts[index]
 }
 
 var digitFontData = [][]byte{
