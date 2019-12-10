@@ -19,7 +19,7 @@ give a string identifier to the package and it returns with a base64-encoding-pn
 
 * [English](https://godoc.org/github.com/mojocn/base64Captcha)
 * [中文文档](https://github.com/mojocn/base64Captcha/blob/master/README_zh.md)
-* [Playground Powered by Vuejs+elementUI+Axios](https://captcha.mojotv.cn)
+* [Playground](https://captcha.mojotv.cn)
 
 
 ## 2. Quick Start
