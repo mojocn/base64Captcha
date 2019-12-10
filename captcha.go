@@ -36,7 +36,7 @@ func NewCaptcha(driver Driver, store Store) *Captcha {
 	return &Captcha{Driver: driver, Store: store}
 }
 
-func (c *Captcha) GenerateB64s() (id, b64s string, err error) {
+func (c *Captcha) Generate() (id, b64s string, err error) {
 	id = randomId()
 	content, answer := c.Driver.GenerateQuestionAnswer()
 	item, err := c.Driver.GenerateItem(content)
@@ -47,6 +47,9 @@ func (c *Captcha) GenerateB64s() (id, b64s string, err error) {
 	b64s = item.EncodeB64string()
 	return
 }
+
+//if you has multiple captcha instances which shared a same store. You may want to use `store.Verify` method instead.
+//Verify by given id key and remove the captcha value in store, return boolean value.
 func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 	match = c.Store.Get(id, clear) == answer
 	return

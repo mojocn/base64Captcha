@@ -23,8 +23,6 @@ type configJsonBody struct {
 
 var store = base64Captcha.DefaultMemStore
 
-var captchaMap = map[string]base64Captcha.Captcha{}
-
 // base64Captcha create http handler
 func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	//parse request parameters
@@ -53,12 +51,11 @@ func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 		driver = param.DriverDigit
 	}
 	c := base64Captcha.NewCaptcha(driver, store)
-	id, b64s, err := c.GenerateB64s()
+	id, b64s, err := c.Generate()
 	body := map[string]interface{}{"code": 1, "data": b64s, "captchaId": id, "msg": "success"}
 	if err != nil {
 		body = map[string]interface{}{"code": 0, "msg": err.Error()}
 	}
-	captchaMap[id] = *c
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	json.NewEncoder(w).Encode(body)
 }
@@ -76,14 +73,10 @@ func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 	//verify the captcha
-	c, ok := captchaMap[param.Id]
 	body := map[string]interface{}{"code": 0, "msg": "failed"}
-	if ok {
-		if c.Verify(param.Id, param.VerifyValue, true) {
-			body = map[string]interface{}{"code": 1, "msg": "ok"}
-		}
+	if store.Verify(param.Id, param.VerifyValue, true) {
+		body = map[string]interface{}{"code": 1, "msg": "ok"}
 	}
-	delete(captchaMap, param.Id)
 
 	//set json response
 	//设置json响应
