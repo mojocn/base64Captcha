@@ -121,62 +121,120 @@ func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 #### 2.2.6 Full Example
 
 ```go
-func main(){
-		dr := DefaultDriverAudio
-    	st := DefaultMemStore
-    	c := NewCaptcha(dr,st)
-    	id,b64s,err := c.Generate()
-    	if err != nil {
-    		panic(err)
-    	}
-    	fmt.Println("ID ",id)
-    	fmt.Println("Base64 Png or Wav ",b64s)
-    	
-    	//verify
-    	//st.Verify(id,"xxxx",true)
-    	//c.Verify(id,"xxxx",true)
+// example of HTTP server that uses the captcha package.
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"github.com/mojocn/base64Captcha"
+	"log"
+	"net/http"
+)
+
+//configJsonBody json request body.
+type configJsonBody struct {
+	Id            string
+	CaptchaType   string
+	VerifyValue   string
+	DriverAudio   *base64Captcha.DriverAudio
+	DriverString  *base64Captcha.DriverString
+	DriverChinese *base64Captcha.DriverChinese
+	DriverMath    *base64Captcha.DriverMath
+	DriverDigit   *base64Captcha.DriverDigit
 }
 
+var store = base64Captcha.DefaultMemStore
 
+// base64Captcha create http handler
+func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
+	//parse request parameters
+	//接收客户端发送来的请求参数
+	decoder := json.NewDecoder(r.Body)
+	var param configJsonBody
+	err := decoder.Decode(&param)
+	if err != nil {
+		log.Println(err)
+	}
+	defer r.Body.Close()
+	var driver base64Captcha.Driver
+
+	//create base64 encoding captcha
+	//创建base64图像验证码
+	switch param.CaptchaType {
+	case "audio":
+		driver = param.DriverAudio
+	case "string":
+		driver = param.DriverString.ConvertFonts()
+	case "math":
+		driver = param.DriverMath.ConvertFonts()
+	case "chinese":
+		driver = param.DriverChinese.ConvertFonts()
+	default:
+		driver = param.DriverDigit
+	}
+	c := base64Captcha.NewCaptcha(driver, store)
+	id, b64s, err := c.Generate()
+	body := map[string]interface{}{"code": 1, "data": b64s, "captchaId": id, "msg": "success"}
+	if err != nil {
+		body = map[string]interface{}{"code": 0, "msg": err.Error()}
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	json.NewEncoder(w).Encode(body)
+}
+
+// base64Captcha verify http handler
+func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
+
+	//parse request json body
+	decoder := json.NewDecoder(r.Body)
+	var param configJsonBody
+	err := decoder.Decode(&param)
+	if err != nil {
+		log.Println(err)
+	}
+	defer r.Body.Close()
+	//verify the captcha
+	body := map[string]interface{}{"code": 0, "msg": "failed"}
+	if store.Verify(param.Id, param.VerifyValue, true) {
+		body = map[string]interface{}{"code": 1, "msg": "ok"}
+	}
+
+	//set json response
+	//设置json响应
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+
+	json.NewEncoder(w).Encode(body)
+}
+
+//start a net/http server
+//启动golang net/http 服务器
+func main() {
+	//serve Vuejs+ElementUI+Axios Web Application
+	http.Handle("/", http.FileServer(http.Dir("./static")))
+
+	//api for create captcha
+	http.HandleFunc("/api/getCaptcha", generateCaptchaHandler)
+
+	//api for verify captcha
+	http.HandleFunc("/api/verifyCaptcha", captchaVerifyHandle)
+
+	fmt.Println("Server is at :8777")
+	if err := http.ListenAndServe(":8777", nil); err != nil {
+		log.Fatal(err)
+	}
+}
 ```
 
-#### 2.2.7 More Example
 
-
-### func SetCustomStore
-
-	func SetCustomStore(s Store)
-
-SetCustomStore sets custom storage for captchas, replacing the default
-memory store. This function must be called before generating any captchas.
-##### [Customize Redis Store](_examples_redis/main.go)
-### func NewMemoryStore
-
-	func NewMemoryStore(collectNum int, expiration time.Duration) Store
-
-NewMemoryStore returns a new standard memory store for captchas with the
-given collection threshold and expiration time in seconds. The returned
-store must be registered with SetCustomStore to replace the default one.
-## use base64Captcha quick start a API server
-```go
-
-```
-#### base64Captcha package function
-
-#### Build and Run the Demo
-    cd $GOPATH/src/github.com/mojocn/captcha/examples
-    go run main.go
-
-Congratulations! You've just built your first **base64Captcha-APIs** app.
-Any question you can leave a message. If you like the package please star this repo
-## Thanks
+## 3. Thanks
 
 - [dchest/captha](https://github.com/dchest/captcha)
 - [@slayercat][https://github.com/slayercat]
 - [@amzyang][https://github.com/amzyang]
 - [@Luckyboys](https://github.com/Luckyboys)
 
-## License
+## 4. License
 
 base64Captcha source code is licensed under the Apache Licence, Version 2.0
 (http://www.apache.org/licenses/LICENSE-2.0.html).
