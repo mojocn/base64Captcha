@@ -45,7 +45,6 @@ func (c *Captcha) GenerateB64s() (id, b64s string, err error) {
 	}
 	c.Store.Set(id, answer)
 	b64s = item.EncodeB64string()
-	ItemWriteToFile(item,"_builds",randomId(),"png")
 	return
 }
 func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
