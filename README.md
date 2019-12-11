@@ -33,7 +33,7 @@ For Gopher from mainland China without VPN `go get golang.org/x/image` failure s
 
 #### 2.2.1 Implement [Store interface](interface_store.go) or use build-in memory store
 
--[Build-in Memory Store](store_memory.go)
+- [Build-in Memory Store](store_memory.go)
 
 ```go
 type Store interface {

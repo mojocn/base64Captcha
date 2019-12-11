@@ -21,37 +21,36 @@ import (
 //DriverDigit config for captcha-engine-digit.
 type DriverDigit struct {
 	// Height png height in pixel.
-	// 图像验证码的高度像素.
 	Height int
 	// Width Captcha png width in pixel.
-	// 图像验证码的宽度像素
 	Width int
 	// DefaultLen Default number of digits in captcha solution.
-	// 默认数字验证长度6.
 	Length int
 	// MaxSkew max absolute skew factor of a single digit.
-	// 图像验证码的最大干扰洗漱.
 	MaxSkew float64
 	// DotCount Number of background circles.
-	// 图像验证码干扰圆点的数量.
 	DotCount int
 }
 
+//NewDriverDigit creates a driver of digit
 func NewDriverDigit(height int, width int, length int, maxSkew float64, dotCount int) *DriverDigit {
 	return &DriverDigit{Height: height, Width: width, Length: length, MaxSkew: maxSkew, DotCount: dotCount}
 }
 
+//DefaultDriverDigit is a default driver of digit
 var DefaultDriverDigit = NewDriverDigit(80, 240, 5, 0.7, 80)
 
+//GenerateQuestionAnswer creates captcha content and answer
 func (d *DriverDigit) GenerateQuestionAnswer() (q, a string) {
 	digits := randomDigits(d.Length)
 	a = parseDigitsToString(digits)
 	return a, a
 }
 
+//GenerateItem creates digit captcha item
 func (d *DriverDigit) GenerateItem(content string) (item Item, err error) {
 	// Initialize PRNG.
-	itemDigit := NewItemDigit(d.Width, d.Height)
+	itemDigit := NewItemDigit(d.Width, d.Height, d.DotCount, d.MaxSkew)
 	//parse digits to string
 	digits := stringToFakeByte(content)
 	itemDigit.rng.Seed(deriveSeed(imageSeedPurpose, randomId(), digits))
@@ -79,6 +78,6 @@ func (d *DriverDigit) GenerateItem(content string) (item Item, err error) {
 	// Apply wave distortion.
 	itemDigit.distort(itemDigit.rng.Float(5, 10), itemDigit.rng.Float(100, 200))
 	// Fill image with random circles.
-	itemDigit.fillWithCircles(DotCount, itemDigit.dotSize)
+	itemDigit.fillWithCircles(d.DotCount, itemDigit.dotSize)
 	return itemDigit, nil
 }

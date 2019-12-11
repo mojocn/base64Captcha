@@ -16,17 +16,19 @@ type ItemDigit struct {
 	width  int
 	height int
 	*image.Paletted
-	dotSize int
-	rng     siprng
+	dotSize  int
+	dotCount int
+	maxSkew  float64
+	rng      siprng
 }
 
-func NewItemDigit(width int, height int) *ItemDigit {
-	d := &ItemDigit{width: width, height: height}
-	return d
+//NewItemDigit create a instance of item-digit
+func NewItemDigit(width int, height int, dotCount int, maxSkew float64) *ItemDigit {
+	return &ItemDigit{width: width, height: height, dotCount: dotCount, maxSkew: maxSkew}
 }
 
 func (m *ItemDigit) getRandomPalette() color.Palette {
-	p := make([]color.Color, DotCount+1)
+	p := make([]color.Color, m.dotCount+1)
 	// Transparent color.
 	p[0] = color.RGBA{0xFF, 0xFF, 0xFF, 0x00}
 	// Primary color.
@@ -38,7 +40,7 @@ func (m *ItemDigit) getRandomPalette() color.Palette {
 	}
 	p[1] = prim
 	// Circle colors.
-	for i := 2; i <= DotCount; i++ {
+	for i := 2; i <= m.dotCount; i++ {
 		p[i] = m.randomBrightness(prim, 255)
 	}
 	return p
@@ -118,7 +120,7 @@ func (m *ItemDigit) fillWithCircles(n, maxradius int) {
 	maxx := m.Bounds().Max.X
 	maxy := m.Bounds().Max.Y
 	for i := 0; i < n; i++ {
-		colorIdx := uint8(m.rng.Int(1, DotCount-1))
+		colorIdx := uint8(m.rng.Int(1, m.dotCount-1))
 		r := m.rng.Int(1, maxradius)
 		m.drawCircle(m.rng.Int(r, maxx-r), m.rng.Int(r, maxy-r), r, colorIdx)
 	}
@@ -141,9 +143,9 @@ func (m *ItemDigit) strikeThrough() {
 	}
 }
 
-//写入数字 数字byte
+//draw digit
 func (m *ItemDigit) drawDigit(digit []byte, x, y int) {
-	skf := m.rng.Float(-MaxSkew, MaxSkew)
+	skf := m.rng.Float(-m.maxSkew, m.maxSkew)
 	xs := float64(x)
 	r := m.dotSize / 2
 	y += m.rng.Int(-r, r)
