@@ -14,6 +14,6 @@ func TestDriverLanguage_GenerateItem(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		ItemWriteToFile(item, "_builds", randomId(), "png")
+		itemWriteFile(item, "_builds", randomId(), "png")
 	}
 }

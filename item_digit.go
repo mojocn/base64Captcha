@@ -214,8 +214,7 @@ func max3(x, y, z uint8) (m uint8) {
 	return
 }
 
-// EncodeBinary encodes an image to PNG and returns
-// the result as a byte slice.
+// EncodeBinary encodes an image to PNG and returns a byte slice.
 func (m *ItemDigit) EncodeBinary() []byte {
 	var buf bytes.Buffer
 	if err := png.Encode(&buf, m.Paletted); err != nil {
@@ -224,12 +223,14 @@ func (m *ItemDigit) EncodeBinary() []byte {
 	return buf.Bytes()
 }
 
-// WriteTo writes captcha image in PNG format into the given writer.
+// WriteTo writes captcha character in png format into the given io.Writer, and
+// returns the number of bytes written and an error if any.
 func (m *ItemDigit) WriteTo(w io.Writer) (int64, error) {
 	n, err := w.Write(m.EncodeBinary())
 	return int64(n), err
 }
 
+// EncodeB64string encodes an image to base64 string
 func (m *ItemDigit) EncodeB64string() string {
 	return fmt.Sprintf("data:%s;base64,%s", MimeTypeImage, base64.StdEncoding.EncodeToString(m.EncodeBinary()))
 }

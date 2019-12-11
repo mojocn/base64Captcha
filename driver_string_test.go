@@ -46,7 +46,7 @@ func TestDriverString_GenerateItem(t *testing.T) {
 				t.Errorf("DriverString.GenerateItem() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			err = ItemWriteToFile(gotItem, "_builds", tt.args.content, "png")
+			err = itemWriteFile(gotItem, "_builds", tt.args.content, "png")
 			if err != nil {
 				t.Error(err)
 			}

@@ -1,4 +1,4 @@
-# Base64captcha is a customize-friendly captcha package.
+# Base64captcha is a customization-friendly captcha package.
 [![Go Report Card](https://goreportcard.com/badge/github.com/mojocn/base64Captcha)](https://goreportcard.com/report/github.com/mojocn/base64Captcha)
 [![GoDoc](https://godoc.org/github.com/mojocn/base64Captcha?status.svg)](https://godoc.org/github.com/mojocn/base64Captcha)
 [![Build Status](https://travis-ci.org/mojocn/base64Captcha.svg?branch=master)](https://travis-ci.org/mojocn/base64Captcha)
@@ -7,15 +7,14 @@
 [![codebeat badge](https://codebeat.co/badges/650029a5-fcea-4416-925e-277e2f178e96)](https://codebeat.co/projects/github-com-mojocn-base64captcha-master)
 [![Foundation](https://img.shields.io/badge/Golang-Foundation-green.svg)](http://golangfoundation.org)
 
-Base64captcha supports digit, number, alphabet, arithmetic, audio and digit-alphabet captcha.
-Base64Captcha is used for fast development of RESTful APIs, web apps and backend services in Go.
-give a string identifier to the package and it returns with a base64-encoding-png-string
+Base64captcha supports any unicode character and can customize its content to support Math Chinese Korean Japanese Russian Arabic etc.
 
-#### Why Base64 for RESTful Application
+
+### Why Base64 for RESTful Application
       Data URIs are now supported by all major browsers. IE supports embedding images since version 8 as well.
       RESTful Application returns small base64 image is more convenient.
 
-#### Documentation
+### Documentation
 
 * [English](https://godoc.org/github.com/mojocn/base64Captcha)
 * [中文文档](https://github.com/mojocn/base64Captcha/blob/master/README_zh.md)
@@ -32,7 +31,10 @@ For Gopher from mainland China without VPN `go get golang.org/x/image` failure s
 
 ### 2.2 How to code with base64Captcha
 
-#### 2.2.1 Impelement [Store interface](/base64Captcha/blob/master/interface_store.go) 
+#### 2.2.1 Implement [Store interface](interface_store.go) or use build-in memory store
+
+-[Build-in Memory Store](store_memory.go)
+
 ```go
 type Store interface {
 	// Set sets the digits for the captcha id.
@@ -47,7 +49,13 @@ type Store interface {
 
 ```
 
-#### 2.2.2 Impelement [Driver interface](/base64Captcha/blob/master/interface_driver.go)
+#### 2.2.2 Impelement [Driver interface](interface_driver.go) or use one of build-in drivers
+There are some build-in drivers:
+1. [Build-in Driver Digit](driver_digit.go)  
+2. [Build-in Driver String](driver_string.go)
+3. [Build-in Driver Math](driver_math.go)
+4. [Build-in Driver Chinese](driver_chinses.go))
+
 ```go
 // Driver captcha interface for captcha engine to to write staff
 type Driver interface {
@@ -57,7 +65,7 @@ type Driver interface {
 }
 ```
 
-#### 2.2.3 New [Captcha instance]((/base64Captcha/blob/master/captcha.go))
+#### 2.2.3 New [Captcha instance]((captcha.go))
 ```go
 
 func init() {
@@ -121,62 +129,129 @@ func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 #### 2.2.6 Full Example
 
 ```go
-func main(){
-		dr := DefaultDriverAudio
-    	st := DefaultMemStore
-    	c := NewCaptcha(dr,st)
-    	id,b64s,err := c.Generate()
-    	if err != nil {
-    		panic(err)
-    	}
-    	fmt.Println("ID ",id)
-    	fmt.Println("Base64 Png or Wav ",b64s)
-    	
-    	//verify
-    	//st.Verify(id,"xxxx",true)
-    	//c.Verify(id,"xxxx",true)
+// example of HTTP server that uses the captcha package.
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"github.com/mojocn/base64Captcha"
+	"log"
+	"net/http"
+)
+
+//configJsonBody json request body.
+type configJsonBody struct {
+	Id            string
+	CaptchaType   string
+	VerifyValue   string
+	DriverAudio   *base64Captcha.DriverAudio
+	DriverString  *base64Captcha.DriverString
+	DriverChinese *base64Captcha.DriverChinese
+	DriverMath    *base64Captcha.DriverMath
+	DriverDigit   *base64Captcha.DriverDigit
 }
 
+var store = base64Captcha.DefaultMemStore
 
+// base64Captcha create http handler
+func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
+	//parse request parameters
+	//接收客户端发送来的请求参数
+	decoder := json.NewDecoder(r.Body)
+	var param configJsonBody
+	err := decoder.Decode(&param)
+	if err != nil {
+		log.Println(err)
+	}
+	defer r.Body.Close()
+	var driver base64Captcha.Driver
+
+	//create base64 encoding captcha
+	//创建base64图像验证码
+	switch param.CaptchaType {
+	case "audio":
+		driver = param.DriverAudio
+	case "string":
+		driver = param.DriverString.ConvertFonts()
+	case "math":
+		driver = param.DriverMath.ConvertFonts()
+	case "chinese":
+		driver = param.DriverChinese.ConvertFonts()
+	default:
+		driver = param.DriverDigit
+	}
+	c := base64Captcha.NewCaptcha(driver, store)
+	id, b64s, err := c.Generate()
+	body := map[string]interface{}{"code": 1, "data": b64s, "captchaId": id, "msg": "success"}
+	if err != nil {
+		body = map[string]interface{}{"code": 0, "msg": err.Error()}
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	json.NewEncoder(w).Encode(body)
+}
+
+// base64Captcha verify http handler
+func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
+
+	//parse request json body
+	decoder := json.NewDecoder(r.Body)
+	var param configJsonBody
+	err := decoder.Decode(&param)
+	if err != nil {
+		log.Println(err)
+	}
+	defer r.Body.Close()
+	//verify the captcha
+	body := map[string]interface{}{"code": 0, "msg": "failed"}
+	if store.Verify(param.Id, param.VerifyValue, true) {
+		body = map[string]interface{}{"code": 1, "msg": "ok"}
+	}
+
+	//set json response
+	//设置json响应
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+
+	json.NewEncoder(w).Encode(body)
+}
+
+//start a net/http server
+//启动golang net/http 服务器
+func main() {
+	//serve Vuejs+ElementUI+Axios Web Application
+	http.Handle("/", http.FileServer(http.Dir("./static")))
+
+	//api for create captcha
+	http.HandleFunc("/api/getCaptcha", generateCaptchaHandler)
+
+	//api for verify captcha
+	http.HandleFunc("/api/verifyCaptcha", captchaVerifyHandle)
+
+	fmt.Println("Server is at :8777")
+	if err := http.ListenAndServe(":8777", nil); err != nil {
+		log.Fatal(err)
+	}
+}
 ```
 
-#### 2.2.7 More Example
+## 3. Create your own captcha
+You can customize your captcha display image by implementing [interface driver](interface_driver.go) 
+and [interface item](interface_item.go).
+
+There are some example for your reference.
+1. [DriverMath](driver_math.go)
+2. [DriverChinese](driver_chinese.go)
+3. [ItemChar](item_char.go)
 
 
-### func SetCustomStore
-
-	func SetCustomStore(s Store)
-
-SetCustomStore sets custom storage for captchas, replacing the default
-memory store. This function must be called before generating any captchas.
-##### [Customize Redis Store](_examples_redis/main.go)
-### func NewMemoryStore
-
-	func NewMemoryStore(collectNum int, expiration time.Duration) Store
-
-NewMemoryStore returns a new standard memory store for captchas with the
-given collection threshold and expiration time in seconds. The returned
-store must be registered with SetCustomStore to replace the default one.
-## use base64Captcha quick start a API server
-```go
-
-```
-#### base64Captcha package function
-
-#### Build and Run the Demo
-    cd $GOPATH/src/github.com/mojocn/captcha/examples
-    go run main.go
-
-Congratulations! You've just built your first **base64Captcha-APIs** app.
-Any question you can leave a message. If you like the package please star this repo
-## Thanks
+## 4. Thanks
 
 - [dchest/captha](https://github.com/dchest/captcha)
 - [@slayercat][https://github.com/slayercat]
 - [@amzyang][https://github.com/amzyang]
 - [@Luckyboys](https://github.com/Luckyboys)
 
-## License
+## 5. License
 
 base64Captcha source code is licensed under the Apache Licence, Version 2.0
 (http://www.apache.org/licenses/LICENSE-2.0.html).

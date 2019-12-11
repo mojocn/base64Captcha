@@ -179,6 +179,7 @@
                         <el-form-item label="DriverString.Source">
                             <el-input v-model.trim="form.DriverString.Source"
                                       type="textarea"
+                                      placeholder="Any Unicode string is OK, Korean Japanese Greek Arabic Thai ..."
                                       @change="generateCaptcha"></el-input>
                         </el-form-item>
 
@@ -324,6 +325,7 @@
                         <el-form-item label="DriverChinese.Source">
                             <el-input v-model.trim="form.DriverChinese.Source"
                                       type="textarea"
+                                      placeholder="可以是英文逗号分隔的词组"
                                       @change="generateCaptcha"></el-input>
                         </el-form-item>
 

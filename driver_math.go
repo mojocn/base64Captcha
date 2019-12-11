@@ -27,6 +27,18 @@ type DriverMath struct {
 	fontsArray []*truetype.Font
 }
 
+func NewDriverMath(height int, width int, noiseCount int, showLineOptions int, bgColor *color.RGBA, fonts []string) *DriverMath {
+	tfs := []*truetype.Font{}
+	for _, fff := range fonts {
+		tf := loadFontByName("fonts/" + fff)
+		tfs = append(tfs, tf)
+	}
+	if len(tfs) == 0 {
+		tfs = fontsAll
+	}
+	return &DriverMath{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, fontsArray: tfs, BgColor: bgColor, Fonts: fonts}
+}
+
 func (d *DriverMath) ConvertFonts() *DriverMath {
 	tfs := []*truetype.Font{}
 	for _, fff := range d.Fonts {

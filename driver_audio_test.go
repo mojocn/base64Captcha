@@ -35,7 +35,7 @@ func TestDriverAudio_GenerateItem(t *testing.T) {
 			if err != nil {
 				t.Error(err)
 			}
-			ItemWriteToFile(gotItem, "_builds", tt.args.content, "wav")
+			itemWriteFile(gotItem, "_builds", tt.args.content, "wav")
 		})
 	}
 }
