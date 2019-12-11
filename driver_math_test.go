@@ -47,7 +47,7 @@ func TestDriverMath_GenerateItem(t *testing.T) {
 				t.Errorf("DriverMath.GenerateItem() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			ItemWriteToFile(gotItem, "_builds", a, "png")
+			itemWriteFile(gotItem, "_builds", a, "png")
 
 		})
 	}

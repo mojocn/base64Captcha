@@ -1,4 +1,4 @@
-# Base64captcha is a customize-friendly captcha package.
+# Base64captcha is a customization-friendly captcha package.
 [![Go Report Card](https://goreportcard.com/badge/github.com/mojocn/base64Captcha)](https://goreportcard.com/report/github.com/mojocn/base64Captcha)
 [![GoDoc](https://godoc.org/github.com/mojocn/base64Captcha?status.svg)](https://godoc.org/github.com/mojocn/base64Captcha)
 [![Build Status](https://travis-ci.org/mojocn/base64Captcha.svg?branch=master)](https://travis-ci.org/mojocn/base64Captcha)
@@ -7,15 +7,14 @@
 [![codebeat badge](https://codebeat.co/badges/650029a5-fcea-4416-925e-277e2f178e96)](https://codebeat.co/projects/github-com-mojocn-base64captcha-master)
 [![Foundation](https://img.shields.io/badge/Golang-Foundation-green.svg)](http://golangfoundation.org)
 
-Base64captcha supports digit, number, alphabet, arithmetic, audio and digit-alphabet captcha.
-Base64Captcha is used for fast development of RESTful APIs, web apps and backend services in Go.
-give a string identifier to the package and it returns with a base64-encoding-png-string
+Base64captcha supports any unicode character and can customize its content to support Math Chinese Korean Japanese Russian Arabic etc.
 
-#### Why Base64 for RESTful Application
+
+### Why Base64 for RESTful Application
       Data URIs are now supported by all major browsers. IE supports embedding images since version 8 as well.
       RESTful Application returns small base64 image is more convenient.
 
-#### Documentation
+### Documentation
 
 * [English](https://godoc.org/github.com/mojocn/base64Captcha)
 * [中文文档](https://github.com/mojocn/base64Captcha/blob/master/README_zh.md)
@@ -32,7 +31,10 @@ For Gopher from mainland China without VPN `go get golang.org/x/image` failure s
 
 ### 2.2 How to code with base64Captcha
 
-#### 2.2.1 Impelement [Store interface](/base64Captcha/blob/master/interface_store.go) 
+#### 2.2.1 Implement [Store interface](interface_store.go) or use build-in memory store
+
+-[Build-in Memory Store](store_memory.go)
+
 ```go
 type Store interface {
 	// Set sets the digits for the captcha id.
@@ -47,7 +49,13 @@ type Store interface {
 
 ```
 
-#### 2.2.2 Impelement [Driver interface](/base64Captcha/blob/master/interface_driver.go)
+#### 2.2.2 Impelement [Driver interface](interface_driver.go) or use one of build-in drivers
+There are some build-in drivers:
+1. [Build-in Driver Digit](driver_digit.go)  
+2. [Build-in Driver String](driver_string.go)
+3. [Build-in Driver Math](driver_math.go)
+4. [Build-in Driver Chinese](driver_chinses.go))
+
 ```go
 // Driver captcha interface for captcha engine to to write staff
 type Driver interface {
@@ -57,7 +65,7 @@ type Driver interface {
 }
 ```
 
-#### 2.2.3 New [Captcha instance]((/base64Captcha/blob/master/captcha.go))
+#### 2.2.3 New [Captcha instance]((captcha.go))
 ```go
 
 func init() {
@@ -226,15 +234,24 @@ func main() {
 }
 ```
 
+## 3. Create your own captcha
+You can customize your captcha display image by implementing [interface driver](interface_driver.go) 
+and [interface item](interface_item.go).
 
-## 3. Thanks
+There are some example for your reference.
+1. [DriverMath](driver_math.go)
+2. [DriverChinese](driver_chinese.go)
+3. [ItemChar](item_char.go)
+
+
+## 4. Thanks
 
 - [dchest/captha](https://github.com/dchest/captcha)
 - [@slayercat][https://github.com/slayercat]
 - [@amzyang][https://github.com/amzyang]
 - [@Luckyboys](https://github.com/Luckyboys)
 
-## 4. License
+## 5. License
 
 base64Captcha source code is licensed under the Apache Licence, Version 2.0
 (http://www.apache.org/licenses/LICENSE-2.0.html).

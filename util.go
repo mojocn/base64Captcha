@@ -68,7 +68,7 @@ func randomBytesMod(length int, mod byte) (b []byte) {
 	}
 }
 
-func ItemWriteToFile(cap Item, outputDir, fileName, fileExt string) error {
+func itemWriteFile(cap Item, outputDir, fileName, fileExt string) error {
 	filePath := filepath.Join(outputDir, fileName+"."+fileExt)
 	if !pathExists(outputDir) {
 		_ = os.MkdirAll(outputDir, os.ModePerm)

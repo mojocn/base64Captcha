@@ -235,8 +235,7 @@ func (item *ItemChar) DrawText(text string, fonts []*truetype.Font) error {
 	return nil
 }
 
-//BinaryEncoding save captcha image to binary.
-//保存图片到io.
+// EncodeBinary encodes an image to PNG and returns a byte slice.
 func (item *ItemChar) BinaryEncoding() []byte {
 	var buf bytes.Buffer
 	if err := png.Encode(&buf, item.nrgba); err != nil {
@@ -245,13 +244,14 @@ func (item *ItemChar) BinaryEncoding() []byte {
 	return buf.Bytes()
 }
 
-// WriteTo writes captcha image in PNG format into the given writer.
+// WriteTo writes captcha character in png format into the given io.Writer, and
+// returns the number of bytes written and an error if any.
 func (item *ItemChar) WriteTo(w io.Writer) (int64, error) {
 	n, err := w.Write(item.BinaryEncoding())
 	return int64(n), err
 }
 
-// WriteTo writes captcha image in PNG format into the given writer.
+// EncodeB64string encodes an image to base64 string
 func (item *ItemChar) EncodeB64string() string {
 	return fmt.Sprintf("data:%s;base64,%s", MimeTypeImage, base64.StdEncoding.EncodeToString(item.BinaryEncoding()))
 }

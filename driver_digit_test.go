@@ -52,7 +52,7 @@ func TestDriverDigit_GenerateItem(t *testing.T) {
 				t.Errorf("DriverDigit.GenerateItem() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			ItemWriteToFile(gotItem, "_builds", tt.args.content, "png")
+			itemWriteFile(gotItem, "_builds", tt.args.content, "png")
 
 		})
 	}
