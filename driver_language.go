@@ -36,6 +36,7 @@ func generateRandomRune(size int, code string) string {
 	return string(randRune)
 }
 
+//DriverLanguage generates language unicode by lanuage
 type DriverLanguage struct {
 	// Height png height in pixel.
 	// 图像验证码的高度像素.
@@ -62,15 +63,18 @@ type DriverLanguage struct {
 	LanguageCode string
 }
 
+//NewDriverLanguage creates a driver
 func NewDriverLanguage(height int, width int, noiseCount int, showLineOptions int, length int, bgColor *color.RGBA, fonts []*truetype.Font, languageCode string) *DriverLanguage {
 	return &DriverLanguage{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, BgColor: bgColor, Fonts: fonts, LanguageCode: languageCode}
 }
 
+//GenerateQuestionAnswer creates content and answer
 func (d *DriverLanguage) GenerateQuestionAnswer() (content, answer string) {
 	content = generateRandomRune(d.Length, d.LanguageCode)
 	return content, content
 }
 
+//GenerateItem creates item
 func (d *DriverLanguage) GenerateItem(content string) (item Item, err error) {
 	var bgc color.RGBA
 	if d.BgColor != nil {
@@ -106,7 +110,7 @@ func (d *DriverLanguage) GenerateItem(content string) (item Item, err error) {
 
 	//draw content
 	//use font that match your language
-	err = itemChar.DrawText(content, []*truetype.Font{fontChinese})
+	err = itemChar.drawText(content, []*truetype.Font{fontChinese})
 	if err != nil {
 		return
 	}

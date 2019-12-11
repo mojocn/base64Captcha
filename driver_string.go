@@ -99,7 +99,7 @@ func (d *DriverString) GenerateItem(content string) (item Item, err error) {
 	}
 
 	//draw content
-	err = itemChar.DrawText(content, d.fontsArray)
+	err = itemChar.drawText(content, d.fontsArray)
 	if err != nil {
 		return
 	}

@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-//DriverChar captcha config for captcha-engine-characters.
+//DriverChinese is a driver of unicode Chinese characters.
 type DriverChinese struct {
 	// Height png height in pixel.
 	// 图像验证码的高度像素.
@@ -123,7 +123,7 @@ func (d *DriverChinese) GenerateItem(content string) (item Item, err error) {
 	}
 
 	//draw content
-	err = itemChar.DrawText(content, d.fontsArray)
+	err = itemChar.drawText(content, d.fontsArray)
 	if err != nil {
 		return
 	}

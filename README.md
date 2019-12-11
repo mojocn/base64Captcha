@@ -247,8 +247,8 @@ There are some example for your reference.
 ## 4. Thanks
 
 - [dchest/captha](https://github.com/dchest/captcha)
-- [@slayercat][https://github.com/slayercat]
-- [@amzyang][https://github.com/amzyang]
+- [@slayercat](https://github.com/slayercat)
+- [@amzyang](https://github.com/amzyang)
 - [@Luckyboys](https://github.com/Luckyboys)
 
 ## 5. License

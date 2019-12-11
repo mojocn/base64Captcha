@@ -7,27 +7,6 @@ import (
 	"strings"
 )
 
-//randFromStringArray: create random text from sourceStringArray, ensure sequenced
-func randFromStringArray(num int, sourceStringArray []string) string {
-	target_runes := []rune{}
-	for len(target_runes) < num {
-		ftarget := []rune(randStringArrayNext(sourceStringArray))
-		// 切除超过需要字符的部分
-		icut := num - len(target_runes)
-		if icut > len(ftarget) {
-			icut = len(ftarget)
-		}
-		target_runes = append(target_runes, ftarget[0:icut]...)
-	}
-	return string(target_runes)
-}
-
-//randRuneArrayNext: select random one from input
-func randStringArrayNext(input []string) string {
-	i := rand.Intn(len(input))
-	return input[i]
-}
-
 //randText create random text. 生成随机文本.
 func randText(size int, sourceChars string) string {
 	if size >= len(sourceChars) {
