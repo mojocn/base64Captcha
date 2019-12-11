@@ -36,6 +36,7 @@ type DriverChinese struct {
 	fontsArray []*truetype.Font
 }
 
+//NewDriverChinese creates a driver of Chinese characters
 func NewDriverChinese(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fonts []string) *DriverChinese {
 	tfs := []*truetype.Font{}
 	for _, fff := range fonts {
@@ -47,6 +48,8 @@ func NewDriverChinese(height int, width int, noiseCount int, showLineOptions int
 	}
 	return &DriverChinese{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsArray: tfs}
 }
+
+//ConvertFonts loads fonts by names
 func (d *DriverChinese) ConvertFonts() *DriverChinese {
 	tfs := []*truetype.Font{}
 	for _, fff := range d.Fonts {
@@ -60,6 +63,7 @@ func (d *DriverChinese) ConvertFonts() *DriverChinese {
 	return d
 }
 
+//GenerateQuestionAnswer generates captcha content and its answer
 func (d *DriverChinese) GenerateQuestionAnswer() (content, answer string) {
 
 	ss := strings.Split(d.Source, ",")
@@ -74,13 +78,15 @@ func (d *DriverChinese) GenerateQuestionAnswer() (content, answer string) {
 	}
 
 	res := make([]string, d.Length)
-	for k, _ := range res {
+	for k := range res {
 		res[k] = ss[rand.Intn(length)]
 	}
 
 	content = strings.Join(res, "")
 	return content, content
 }
+
+//GenerateItem generates captcha item(image)
 func (d *DriverChinese) GenerateItem(content string) (item Item, err error) {
 
 	var bgc color.RGBA

@@ -46,14 +46,6 @@ const (
 //GoTestOutputDir run go test command where the png and wav file output
 
 const (
-	// MaxSkew max absolute skew factor of a single digit.
-	// 图像验证码的最大干扰洗漱.
-	MaxSkew = 0.7
-	// DotCount Number of background circles.
-	// 图像验证码干扰圆点的数量.
-	DotCount = 20
-)
-const (
 	digitFontWidth     = 11
 	digitFontHeight    = 18
 	digitFontBlackChar = 1
@@ -62,10 +54,10 @@ const (
 //var cjkFontFamilies = readCJKFonts()
 
 const (
-	//IsShowHollowLine is show hollow line.
+	//OptionShowHollowLine shows hollow line
 	OptionShowHollowLine = 2
-	//IsShowSlimeLine is show slime line.
+	//OptionShowSlimeLine shows slime line
 	OptionShowSlimeLine = 4
-	//IsShowSineLine is show sine line.
+	//OptionShowSineLine shows sine line
 	OptionShowSineLine = 8
 )
