@@ -61,9 +61,9 @@ type Driver interface {
 }
 ```
 
-#### 2.2.3 🚴🚴🚴 ‍New [Captcha instance]((captcha.go))
+#### 2.2.3 🚴🚴🚴 ‍Core code [captcha.go]((captcha.go))
+`captcha.go` is the entry of base64Captcha which is quite simple.
 ```go
-
 func init() {
 	//init rand seed
 	rand.Seed(time.Now().UnixNano())

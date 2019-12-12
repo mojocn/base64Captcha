@@ -1,113 +1,130 @@
-# 快速生成base64编码图片验证码字符串.base64图形验证码(captcha)为golang而设计.
-支持多种样式,算术,数字,字母,混合模式,语音模式.
+# 高度可以自定义的图形验证码库
+[![Go Report Card](https://goreportcard.com/badge/github.com/mojocn/base64Captcha)](https://goreportcard.com/report/github.com/mojocn/base64Captcha)
+[![GoDoc](https://godoc.org/github.com/mojocn/base64Captcha?status.svg)](https://godoc.org/github.com/mojocn/base64Captcha)
+[![Build Status](https://travis-ci.org/mojocn/base64Captcha.svg?branch=master)](https://travis-ci.org/mojocn/base64Captcha)
+[![codecov](https://codecov.io/gh/mojocn/base64Captcha/branch/master/graph/badge.svg)](https://codecov.io/gh/mojocn/base64Captcha)
+![stability-stable](https://img.shields.io/badge/stability-stable-brightgreen.svg)
+[![codebeat badge](https://codebeat.co/badges/650029a5-fcea-4416-925e-277e2f178e96)](https://codebeat.co/projects/github-com-mojocn-base64captcha-master)
+[![Foundation](https://img.shields.io/badge/Golang-Foundation-green.svg)](http://golangfoundation.org)
 
-Base64是网络上最常见的用于传输8Bit字节代码的编码方式之一。Base64编码可用于在HTTP环境下传递较长的标识信息, 直接把base64当成是字符串方式的数据就好了
-减少了http请求；数据就是图片；
-为APIs微服务而设计
-#### 为什么base64图片 for RESTful 服务
-      Data URIs 支持大部分浏览器,IE8之后也支持.
-      小图片使用base64响应对于RESTful服务来说更便捷
-
-#### [godoc文档](https://godoc.org/github.com/mojocn/base64Captcha)
-
-#### 在线Demo [Playground Powered by Vuejs+elementUI+Axios](http://captcha.mojotv.cn)
+Base64captcha 几行代码就可以定义自己内容的图形验证码库,支持任意unicode字符的内容.
 
 
-### 安装golang包
+## 1. 📒📒📒 文档&Demo
 
+* [English](https://godoc.org/github.com/mojocn/base64Captcha)
+* [中文文档](https://github.com/mojocn/base64Captcha/blob/master/README_zh.md)
+* [Playground](https://captcha.mojotv.cn)
+
+## 2. 🚀🚀🚀 快速上手
+
+### 2.1 📥📥📥 下载base64Captcha包
     go get -u github.com/mojocn/base64Captcha
 
-对于中国大陆Gopher `go get golang.org/x/image` 失败解决方案:
-#### 方法1
-```bash
-    mkdir -p $GOPATH/src/golang.org/x
-    cd $GOPATH/src/golang.org/x
-    git clone https://github.com/golang/image.git
-```
-#### 方法2
-- go version > 1.11
-- set env `GOPROXY=https://goproxy.io`
-- ![](_examples/static/gomodproxy.png)
+### 2.2 🏂🏂🏂 在你的项目中使用base64Captcha
 
-###  创建图像验证码
-```
-import "github.com/mojocn/base64Captcha"
-func demoCodeCaptchaCreate() {
-	//config struct for digits
-	//数字验证码配置
-	var configD = base64Captcha.ConfigDigit{
-		Height:     80,
-		Width:      240,
-		MaxSkew:    0.7,
-		DotCount:   80,
-		CaptchaLen: 5,
-	}
-	//config struct for audio
-	//声音验证码配置
-	var configA = base64Captcha.ConfigAudio{
-		CaptchaLen: 6,
-		Language:   "zh",
-	}
-	//config struct for Character
-	//字符,公式,验证码配置
-	var configC = base64Captcha.ConfigCharacter{
-		Height:             60,
-		Width:              240,
-		//const CaptchaModeNumber:数字
-		//      CaptchaModeAlphabet:字母
-		//      CaptchaModeArithmetic:算术
-		//      CaptchaModeNumberAlphabet:数字字母混合.
-		//      CaptchaModeChinese: 中文字符串
-		//      CaptchaModeUseSequencedCharacters:  在指定词组中随机（内部保持词组有序)
-		Mode:               base64Captcha.CaptchaModeNumber,
-		ComplexOfNoiseText: base64Captcha.CaptchaComplexLower,
-		ComplexOfNoiseDot:  base64Captcha.CaptchaComplexLower,
-		IsShowHollowLine:   false,
-		IsShowNoiseDot:     false,
-		IsShowNoiseText:    false,
-		IsShowSlimeLine:    false,
-		IsShowSineLine:     false,
-		// 随机中文字符串来源，在CaptchaModeChinese时有效。
-		ChineseCharacterSource： "",
-		// 随机词组，在CaptchaModeUseSequencedCharacters时有效
-		SequencedCharacters: []string {"中文","英文","其他"},
-		CaptchaLen:         6,
-	}
-	//创建声音验证码
-	//GenerateCaptcha 第一个参数为空字符串,包会自动在服务器一个随机种子给你产生随机uiid.
-	idKeyA, capA := base64Captcha.GenerateCaptcha("", configA)
-	//以base64编码
-	base64stringA := base64Captcha.CaptchaWriteToBase64Encoding(capA)
-	//创建字符公式验证码.
-	//GenerateCaptcha 第一个参数为空字符串,包会自动在服务器一个随机种子给你产生随机uiid.
-	idKeyC, capC := base64Captcha.GenerateCaptcha("", configC)
-	//以base64编码
-	base64stringC := base64Captcha.CaptchaWriteToBase64Encoding(capC)
-	//创建数字验证码.
-	//GenerateCaptcha 第一个参数为空字符串,包会自动在服务器一个随机种子给你产生随机uiid.
-	idKeyD, capD := base64Captcha.GenerateCaptcha("", configD)
-	//以base64编码
-	base64stringD := base64Captcha.CaptchaWriteToBase64Encoding(capD)
-    
-	fmt.Println(idKeyA, base64stringA, "\n")
-	fmt.Println(idKeyC, base64stringC, "\n")
-	fmt.Println(idKeyD, base64stringD, "\n")
+#### 2.2.1 🏇🏇🏇 实现[Store interface](interface_store.go) 或者使用自带memory store
+
+- [Build-in Memory Store](store_memory.go)(只支持单机部署,多台服务器请自定义redis store)
+
+```go
+type Store interface {
+	// Set sets the digits for the captcha id.
+	Set(id string, value string)
+
+	// Get returns stored digits for the captcha id. Clear indicates
+	// whether the captcha must be deleted from the store.
+	Get(id string, clear bool) string
+	
+    //Verify captcha's answer directly
+	Verify(id, answer string, clear bool) bool
 }
 
 ```
-### 验证图像验证码
-```
-import "github.com/mojocn/base64Captcha"
-func verfiyCaptcha(idkey,verifyValue string){
-    verifyResult := base64Captcha.VerifyCaptcha(idkey, verifyValue)
-    if verifyResult {
-        //success
-    } else {
-        //fail
-    }
+
+#### 2.2.2 🏄🏄🏄 实现[Driver interface](interface_driver.go) 或者使用自带 drivers
+包自带driver:
+1. [Driver Digit](driver_digit.go)  
+2. [Driver String](driver_string.go)
+3. [Driver Math](driver_math.go)
+4. [Driver Chinese](driver_chinses.go))
+
+```go
+// Driver captcha interface for captcha engine to to write staff
+type Driver interface {
+	// EncodeBinary covert to bytes
+	GenerateItem(content string) (item Item, err error)
+	GenerateQuestionAnswer() (q, a string)
 }
 ```
-#### 使用golang搭建API服务
+
+#### 2.2.3 🚴🚴🚴 核心代码[captcha.go]((captcha.go))
+captcha.go 是package的入口文件,源代码逻辑非常简单,如下:
+
+```go
+func init() {
+	//init rand seed
+	rand.Seed(time.Now().UnixNano())
+}
+
+// Captcha captcha basic information.
+type Captcha struct {
+	Driver Driver
+	Store  Store
+}
+
+func NewCaptcha(driver Driver, store Store) *Captcha {
+	return &Captcha{Driver: driver, Store: store}
+}
+
+func (c *Captcha) Generate() (id, b64s string, err error) {
+	id = randomId()
+	content, answer := c.Driver.GenerateQuestionAnswer()
+	item, err := c.Driver.GenerateItem(content)
+	if err != nil {
+		return "", "", err
+	}
+	c.Store.Set(id, answer)
+	b64s = item.EncodeB64string()
+	return
+}
+//if you has multiple captcha instances which shares a same store. You may want to use `store.Verify` method instead.
+//Verify by given id key and remove the captcha value in store, return boolean value.
+func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
+	match = c.Store.Get(id, clear) == answer
+	return
+}
+
+```
+
+#### 2.2.4 🚵🚵🚵 生成Base64(image/audio)验证码字符串
+
+```go
+func (c *Captcha) Generate() (id, b64s string, err error) {
+	id = randomId()
+	content, answer := c.Driver.GenerateQuestionAnswer()
+	item, err := c.Driver.GenerateItem(content)
+	if err != nil {
+		return "", "", err
+	}
+	c.Store.Set(id, answer)
+	b64s = item.EncodeB64string()
+	return
+}
+```
+
+#### 2.2.5 🤸🤸🤸 校验验证码内容
+```go
+//if you has multiple captcha instances which shares a same store. You may want to use `store.Verify` method instead.
+//Verify by given id key and remove the captcha value in store, return boolean value.
+func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
+	match = c.Store.Get(id, clear) == answer
+	return
+}
+```
+
+#### 2.2.6 🏃🏃🏃 完整实例代码
+
 ```go
 // example of HTTP server that uses the captcha package.
 package main
@@ -120,83 +137,80 @@ import (
 	"net/http"
 )
 
-//ConfigJsonBody json request body.
-type ConfigJsonBody struct {
-	Id              string
-	CaptchaType     string
-	VerifyValue     string
-	ConfigAudio     base64Captcha.ConfigAudio
-	ConfigCharacter base64Captcha.ConfigCharacter
-	ConfigDigit     base64Captcha.ConfigDigit
+//configJsonBody json request body.
+type configJsonBody struct {
+	Id            string
+	CaptchaType   string
+	VerifyValue   string
+	DriverAudio   *base64Captcha.DriverAudio
+	DriverString  *base64Captcha.DriverString
+	DriverChinese *base64Captcha.DriverChinese
+	DriverMath    *base64Captcha.DriverMath
+	DriverDigit   *base64Captcha.DriverDigit
 }
+
+var store = base64Captcha.DefaultMemStore
 
 // base64Captcha create http handler
 func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	//parse request parameters
-	//接收客户端发送来的请求参数
 	decoder := json.NewDecoder(r.Body)
-	var postParameters ConfigJsonBody
-	err := decoder.Decode(&postParameters)
+	var param configJsonBody
+	err := decoder.Decode(&param)
 	if err != nil {
 		log.Println(err)
 	}
 	defer r.Body.Close()
+	var driver base64Captcha.Driver
 
 	//create base64 encoding captcha
-	//创建base64图像验证码
-
-	var config interface{}
-	switch postParameters.CaptchaType {
+	switch param.CaptchaType {
 	case "audio":
-		config = postParameters.ConfigAudio
-	case "character":
-		config = postParameters.ConfigCharacter
+		driver = param.DriverAudio
+	case "string":
+		driver = param.DriverString.ConvertFonts()
+	case "math":
+		driver = param.DriverMath.ConvertFonts()
+	case "chinese":
+		driver = param.DriverChinese.ConvertFonts()
 	default:
-		config = postParameters.ConfigDigit
+		driver = param.DriverDigit
 	}
-	//GenerateCaptcha 第一个参数为空字符串,包会自动在服务器一个随机种子给你产生随机uiid.
-	captchaId, digitCap := base64Captcha.GenerateCaptcha(postParameters.Id, config)
-	base64Png := base64Captcha.CaptchaWriteToBase64Encoding(digitCap)
-
-	//or you can do this
-	//你也可以是用默认参数 生成图像验证码
-
-	//set json response
-	//设置json响应
-
+	c := base64Captcha.NewCaptcha(driver, store)
+	id, b64s, err := c.Generate()
+	body := map[string]interface{}{"code": 1, "data": b64s, "captchaId": id, "msg": "success"}
+	if err != nil {
+		body = map[string]interface{}{"code": 0, "msg": err.Error()}
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	body := map[string]interface{}{"code": 1, "data": base64Png, "captchaId": captchaId, "msg": "success"}
 	json.NewEncoder(w).Encode(body)
 }
+
 // base64Captcha verify http handler
 func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
 
-	//parse request parameters
-	//接收客户端发送来的请求参数
+	//parse request json body
 	decoder := json.NewDecoder(r.Body)
-	var postParameters ConfigJsonBody
-	err := decoder.Decode(&postParameters)
+	var param configJsonBody
+	err := decoder.Decode(&param)
 	if err != nil {
 		log.Println(err)
 	}
 	defer r.Body.Close()
 	//verify the captcha
-	//比较图像验证码
-	verifyResult := base64Captcha.VerifyCaptcha(postParameters.Id, postParameters.VerifyValue)
+	body := map[string]interface{}{"code": 0, "msg": "failed"}
+	if store.Verify(param.Id, param.VerifyValue, true) {
+		body = map[string]interface{}{"code": 1, "msg": "ok"}
+	}
 
 	//set json response
-	//设置json响应
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	body := map[string]interface{}{"code": "error", "data": "验证失败", "msg": "captcha failed"}
-	if verifyResult {
-		body = map[string]interface{}{"code": "success", "data": "验证通过", "msg": "captcha verified"}
-	}
+
 	json.NewEncoder(w).Encode(body)
 }
 
 //start a net/http server
 func main() {
-
 	//serve Vuejs+ElementUI+Axios Web Application
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 
@@ -206,21 +220,30 @@ func main() {
 	//api for verify captcha
 	http.HandleFunc("/api/verifyCaptcha", captchaVerifyHandle)
 
-	fmt.Println("Server is at localhost:3333")
-	if err := http.ListenAndServe("localhost:3333", nil); err != nil {
+	fmt.Println("Server is at :8777")
+	if err := http.ListenAndServe(":8777", nil); err != nil {
 		log.Fatal(err)
 	}
 }
 ```
-#### [使用redis做储存](examples_redis/main.go)
-#### 运行demo代码
-    cd $GOPATH/src/github.com/mojocn/captcha/_examples
-    go run main.go
 
-#### 访问 `http://localhost:777`
+## 3. 🎨🎨🎨 定制自己的图形验证码
+你那个定制自己的图形验码内容,只需实现 [interface driver](interface_driver.go) 和 [interface item](interface_item.go).
+
+下面是几个可以参考的driver实现示例:
+
+1. [DriverMath](driver_math.go)
+2. [DriverChinese](driver_chinese.go)
+3. [ItemChar](item_char.go)
 
 
-## License
+## 4. 💖💖💖 致谢
+- [dchest/captha](https://github.com/dchest/captcha)
+- [@slayercat](https://github.com/slayercat)
+- [@amzyang](https://github.com/amzyang)
+- [@Luckyboys](https://github.com/Luckyboys)
+
+## 5. 🍭🍭🍭 Licence
 
 base64Captcha source code is licensed under the Apache Licence, Version 2.0
 (http://www.apache.org/licenses/LICENSE-2.0.html).
