@@ -8,25 +8,29 @@ import (
 	"strings"
 )
 
-//DriverChar captcha config for captcha-engine-characters.
+//DriverMath captcha config for captcha math
 type DriverMath struct {
+	//Height png height in pixel.
 	Height int
+
 	// Width Captcha png width in pixel.
-	// 图像验证码的宽度像素
 	Width int
 
 	//NoiseCount text noise count.
 	NoiseCount int
 
+	//ShowLineOptions := OptionShowHollowLine | OptionShowSlimeLine | OptionShowSineLine .
 	ShowLineOptions int
-	//CaptchaRunePairs make a list of rune for Captcha random selection.
-	// 随机字符串可选内容
 
-	BgColor    *color.RGBA
+	//BgColor captcha image background color (optional)
+	BgColor *color.RGBA
+
+	//Fonts loads by name see fonts.go's comment
 	Fonts      []string
 	fontsArray []*truetype.Font
 }
 
+//NewDriverMath creates a driver of math
 func NewDriverMath(height int, width int, noiseCount int, showLineOptions int, bgColor *color.RGBA, fonts []string) *DriverMath {
 	tfs := []*truetype.Font{}
 	for _, fff := range fonts {
@@ -39,6 +43,7 @@ func NewDriverMath(height int, width int, noiseCount int, showLineOptions int, b
 	return &DriverMath{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, fontsArray: tfs, BgColor: bgColor, Fonts: fonts}
 }
 
+//ConvertFonts loads fonts from names
 func (d *DriverMath) ConvertFonts() *DriverMath {
 	tfs := []*truetype.Font{}
 	for _, fff := range d.Fonts {
@@ -51,6 +56,8 @@ func (d *DriverMath) ConvertFonts() *DriverMath {
 	d.fontsArray = tfs
 	return d
 }
+
+//GenerateQuestionAnswer creates captcha content and answer
 func (d *DriverMath) GenerateQuestionAnswer() (question, answer string) {
 	operators := []string{"+", "-", "x"}
 	var mathResult int32
@@ -79,8 +86,9 @@ func (d *DriverMath) GenerateQuestionAnswer() (question, answer string) {
 	answer = fmt.Sprintf("%d", mathResult)
 	return
 }
-func (d *DriverMath) GenerateItem(question string) (item Item, err error) {
 
+//GenerateItem creates math captcha item
+func (d *DriverMath) GenerateItem(question string) (item Item, err error) {
 	var bgc color.RGBA
 	if d.BgColor != nil {
 		bgc = *d.BgColor
@@ -114,7 +122,7 @@ func (d *DriverMath) GenerateItem(question string) (item Item, err error) {
 	}
 
 	//draw question
-	err = itemChar.DrawText(question, d.fontsArray)
+	err = itemChar.drawText(question, d.fontsArray)
 	if err != nil {
 		return
 	}

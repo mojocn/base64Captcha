@@ -195,14 +195,12 @@ func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
 }
 
 //start a net/http server
-//启动golang net/http 服务器
 func main() {
 
 	//serve Vuejs+ElementUI+Axios Web Application
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 
 	//api for create captcha
-	//创建图像验证码api
 	http.HandleFunc("/api/getCaptcha", generateCaptchaHandler)
 
 	//api for verify captcha

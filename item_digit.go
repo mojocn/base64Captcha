@@ -11,6 +11,12 @@ import (
 	"math"
 )
 
+const (
+	digitFontWidth     = 11
+	digitFontHeight    = 18
+	digitFontBlackChar = 1
+)
+
 // ItemDigit digits captcha Struct
 type ItemDigit struct {
 	width  int

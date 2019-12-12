@@ -8,33 +8,34 @@ import (
 
 //DriverChar captcha config for captcha-engine-characters.
 type DriverString struct {
+
 	// Height png height in pixel.
-	// 图像验证码的高度像素.
 	Height int
+
 	// Width Captcha png width in pixel.
-	// 图像验证码的宽度像素
 	Width int
 
 	//NoiseCount text noise count.
 	NoiseCount int
 
+	//ShowLineOptions := OptionShowHollowLine | OptionShowSlimeLine | OptionShowSineLine .
 	ShowLineOptions int
-	//CaptchaRunePairs make a list of rune for Captcha random selection.
-	// 随机字符串可选内容
 
-	// Length Default number of digits in captcha solution.
-	// 默认数字验证长度6.
+	//Length random string length.
 	Length int
 
+	//Source is a unicode which is the rand string from.
 	Source string
 
 	//BgColor captcha image background color (optional)
-	//背景颜色
-	BgColor    *color.RGBA
+	BgColor *color.RGBA
+
+	//Fonts loads by name see fonts.go's comment
 	Fonts      []string
 	fontsArray []*truetype.Font
 }
 
+//NewDriverString creates driver
 func NewDriverString(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fonts []string) *DriverString {
 	tfs := []*truetype.Font{}
 	for _, fff := range fonts {
@@ -46,6 +47,8 @@ func NewDriverString(height int, width int, noiseCount int, showLineOptions int,
 	}
 	return &DriverString{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsArray: tfs}
 }
+
+//ConvertFonts loads fonts by names
 func (d *DriverString) ConvertFonts() *DriverString {
 	tfs := []*truetype.Font{}
 	for _, fff := range d.Fonts {
@@ -59,10 +62,13 @@ func (d *DriverString) ConvertFonts() *DriverString {
 	return d
 }
 
+//GenerateQuestionAnswer creates content and answer
 func (d *DriverString) GenerateQuestionAnswer() (content, answer string) {
 	content = randText(d.Length, d.Source)
 	return content, content
 }
+
+//GenerateItem draws captcha item
 func (d *DriverString) GenerateItem(content string) (item Item, err error) {
 
 	var bgc color.RGBA
@@ -99,7 +105,7 @@ func (d *DriverString) GenerateItem(content string) (item Item, err error) {
 	}
 
 	//draw content
-	err = itemChar.DrawText(content, d.fontsArray)
+	err = itemChar.drawText(content, d.fontsArray)
 	if err != nil {
 		return
 	}

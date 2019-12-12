@@ -1,4 +1,4 @@
-# Base64captcha is a customization-friendly captcha package.
+# A flexible and various captcha package
 [![Go Report Card](https://goreportcard.com/badge/github.com/mojocn/base64Captcha)](https://goreportcard.com/report/github.com/mojocn/base64Captcha)
 [![GoDoc](https://godoc.org/github.com/mojocn/base64Captcha?status.svg)](https://godoc.org/github.com/mojocn/base64Captcha)
 [![Build Status](https://travis-ci.org/mojocn/base64Captcha.svg?branch=master)](https://travis-ci.org/mojocn/base64Captcha)
@@ -7,31 +7,26 @@
 [![codebeat badge](https://codebeat.co/badges/650029a5-fcea-4416-925e-277e2f178e96)](https://codebeat.co/projects/github-com-mojocn-base64captcha-master)
 [![Foundation](https://img.shields.io/badge/Golang-Foundation-green.svg)](http://golangfoundation.org)
 
-Base64captcha supports any unicode character and can customize its content to support Math Chinese Korean Japanese Russian Arabic etc.
+Base64captcha supports any unicode character and can easily be customized to support Math Chinese Korean Japanese Russian Arabic etc.
 
 
-### Why Base64 for RESTful Application
-      Data URIs are now supported by all major browsers. IE supports embedding images since version 8 as well.
-      RESTful Application returns small base64 image is more convenient.
-
-### Documentation
+## 1. 📖📖📖 Doc & Demo
 
 * [English](https://godoc.org/github.com/mojocn/base64Captcha)
 * [中文文档](https://github.com/mojocn/base64Captcha/blob/master/README_zh.md)
 * [Playground](https://captcha.mojotv.cn)
 
+## 2. 🚀🚀🚀 Quick start
 
-## 2. Quick Start
-
-### 2.1 Download package
+### 2.1 📥📥📥 Download package
     go get -u github.com/mojocn/base64Captcha
 For Gopher from mainland China without VPN `go get golang.org/x/image` failure solution:
 - go version > 1.11
 - set env `GOPROXY=https://goproxy.io`
 
-### 2.2 How to code with base64Captcha
+### 2.2 🏂🏂🏂 How to code with base64Captcha
 
-#### 2.2.1 Implement [Store interface](interface_store.go) or use build-in memory store
+#### 2.2.1 🏇🏇🏇 Implement [Store interface](interface_store.go) or use build-in memory store
 
 - [Build-in Memory Store](store_memory.go)
 
@@ -43,13 +38,14 @@ type Store interface {
 	// Get returns stored digits for the captcha id. Clear indicates
 	// whether the captcha must be deleted from the store.
 	Get(id string, clear bool) string
-	//
+	
+    //Verify captcha's answer directly
 	Verify(id, answer string, clear bool) bool
 }
 
 ```
 
-#### 2.2.2 Impelement [Driver interface](interface_driver.go) or use one of build-in drivers
+#### 2.2.2 🏄🏄🏄 Implement [Driver interface](interface_driver.go) or use one of build-in drivers
 There are some build-in drivers:
 1. [Build-in Driver Digit](driver_digit.go)  
 2. [Build-in Driver String](driver_string.go)
@@ -65,7 +61,7 @@ type Driver interface {
 }
 ```
 
-#### 2.2.3 New [Captcha instance]((captcha.go))
+#### 2.2.3 🚴🚴🚴 ‍New [Captcha instance]((captcha.go))
 ```go
 
 func init() {
@@ -94,7 +90,7 @@ func (c *Captcha) Generate() (id, b64s string, err error) {
 	b64s = item.EncodeB64string()
 	return
 }
-//if you has multiple captcha instances which shared a same store. You may want to use `store.Verify` method instead.
+//if you has multiple captcha instances which shares a same store. You may want to use `store.Verify` method instead.
 //Verify by given id key and remove the captcha value in store, return boolean value.
 func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 	match = c.Store.Get(id, clear) == answer
@@ -102,7 +98,7 @@ func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 }
 
 ```
-#### 2.2.4 Generate Base64(image/audio) string
+#### 2.2.4 🚵🚵🚵 ‍Generate Base64(image/audio) string
 ```go
 func (c *Captcha) Generate() (id, b64s string, err error) {
 	id = randomId()
@@ -116,9 +112,9 @@ func (c *Captcha) Generate() (id, b64s string, err error) {
 	return
 }
 ```
-#### 2.2.5 Verify Answer
+#### 2.2.5 🤸🤸🤸 Verify Answer
 ```go
-//if you has multiple captcha instances which shared a same store. You may want to use `store.Verify` method instead.
+//if you has multiple captcha instances which shares a same store. You may want to use `store.Verify` method instead.
 //Verify by given id key and remove the captcha value in store, return boolean value.
 func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 	match = c.Store.Get(id, clear) == answer
@@ -126,7 +122,7 @@ func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 }
 ```
 
-#### 2.2.6 Full Example
+#### 2.2.6 🏃🏃🏃 ‍Full Example
 
 ```go
 // example of HTTP server that uses the captcha package.
@@ -157,7 +153,6 @@ var store = base64Captcha.DefaultMemStore
 // base64Captcha create http handler
 func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	//parse request parameters
-	//接收客户端发送来的请求参数
 	decoder := json.NewDecoder(r.Body)
 	var param configJsonBody
 	err := decoder.Decode(&param)
@@ -168,7 +163,6 @@ func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	var driver base64Captcha.Driver
 
 	//create base64 encoding captcha
-	//创建base64图像验证码
 	switch param.CaptchaType {
 	case "audio":
 		driver = param.DriverAudio
@@ -209,14 +203,12 @@ func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//set json response
-	//设置json响应
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	json.NewEncoder(w).Encode(body)
 }
 
 //start a net/http server
-//启动golang net/http 服务器
 func main() {
 	//serve Vuejs+ElementUI+Axios Web Application
 	http.Handle("/", http.FileServer(http.Dir("./static")))
@@ -234,7 +226,7 @@ func main() {
 }
 ```
 
-## 3. Create your own captcha
+## 3. 🎨🎨🎨 Customization
 You can customize your captcha display image by implementing [interface driver](interface_driver.go) 
 and [interface item](interface_item.go).
 
@@ -244,14 +236,13 @@ There are some example for your reference.
 3. [ItemChar](item_char.go)
 
 
-## 4. Thanks
-
+## 4. 💖💖💖 Thanks
 - [dchest/captha](https://github.com/dchest/captcha)
-- [@slayercat][https://github.com/slayercat]
-- [@amzyang][https://github.com/amzyang]
+- [@slayercat](https://github.com/slayercat)
+- [@amzyang](https://github.com/amzyang)
 - [@Luckyboys](https://github.com/Luckyboys)
 
-## 5. License
+## 5. 🍭🍭🍭 Licence
 
 base64Captcha source code is licensed under the Apache Licence, Version 2.0
 (http://www.apache.org/licenses/LICENSE-2.0.html).

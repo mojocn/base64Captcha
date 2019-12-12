@@ -12,17 +12,22 @@ type DriverAudio struct {
 	Language string
 }
 
+//DefaultDriverAudio is a default audio driver
 var DefaultDriverAudio = NewDriverAudio(6, "en")
 
+//NewDriverAudio creates a driver of audio
 func NewDriverAudio(length int, language string) *DriverAudio {
 	return &DriverAudio{Length: length, Language: language}
 }
 
+//GenerateItem creates audio captcha item
 func (d *DriverAudio) GenerateItem(content string) (item Item, err error) {
 	digits := stringToFakeByte(content)
 	audio := newAudio("", digits, d.Language)
 	return audio, nil
 }
+
+//GenerateQuestionAnswer creates captcha content and answer
 func (d *DriverAudio) GenerateQuestionAnswer() (q, a string) {
 	digits := randomDigits(d.Length)
 	a = parseDigitsToString(digits)

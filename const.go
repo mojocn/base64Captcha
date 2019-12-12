@@ -39,16 +39,8 @@ const (
 	MimeTypeAudio = "audio/wav"
 	//MimeTypeImage output base64 mine-type.
 	MimeTypeImage = "image/png"
-
+	//Emoji is a source string for randTxt
 	Emoji = "😀😃💯😄🤖😻😅🤣😂🧑🙃😉😊😇😍👴🤩😘😗☺👽♀😙♂😋😛🎨😜🤪😝🤑🤗🤭🤫🤔🤐🤨😐🙉😶😏💗🙄😬🤥😌😪🤤😷🤢🤮🤯😵🤠😎🧐😨😰😱😭😖😡🤬👿☠💀💥💢"
-)
-
-//GoTestOutputDir run go test command where the png and wav file output
-
-const (
-	digitFontWidth     = 11
-	digitFontHeight    = 18
-	digitFontBlackChar = 1
 )
 
 //var cjkFontFamilies = readCJKFonts()

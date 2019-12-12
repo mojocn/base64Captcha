@@ -7,32 +7,30 @@ import (
 	"strings"
 )
 
-//DriverChar captcha config for captcha-engine-characters.
+//DriverChinese is a driver of unicode Chinese characters.
 type DriverChinese struct {
-	// Height png height in pixel.
-	// 图像验证码的高度像素.
+	//Height png height in pixel.
 	Height int
-	// Width Captcha png width in pixel.
-	// 图像验证码的宽度像素
+	//Width Captcha png width in pixel.
 	Width int
 
 	//NoiseCount text noise count.
 	NoiseCount int
 
+	//ShowLineOptions := OptionShowHollowLine | OptionShowSlimeLine | OptionShowSineLine .
 	ShowLineOptions int
-	//CaptchaRunePairs make a list of rune for Captcha random selection.
-	// 随机字符串可选内容
 
-	// Length Default number of digits in captcha solution.
-	// 默认数字验证长度6.
+	//Length random string length.
 	Length int
 
+	//Source is a unicode which is the rand string from.
 	Source string
 
 	//BgColor captcha image background color (optional)
-	//背景颜色
-	BgColor    *color.RGBA
-	Fonts      []string
+	BgColor *color.RGBA
+	//Fonts loads by name see fonts.go's comment
+	Fonts []string
+
 	fontsArray []*truetype.Font
 }
 
@@ -123,7 +121,7 @@ func (d *DriverChinese) GenerateItem(content string) (item Item, err error) {
 	}
 
 	//draw content
-	err = itemChar.DrawText(content, d.fontsArray)
+	err = itemChar.drawText(content, d.fontsArray)
 	if err != nil {
 		return
 	}

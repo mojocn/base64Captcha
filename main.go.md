@@ -133,7 +133,6 @@ func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
 }
 
 // start a net/http server
-// 启动golang net/http 服务器
 func main() {
 
 	staticPath := fmt.Sprintf("%s/src/github.com/mojocn/base64Captcha/_examples/static", os.Getenv("GOPATH"))

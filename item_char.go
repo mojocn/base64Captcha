@@ -18,7 +18,7 @@ import (
 	"math/rand"
 )
 
-//ItemChar captcha-engine-char return type.
+//ItemChar captcha item of unicode characters
 type ItemChar struct {
 	bgColor color.Color
 	width   int
@@ -26,6 +26,7 @@ type ItemChar struct {
 	nrgba   *image.NRGBA
 }
 
+//NewItemChar creates a captcha item of characters
 func NewItemChar(w int, h int, bgColor color.RGBA) *ItemChar {
 	d := ItemChar{width: w, height: h}
 	m := image.NewNRGBA(image.Rect(0, 0, w, h))
@@ -35,7 +36,6 @@ func NewItemChar(w int, h int, bgColor color.RGBA) *ItemChar {
 }
 
 //drawHollowLine draw strong and bold white line.
-//添加一个较粗的空白直线
 func (item *ItemChar) drawHollowLine() *ItemChar {
 
 	first := item.width / 20
@@ -73,7 +73,6 @@ func (item *ItemChar) drawHollowLine() *ItemChar {
 }
 
 //drawSineLine draw a sine line.
-//画一条正弦曲线.
 func (item *ItemChar) drawSineLine() *ItemChar {
 	var py float64
 
@@ -118,7 +117,6 @@ func (item *ItemChar) drawSineLine() *ItemChar {
 }
 
 //drawSlimLine draw n slim-random-color lines.
-//画n条随机颜色的细线
 func (item *ItemChar) drawSlimLine(num int) *ItemChar {
 
 	first := item.width / 10
@@ -205,7 +203,7 @@ func (item *ItemChar) drawNoise(noiseText string, fonts []*truetype.Font) error 
 
 //drawText draw captcha string to image.把文字写入图像验证码
 
-func (item *ItemChar) DrawText(text string, fonts []*truetype.Font) error {
+func (item *ItemChar) drawText(text string, fonts []*truetype.Font) error {
 	c := freetype.NewContext()
 	c.SetDPI(imageStringDpi)
 	c.SetClip(item.nrgba.Bounds())
@@ -235,7 +233,7 @@ func (item *ItemChar) DrawText(text string, fonts []*truetype.Font) error {
 	return nil
 }
 
-// EncodeBinary encodes an image to PNG and returns a byte slice.
+//BinaryEncoding encodes an image to PNG and returns a byte slice.
 func (item *ItemChar) BinaryEncoding() []byte {
 	var buf bytes.Buffer
 	if err := png.Encode(&buf, item.nrgba); err != nil {
