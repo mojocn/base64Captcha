@@ -61,18 +61,19 @@ func (d *DriverChinese) ConvertFonts() *DriverChinese {
 	return d
 }
 
-//GenerateQuestionAnswer generates captcha content and its answer
-func (d *DriverChinese) GenerateQuestionAnswer() (content, answer string) {
+//GenerateIdQuestionAnswer generates captcha content and its answer
+func (d *DriverChinese) GenerateIdQuestionAnswer() (id, content, answer string) {
+	id = randomId()
 
 	ss := strings.Split(d.Source, ",")
 	length := len(ss)
 	if length == 1 {
 		c := randText(d.Length, ss[0])
-		return c, c
+		return id, c, c
 	}
 	if length <= d.Length {
 		c := randText(d.Length, TxtNumbers+TxtAlphabet)
-		return c, c
+		return id, c, c
 	}
 
 	res := make([]string, d.Length)
@@ -81,11 +82,11 @@ func (d *DriverChinese) GenerateQuestionAnswer() (content, answer string) {
 	}
 
 	content = strings.Join(res, "")
-	return content, content
+	return id, content, content
 }
 
-//GenerateItem generates captcha item(image)
-func (d *DriverChinese) GenerateItem(content string) (item Item, err error) {
+//DrawCaptcha generates captcha item(image)
+func (d *DriverChinese) DrawCaptcha(content string) (item Item, err error) {
 
 	var bgc color.RGBA
 	if d.BgColor != nil {

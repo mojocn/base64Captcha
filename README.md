@@ -50,20 +50,28 @@ There are some build-in drivers:
 1. [Build-in Driver Digit](driver_digit.go)  
 2. [Build-in Driver String](driver_string.go)
 3. [Build-in Driver Math](driver_math.go)
-4. [Build-in Driver Chinese](driver_chinses.go))
+4. [Build-in Driver Chinese](driver_chinses.go)
 
 ```go
 // Driver captcha interface for captcha engine to to write staff
 type Driver interface {
-	// EncodeBinary covert to bytes
-	GenerateItem(content string) (item Item, err error)
-	GenerateQuestionAnswer() (q, a string)
+	//DrawCaptcha draws binary item
+	DrawCaptcha(content string) (item Item, err error)
+	//GenerateIdQuestionAnswer creates rand id, content and answer
+	GenerateIdQuestionAnswer() (id, q, a string)
 }
 ```
 
-#### 2.2.3 🚴🚴🚴 ‍Core code [captcha.go]((captcha.go))
+#### 2.2.3 🚴🚴🚴 ‍Core code [captcha.go](captcha.go)
 `captcha.go` is the entry of base64Captcha which is quite simple.
 ```go
+package base64Captcha
+
+import (
+	"math/rand"
+	"time"
+)
+
 func init() {
 	//init rand seed
 	rand.Seed(time.Now().UnixNano())
@@ -75,14 +83,15 @@ type Captcha struct {
 	Store  Store
 }
 
+//NewCaptcha creates a captcha instance from driver and store
 func NewCaptcha(driver Driver, store Store) *Captcha {
 	return &Captcha{Driver: driver, Store: store}
 }
 
+//Generate generates a random id, base64 image string or an error if any
 func (c *Captcha) Generate() (id, b64s string, err error) {
-	id = randomId()
-	content, answer := c.Driver.GenerateQuestionAnswer()
-	item, err := c.Driver.GenerateItem(content)
+	id,content, answer := c.Driver.GenerateIdQuestionAnswer()
+	item, err := c.Driver.DrawCaptcha(content)
 	if err != nil {
 		return "", "", err
 	}
@@ -90,8 +99,11 @@ func (c *Captcha) Generate() (id, b64s string, err error) {
 	b64s = item.EncodeB64string()
 	return
 }
-//if you has multiple captcha instances which shares a same store. You may want to use `store.Verify` method instead.
-//Verify by given id key and remove the captcha value in store, return boolean value.
+
+//Verify by a given id key and remove the captcha value in store,
+//return boolean value.
+//if you has multiple captcha instances which share a same store.
+//You may want to call `store.Verify` method instead.
 func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 	match = c.Store.Get(id, clear) == answer
 	return
@@ -101,9 +113,8 @@ func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 #### 2.2.4 🚵🚵🚵 ‍Generate Base64(image/audio) string
 ```go
 func (c *Captcha) Generate() (id, b64s string, err error) {
-	id = randomId()
-	content, answer := c.Driver.GenerateQuestionAnswer()
-	item, err := c.Driver.GenerateItem(content)
+	id,content, answer := c.Driver.GenerateIdQuestionAnswer()
+	item, err := c.Driver.DrawCaptcha(content)
 	if err != nil {
 		return "", "", err
 	}
@@ -241,6 +252,7 @@ There are some example for your reference.
 - [@slayercat](https://github.com/slayercat)
 - [@amzyang](https://github.com/amzyang)
 - [@Luckyboys](https://github.com/Luckyboys)
+- [@hi-sb](https://github.com/hi-sb)
 
 ## 5. 🍭🍭🍭 Licence
 

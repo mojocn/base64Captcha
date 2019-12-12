@@ -47,9 +47,9 @@ func TestDriverDigit_GenerateItem(t *testing.T) {
 				MaxSkew:  tt.fields.MaxSkew,
 				DotCount: tt.fields.DotCount,
 			}
-			gotItem, err := d.GenerateItem(tt.args.content)
+			gotItem, err := d.DrawCaptcha(tt.args.content)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("DriverDigit.GenerateItem() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("DriverDigit.DrawCaptcha() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			itemWriteFile(gotItem, "_builds", tt.args.content, "png")

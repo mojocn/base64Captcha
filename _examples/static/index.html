@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Base64 Captcha</title>
+    <title>Config Parameter Playground</title>
     <meta name="Keywords" content="golang,godoc,captcha,base64,png,图像验证码"/>
     <meta name="Description" content="Base64 Captcha"/>
     <link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.0.11/theme-chalk/index.css">
@@ -38,7 +38,7 @@
             background-clip: padding-box;
             margin: 15px auto auto auto;
             width: 480px;
-            padding: 12px;
+            padding: 6px;
             background: #fff;
             border: 1px solid #eaeaea;
             box-shadow: 0 0 25px #cac6c6;
@@ -58,7 +58,15 @@
         }
 
         .el-form-item {
-            margin-bottom: 6px;
+            margin-bottom: 0px;
+        }
+
+        .el-main {
+            background-color: #E9EEF3;
+            color: #333;
+            text-align: center;
+            padding: 0px !important;
+
         }
 
 
@@ -126,7 +134,37 @@
 
         </el-header>
         <el-main>
-            <h3 class="title">Base64 Captcha Playground</h3>
+            <el-row style="width: 50%;margin:8px auto;background: #9e9e9e;padding: 8px 2rem" type="flex"
+                    justify="center" align="middle">
+                <el-col :span="16">
+                    <img @click.prevent="generateCaptcha" :src="blob" class="captcha-img"
+                         v-if="form.CaptchaType !== 'audio'"/>
+                    <audio controls :src="blob" autoplay v-if="form.CaptchaType === 'audio'"/>
+                </el-col>
+                <el-col :span="8">
+                    <el-form>
+                        <el-form-item>
+                            <el-input
+                                    type="text"
+                                    v-model="form.VerifyValue"
+                                    auto-complete="off"
+                                    style="margin: 0 auto 8px auto"
+                                    placeholder="input your captcha numbers">
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button
+                                    type="primary"
+                                    style="width:100%"
+                                    v-loading="loading"
+                                    @click.native.prevent="submitForm">
+                                Verify Captcha
+                            </el-button>
+                        </el-form-item>
+                    </el-form>
+                </el-col>
+
+            </el-row>
 
 
             <el-tabs v-model="form.CaptchaType"
@@ -213,7 +251,7 @@
                         <el-form-item label="DriverString.Fonts">
 
                             <el-checkbox-group v-model="form.DriverString.Fonts" @change="generateCaptcha">
-                                <el-checkbox  v-for="f in fonts" :label="f" :key="f">{{f}}</el-checkbox>
+                                <el-checkbox v-for="f in fonts" :label="f" :key="f">{{f}}</el-checkbox>
                             </el-checkbox-group>
 
                         </el-form-item>
@@ -250,8 +288,6 @@
                             label-position="left">
 
 
-
-
                         <el-form-item label="DriverMath.Width">
                             <el-slider v-model="form.DriverMath.Width" :min="20" :max="480" :step="5"
                                        show-input
@@ -281,7 +317,7 @@
                         <el-form-item label="DriverMath.Fonts">
 
                             <el-checkbox-group v-model="form.DriverMath.Fonts" @change="generateCaptcha">
-                                <el-checkbox  v-for="f in fonts" :label="f" :key="f">{{f}}</el-checkbox>
+                                <el-checkbox v-for="f in fonts" :label="f" :key="f">{{f}}</el-checkbox>
                             </el-checkbox-group>
 
                         </el-form-item>
@@ -359,7 +395,7 @@
                         <el-form-item label="DriverChinese.Fonts">
 
                             <el-checkbox-group v-model="form.DriverChinese.Fonts" @change="generateCaptcha">
-                                <el-checkbox  v-for="f in fonts" :label="f" :key="f">{{f}}</el-checkbox>
+                                <el-checkbox v-for="f in fonts" :label="f" :key="f">{{f}}</el-checkbox>
                             </el-checkbox-group>
 
                         </el-form-item>
@@ -416,39 +452,9 @@
                 </el-tab-pane>
             </el-tabs>
 
-
-            <el-form class="login-container">
-
-                <el-form-item>
-                    <img @click.prevent="generateCaptcha" :src="blob" class="captcha-img"
-                         v-if="form.CaptchaType !== 'audio'"/>
-                    <audio controls :src="blob" autoplay v-if="form.CaptchaType === 'audio'"/>
-
-                </el-form-item>
-                <el-form-item>
-                    <el-input
-                            type="text"
-                            v-model="form.VerifyValue"
-                            auto-complete="off"
-                            style="margin: 15px auto"
-                            placeholder="input your captcha numbers">
-                    </el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button
-                            type="primary"
-                            style="width:100%"
-                            v-loading="loading"
-                            @click.native.prevent="submitForm">
-                        Verify Captcha
-                    </el-button>
-                </el-form-item>
-            </el-form>
-
-
         </el-main>
         <el-footer
-                style="line-height: 60px"
+                style="line-height: 60px;margin-top: 1rem"
         > https://github.com/dejavuzhou/felix
             <a href="https://github.com/mojocn" type="success">https://github.com/mojocn</a>
             <a href="https://mojotv.cn" type="success">Golang Tech Blog </a>

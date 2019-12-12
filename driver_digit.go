@@ -40,15 +40,16 @@ func NewDriverDigit(height int, width int, length int, maxSkew float64, dotCount
 //DefaultDriverDigit is a default driver of digit
 var DefaultDriverDigit = NewDriverDigit(80, 240, 5, 0.7, 80)
 
-//GenerateQuestionAnswer creates captcha content and answer
-func (d *DriverDigit) GenerateQuestionAnswer() (q, a string) {
+//GenerateIdQuestionAnswer creates captcha content and answer
+func (d *DriverDigit) GenerateIdQuestionAnswer() (id, q, a string) {
+	id = randomId()
 	digits := randomDigits(d.Length)
 	a = parseDigitsToString(digits)
-	return a, a
+	return id, a, a
 }
 
-//GenerateItem creates digit captcha item
-func (d *DriverDigit) GenerateItem(content string) (item Item, err error) {
+//DrawCaptcha creates digit captcha item
+func (d *DriverDigit) DrawCaptcha(content string) (item Item, err error) {
 	// Initialize PRNG.
 	itemDigit := NewItemDigit(d.Width, d.Height, d.DotCount, d.MaxSkew)
 	//parse digits to string

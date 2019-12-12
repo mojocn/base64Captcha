@@ -57,8 +57,9 @@ func (d *DriverMath) ConvertFonts() *DriverMath {
 	return d
 }
 
-//GenerateQuestionAnswer creates captcha content and answer
-func (d *DriverMath) GenerateQuestionAnswer() (question, answer string) {
+//GenerateIdQuestionAnswer creates id,captcha content and answer
+func (d *DriverMath) GenerateIdQuestionAnswer() (id, question, answer string) {
+	id = randomId()
 	operators := []string{"+", "-", "x"}
 	var mathResult int32
 	switch operators[rand.Int31n(3)] {
@@ -87,8 +88,8 @@ func (d *DriverMath) GenerateQuestionAnswer() (question, answer string) {
 	return
 }
 
-//GenerateItem creates math captcha item
-func (d *DriverMath) GenerateItem(question string) (item Item, err error) {
+//DrawCaptcha creates math captcha item
+func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 	var bgc color.RGBA
 	if d.BgColor != nil {
 		bgc = *d.BgColor

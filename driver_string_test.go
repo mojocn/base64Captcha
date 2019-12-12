@@ -41,9 +41,9 @@ func TestDriverString_GenerateItem(t *testing.T) {
 				BgColor:         tt.fields.BgColor,
 				fontsArray:      tt.fields.Fonts,
 			}
-			gotItem, err := d.GenerateItem(tt.args.content)
+			gotItem, err := d.DrawCaptcha(tt.args.content)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("DriverString.GenerateItem() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("DriverString.DrawCaptcha() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			err = itemWriteFile(gotItem, "_builds", tt.args.content, "png")

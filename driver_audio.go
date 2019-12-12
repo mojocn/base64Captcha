@@ -20,16 +20,17 @@ func NewDriverAudio(length int, language string) *DriverAudio {
 	return &DriverAudio{Length: length, Language: language}
 }
 
-//GenerateItem creates audio captcha item
-func (d *DriverAudio) GenerateItem(content string) (item Item, err error) {
+//DrawCaptcha creates audio captcha item
+func (d *DriverAudio) DrawCaptcha(content string) (item Item, err error) {
 	digits := stringToFakeByte(content)
 	audio := newAudio("", digits, d.Language)
 	return audio, nil
 }
 
-//GenerateQuestionAnswer creates captcha content and answer
-func (d *DriverAudio) GenerateQuestionAnswer() (q, a string) {
+//GenerateIdQuestionAnswer creates id,captcha content and answer
+func (d *DriverAudio) GenerateIdQuestionAnswer() (id, q, a string) {
+	id = randomId()
 	digits := randomDigits(d.Length)
 	a = parseDigitsToString(digits)
-	return a, a
+	return id, a, a
 }

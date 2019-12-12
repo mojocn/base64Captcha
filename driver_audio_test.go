@@ -31,7 +31,7 @@ func TestDriverAudio_GenerateItem(t *testing.T) {
 				Length:   tt.fields.CaptchaLen,
 				Language: tt.fields.Language,
 			}
-			gotItem, err := d.GenerateItem(tt.args.content)
+			gotItem, err := d.DrawCaptcha(tt.args.content)
 			if err != nil {
 				t.Error(err)
 			}

@@ -41,10 +41,10 @@ func TestDriverMath_GenerateItem(t *testing.T) {
 				BgColor:         tt.fields.BgColor,
 				Fonts:           tt.fields.Fonts,
 			}
-			q, a := d.GenerateQuestionAnswer()
-			gotItem, err := d.GenerateItem(q)
+			q, a := d.GenerateIdQuestionAnswer()
+			gotItem, err := d.DrawCaptcha(q)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("DriverMath.GenerateItem() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("DriverMath.DrawCaptcha() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			itemWriteFile(gotItem, "_builds", a, "png")

@@ -52,13 +52,14 @@ type Store interface {
 ```go
 // Driver captcha interface for captcha engine to to write staff
 type Driver interface {
-	// EncodeBinary covert to bytes
-	GenerateItem(content string) (item Item, err error)
-	GenerateQuestionAnswer() (q, a string)
+	//DrawCaptcha draws binary item
+	DrawCaptcha(content string) (item Item, err error)
+	//GenerateIdQuestionAnswer creates rand id, content and answer
+	GenerateIdQuestionAnswer() (id, q, a string)
 }
 ```
 
-#### 2.2.3 🚴🚴🚴 核心代码[captcha.go]((captcha.go))
+#### 2.2.3 🚴🚴🚴 核心代码[captcha.go](captcha.go)
 captcha.go 是package的入口文件,源代码逻辑非常简单,如下:
 
 ```go
@@ -77,10 +78,10 @@ func NewCaptcha(driver Driver, store Store) *Captcha {
 	return &Captcha{Driver: driver, Store: store}
 }
 
+//Generate generates a random id, base64 image string or an error if any
 func (c *Captcha) Generate() (id, b64s string, err error) {
-	id = randomId()
-	content, answer := c.Driver.GenerateQuestionAnswer()
-	item, err := c.Driver.GenerateItem(content)
+	id,content, answer := c.Driver.GenerateIdQuestionAnswer()
+	item, err := c.Driver.DrawCaptcha(content)
 	if err != nil {
 		return "", "", err
 	}
@@ -100,10 +101,10 @@ func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 #### 2.2.4 🚵🚵🚵 生成Base64(image/audio)验证码字符串
 
 ```go
+//Generate generates a random id, base64 image string or an error if any
 func (c *Captcha) Generate() (id, b64s string, err error) {
-	id = randomId()
-	content, answer := c.Driver.GenerateQuestionAnswer()
-	item, err := c.Driver.GenerateItem(content)
+	id,content, answer := c.Driver.GenerateIdQuestionAnswer()
+	item, err := c.Driver.DrawCaptcha(content)
 	if err != nil {
 		return "", "", err
 	}
@@ -242,6 +243,7 @@ func main() {
 - [@slayercat](https://github.com/slayercat)
 - [@amzyang](https://github.com/amzyang)
 - [@Luckyboys](https://github.com/Luckyboys)
+- [@hi-sb](https://github.com/hi-sb)
 
 ## 5. 🍭🍭🍭 Licence
 
