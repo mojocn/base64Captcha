@@ -1,4 +1,4 @@
-# Base64captcha is a customization-friendly captcha package.
+# A flexible and various captcha package
 [![Go Report Card](https://goreportcard.com/badge/github.com/mojocn/base64Captcha)](https://goreportcard.com/report/github.com/mojocn/base64Captcha)
 [![GoDoc](https://godoc.org/github.com/mojocn/base64Captcha?status.svg)](https://godoc.org/github.com/mojocn/base64Captcha)
 [![Build Status](https://travis-ci.org/mojocn/base64Captcha.svg?branch=master)](https://travis-ci.org/mojocn/base64Captcha)
@@ -7,15 +7,14 @@
 [![codebeat badge](https://codebeat.co/badges/650029a5-fcea-4416-925e-277e2f178e96)](https://codebeat.co/projects/github-com-mojocn-base64captcha-master)
 [![Foundation](https://img.shields.io/badge/Golang-Foundation-green.svg)](http://golangfoundation.org)
 
-Base64captcha supports any unicode character and can customize its content to support Math Chinese Korean Japanese Russian Arabic etc.
+Base64captcha supports any unicode character and can easily be customized to support Math Chinese Korean Japanese Russian Arabic etc.
 
 
-### 📜📜📜
+## 1. 📜📜📜 Doc & Demo
 
 * [English](https://godoc.org/github.com/mojocn/base64Captcha)
 * [中文文档](https://github.com/mojocn/base64Captcha/blob/master/README_zh.md)
 * [Playground](https://captcha.mojotv.cn)
-
 
 ## 2. 🚀🚀🚀 Quick start
 
@@ -39,7 +38,8 @@ type Store interface {
 	// Get returns stored digits for the captcha id. Clear indicates
 	// whether the captcha must be deleted from the store.
 	Get(id string, clear bool) string
-	//
+	
+    //Verify captcha's answer directly
 	Verify(id, answer string, clear bool) bool
 }
 
