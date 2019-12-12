@@ -10,7 +10,7 @@
 Base64captcha supports any unicode character and can easily be customized to support Math Chinese Korean Japanese Russian Arabic etc.
 
 
-## 1. 📜📜📜 Doc & Demo
+## 1. 📖📖📖 Doc & Demo
 
 * [English](https://godoc.org/github.com/mojocn/base64Captcha)
 * [中文文档](https://github.com/mojocn/base64Captcha/blob/master/README_zh.md)
