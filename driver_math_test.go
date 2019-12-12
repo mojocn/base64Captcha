@@ -3,18 +3,16 @@ package base64Captcha
 import (
 	"image/color"
 	"testing"
-
-	"github.com/golang/freetype/truetype"
 )
 
-func TestDriverMath_GenerateItem(t *testing.T) {
+func TestDriverMath_DrawCaptcha(t *testing.T) {
 	type fields struct {
 		Height          int
 		Width           int
 		NoiseCount      int
 		ShowLineOptions int
 		BgColor         *color.RGBA
-		Fonts           []*truetype.Font
+		Fonts           []string
 	}
 	type args struct {
 		question string
@@ -27,7 +25,7 @@ func TestDriverMath_GenerateItem(t *testing.T) {
 		wantErr  bool
 	}{
 		{"Math",
-			fields{80, 240, 5, OptionShowSineLine | OptionShowSlimeLine | OptionShowHollowLine, nil, fontsAll},
+			fields{80, 240, 5, OptionShowSineLine | OptionShowSlimeLine | OptionShowHollowLine, nil, []string{"3Dumb.ttf"}},
 			args{""},
 			nil, false},
 	}
@@ -41,7 +39,9 @@ func TestDriverMath_GenerateItem(t *testing.T) {
 				BgColor:         tt.fields.BgColor,
 				Fonts:           tt.fields.Fonts,
 			}
-			q, a := d.GenerateIdQuestionAnswer()
+			d.ConvertFonts()
+			_, q, a := d.GenerateIdQuestionAnswer()
+
 			gotItem, err := d.DrawCaptcha(q)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("DriverMath.DrawCaptcha() error = %v, wantErr %v", err, tt.wantErr)

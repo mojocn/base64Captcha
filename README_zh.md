@@ -237,6 +237,8 @@ func main() {
 2. [DriverChinese](driver_chinese.go)
 3. [ItemChar](item_char.go)
 
+***你甚至可以设计[captcha struct](captcha.go)成你想要的功能***
+
 
 ## 4. 💖💖💖 致谢
 - [dchest/captha](https://github.com/dchest/captcha)

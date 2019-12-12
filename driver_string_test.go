@@ -7,7 +7,7 @@ import (
 	"github.com/golang/freetype/truetype"
 )
 
-func TestDriverString_GenerateItem(t *testing.T) {
+func TestDriverString_DrawCaptcha(t *testing.T) {
 	type fields struct {
 		Height          int
 		Width           int

@@ -5,12 +5,12 @@ import (
 	"testing"
 )
 
-func TestDriverLanguage_GenerateItem(t *testing.T) {
+func TestDriverLanguage_DrawCaptcha(t *testing.T) {
 	ds := NewDriverLanguage(80, 240, 5, OptionShowSineLine|OptionShowSlimeLine|OptionShowHollowLine, 5, nil, []*truetype.Font{fontChinese}, "emotion")
 
 	for i := 0; i < 40; i++ {
-		q, _ := ds.GenerateIdQuestionAnswer()
-		item, err := ds.GenerateItem(q)
+		_, q, _ := ds.GenerateIdQuestionAnswer()
+		item, err := ds.DrawCaptcha(q)
 		if err != nil {
 			t.Error(err)
 		}

@@ -246,6 +246,7 @@ There are some example for your reference.
 2. [DriverChinese](driver_chinese.go)
 3. [ItemChar](item_char.go)
 
+***You can even design the [captcha struct](captcha.go) to whatever you prefer.***
 
 ## 4. 💖💖💖 Thanks
 - [dchest/captha](https://github.com/dchest/captcha)

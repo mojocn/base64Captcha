@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestDriverAudio_GenerateItem(t *testing.T) {
+func TestDriverAudio_DrawCaptcha(t *testing.T) {
 	type fields struct {
 		CaptchaLen int
 		Language   string

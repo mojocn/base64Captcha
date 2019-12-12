@@ -18,7 +18,7 @@ import (
 	"testing"
 )
 
-func TestDriverDigit_GenerateItem(t *testing.T) {
+func TestDriverDigit_DrawCaptcha(t *testing.T) {
 	type fields struct {
 		Height     int
 		Width      int
