@@ -30,6 +30,7 @@ func init() {
 type Captcha struct {
 	Driver Driver
 	Store  Store
+	KeyDriver KeyDriver
 }
 
 //NewCaptcha creates a captcha instance from driver and store
@@ -42,6 +43,19 @@ func (c *Captcha) Generate() (id, b64s string, err error) {
 	id = randomId()
 	content, answer := c.Driver.GenerateQuestionAnswer()
 	item, err := c.Driver.GenerateItem(content)
+	if err != nil {
+		return "", "", err
+	}
+	c.Store.Set(id, answer)
+	b64s = item.EncodeB64string()
+	return
+}
+
+//Generate generates a random id, base64 image string or an error if any
+//by key
+func (c *Captcha) GenerateByKey(key string) (id, b64s string, err error) {
+	id,content, answer := c.KeyDriver.GenerateQuestionAnswer(key)
+	item, err := c.KeyDriver.GenerateItem(key,content)
 	if err != nil {
 		return "", "", err
 	}
