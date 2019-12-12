@@ -41,26 +41,23 @@ func generateRandomRune(size int, code string) string {
 //DriverLanguage generates language unicode by lanuage
 type DriverLanguage struct {
 	// Height png height in pixel.
-	// 图像验证码的高度像素.
 	Height int
 	// Width Captcha png width in pixel.
-	// 图像验证码的宽度像素
 	Width int
 
 	//NoiseCount text noise count.
 	NoiseCount int
 
+	//ShowLineOptions := OptionShowHollowLine | OptionShowSlimeLine | OptionShowSineLine .
 	ShowLineOptions int
-	//CaptchaRunePairs make a list of rune for Captcha random selection.
-	// 随机字符串可选内容
 
-	// Length Default number of digits in captcha solution.
-	// 默认数字验证长度6.
+	//Length random string length.
 	Length int
 
 	//BgColor captcha image background color (optional)
-	//背景颜色
-	BgColor      *color.RGBA
+	BgColor *color.RGBA
+
+	//Fonts loads by name see fonts.go's comment
 	Fonts        []*truetype.Font
 	LanguageCode string
 }

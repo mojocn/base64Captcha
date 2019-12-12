@@ -153,7 +153,6 @@ var store = base64Captcha.DefaultMemStore
 // base64Captcha create http handler
 func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	//parse request parameters
-	//接收客户端发送来的请求参数
 	decoder := json.NewDecoder(r.Body)
 	var param configJsonBody
 	err := decoder.Decode(&param)
@@ -164,7 +163,6 @@ func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	var driver base64Captcha.Driver
 
 	//create base64 encoding captcha
-	//创建base64图像验证码
 	switch param.CaptchaType {
 	case "audio":
 		driver = param.DriverAudio
@@ -205,14 +203,12 @@ func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//set json response
-	//设置json响应
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	json.NewEncoder(w).Encode(body)
 }
 
 //start a net/http server
-//启动golang net/http 服务器
 func main() {
 	//serve Vuejs+ElementUI+Axios Web Application
 	http.Handle("/", http.FileServer(http.Dir("./static")))

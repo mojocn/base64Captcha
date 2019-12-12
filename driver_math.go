@@ -10,19 +10,22 @@ import (
 
 //DriverMath captcha config for captcha math
 type DriverMath struct {
+	//Height png height in pixel.
 	Height int
+
 	// Width Captcha png width in pixel.
-	// 图像验证码的宽度像素
 	Width int
 
 	//NoiseCount text noise count.
 	NoiseCount int
 
+	//ShowLineOptions := OptionShowHollowLine | OptionShowSlimeLine | OptionShowSineLine .
 	ShowLineOptions int
-	//CaptchaRunePairs make a list of rune for Captcha random selection.
-	// 随机字符串可选内容
 
-	BgColor    *color.RGBA
+	//BgColor captcha image background color (optional)
+	BgColor *color.RGBA
+
+	//Fonts loads by name see fonts.go's comment
 	Fonts      []string
 	fontsArray []*truetype.Font
 }
