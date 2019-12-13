@@ -14,6 +14,6 @@ func TestDriverLanguage_DrawCaptcha(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		itemWriteFile(item, "_builds", randomId(), "png")
+		itemWriteFile(item, "_builds", RandomId(), "png")
 	}
 }

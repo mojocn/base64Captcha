@@ -63,9 +63,8 @@ func deriveSeed(purpose byte, id string, digits []byte) (out [16]byte) {
 	return
 }
 
-// randomId returns a new random id key string.
-// golang服务器端产生随机的idKey
-func randomId() string {
+// RandomId returns a new random id key string.
+func RandomId() string {
 	b := randomBytesMod(idLen, byte(len(idChars)))
 	for i, c := range b {
 		b[i] = idChars[c]

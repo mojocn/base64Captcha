@@ -63,16 +63,16 @@ func (d *DriverChinese) ConvertFonts() *DriverChinese {
 
 //GenerateIdQuestionAnswer generates captcha content and its answer
 func (d *DriverChinese) GenerateIdQuestionAnswer() (id, content, answer string) {
-	id = randomId()
+	id = RandomId()
 
 	ss := strings.Split(d.Source, ",")
 	length := len(ss)
 	if length == 1 {
-		c := randText(d.Length, ss[0])
+		c := RandText(d.Length, ss[0])
 		return id, c, c
 	}
 	if length <= d.Length {
-		c := randText(d.Length, TxtNumbers+TxtAlphabet)
+		c := RandText(d.Length, TxtNumbers+TxtAlphabet)
 		return id, c, c
 	}
 
@@ -92,7 +92,7 @@ func (d *DriverChinese) DrawCaptcha(content string) (item Item, err error) {
 	if d.BgColor != nil {
 		bgc = *d.BgColor
 	} else {
-		bgc = randLightColor()
+		bgc = RandLightColor()
 	}
 	itemChar := NewItemChar(d.Width, d.Height, bgc)
 
@@ -114,7 +114,7 @@ func (d *DriverChinese) DrawCaptcha(content string) (item Item, err error) {
 	//draw noise
 	if d.NoiseCount > 0 {
 		source := TxtNumbers + TxtAlphabet + ",.[]<>"
-		noise := randText(d.NoiseCount, strings.Repeat(source, d.NoiseCount))
+		noise := RandText(d.NoiseCount, strings.Repeat(source, d.NoiseCount))
 		err = itemChar.drawNoise(noise, d.fontsArray)
 		if err != nil {
 			return

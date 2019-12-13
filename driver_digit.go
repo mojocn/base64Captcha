@@ -42,7 +42,7 @@ var DefaultDriverDigit = NewDriverDigit(80, 240, 5, 0.7, 80)
 
 //GenerateIdQuestionAnswer creates captcha content and answer
 func (d *DriverDigit) GenerateIdQuestionAnswer() (id, q, a string) {
-	id = randomId()
+	id = RandomId()
 	digits := randomDigits(d.Length)
 	a = parseDigitsToString(digits)
 	return id, a, a
@@ -54,7 +54,7 @@ func (d *DriverDigit) DrawCaptcha(content string) (item Item, err error) {
 	itemDigit := NewItemDigit(d.Width, d.Height, d.DotCount, d.MaxSkew)
 	//parse digits to string
 	digits := stringToFakeByte(content)
-	itemDigit.rng.Seed(deriveSeed(imageSeedPurpose, randomId(), digits))
+	itemDigit.rng.Seed(deriveSeed(imageSeedPurpose, RandomId(), digits))
 
 	itemDigit.Paletted = image.NewPaletted(image.Rect(0, 0, d.Width, d.Height), itemDigit.getRandomPalette())
 	itemDigit.calculateSizes(d.Width, d.Height, len(digits))

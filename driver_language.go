@@ -69,7 +69,7 @@ func NewDriverLanguage(height int, width int, noiseCount int, showLineOptions in
 
 //GenerateIdQuestionAnswer creates content and answer
 func (d *DriverLanguage) GenerateIdQuestionAnswer() (id, content, answer string) {
-	id = randomId()
+	id = RandomId()
 	content = generateRandomRune(d.Length, d.LanguageCode)
 	return id, content, content
 }
@@ -80,7 +80,7 @@ func (d *DriverLanguage) DrawCaptcha(content string) (item Item, err error) {
 	if d.BgColor != nil {
 		bgc = *d.BgColor
 	} else {
-		bgc = randLightColor()
+		bgc = RandLightColor()
 	}
 	itemChar := NewItemChar(d.Width, d.Height, bgc)
 
@@ -101,7 +101,7 @@ func (d *DriverLanguage) DrawCaptcha(content string) (item Item, err error) {
 
 	//draw noise
 	if d.NoiseCount > 0 {
-		noise := randText(d.NoiseCount, TxtNumbers+TxtAlphabet+",.[]<>")
+		noise := RandText(d.NoiseCount, TxtNumbers+TxtAlphabet+",.[]<>")
 		err = itemChar.drawNoise(noise, fontsAll)
 		if err != nil {
 			return

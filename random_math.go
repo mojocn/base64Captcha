@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-//randText create random text. 生成随机文本.
-func randText(size int, sourceChars string) string {
+//RandText create random text.
+func RandText(size int, sourceChars string) string {
 	if size >= len(sourceChars) {
 		sourceChars = strings.Repeat(sourceChars, size)
 	}
@@ -16,7 +16,7 @@ func randText(size int, sourceChars string) string {
 	sourceLength := len(sourceRunes)
 
 	text := make([]rune, size)
-	for i, _ := range text {
+	for i := range text {
 		text[i] = sourceRunes[rand.Intn(sourceLength)]
 	}
 	return string(text)
@@ -27,10 +27,10 @@ func random(min int64, max int64) float64 {
 	return rand.Float64()*float64(max) - float64(min)
 }
 
-//randDeepColor get random deep color. 随机生成深色系.
-func randDeepColor() color.RGBA {
+//RandDeepColor get random deep color. 随机生成深色系.
+func RandDeepColor() color.RGBA {
 
-	randColor := randColor()
+	randColor := RandColor()
 
 	increase := float64(30 + rand.Intn(255))
 
@@ -42,16 +42,16 @@ func randDeepColor() color.RGBA {
 	return color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
 }
 
-//randLightColor get random ligth color. 随机生成浅色.
-func randLightColor() color.RGBA {
+//RandLightColor get random ligth color. 随机生成浅色.
+func RandLightColor() color.RGBA {
 	red := rand.Intn(55) + 200
 	green := rand.Intn(55) + 200
 	blue := rand.Intn(55) + 200
 	return color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
 }
 
-//randColor get random color. 生成随机颜色.
-func randColor() color.RGBA {
+//RandColor get random color. 生成随机颜色.
+func RandColor() color.RGBA {
 
 	red := rand.Intn(255)
 	green := rand.Intn(255)

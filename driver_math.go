@@ -59,7 +59,7 @@ func (d *DriverMath) ConvertFonts() *DriverMath {
 
 //GenerateIdQuestionAnswer creates id,captcha content and answer
 func (d *DriverMath) GenerateIdQuestionAnswer() (id, question, answer string) {
-	id = randomId()
+	id = RandomId()
 	operators := []string{"+", "-", "x"}
 	var mathResult int32
 	switch operators[rand.Int31n(3)] {
@@ -94,7 +94,7 @@ func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 	if d.BgColor != nil {
 		bgc = *d.BgColor
 	} else {
-		bgc = randLightColor()
+		bgc = RandLightColor()
 	}
 	itemChar := NewItemChar(d.Width, d.Height, bgc)
 
@@ -105,7 +105,7 @@ func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 
 	//背景有文字干扰
 	if d.NoiseCount > 0 {
-		noise := randText(d.NoiseCount, strings.Repeat(TxtNumbers, d.NoiseCount))
+		noise := RandText(d.NoiseCount, strings.Repeat(TxtNumbers, d.NoiseCount))
 		err = itemChar.drawNoise(noise, fontsAll)
 		if err != nil {
 			return
