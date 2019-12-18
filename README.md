@@ -50,7 +50,7 @@ There are some build-in drivers:
 1. [Build-in Driver Digit](driver_digit.go)  
 2. [Build-in Driver String](driver_string.go)
 3. [Build-in Driver Math](driver_math.go)
-4. [Build-in Driver Chinese](driver_chinses.go)
+4. [Build-in Driver Chinese](driver_chinese.go)
 
 ```go
 // Driver captcha interface for captcha engine to to write staff
@@ -236,6 +236,12 @@ func main() {
 	}
 }
 ```
+
+### ♣♣♣ Use history version
+[v1.2.2](https://github.com/mojocn/base64Captcha/tree/v1.2.2)
+
+` go get github.com/mojocn/base64Captcha@v1.2.2 `
+
 
 ## 3. 🎨🎨🎨 Customization
 You can customize your captcha display image by implementing [interface driver](interface_driver.go) 
