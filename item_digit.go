@@ -26,7 +26,7 @@ type ItemDigit struct {
 	dotSize  int
 	dotCount int
 	maxSkew  float64
-	rng      siprng
+	//rng      siprng
 }
 
 //NewItemDigit create a instance of item-digit
@@ -131,24 +131,28 @@ func (m *ItemDigit) fillWithCircles(n, maxradius int) {
 	maxx := m.Bounds().Max.X
 	maxy := m.Bounds().Max.Y
 	for i := 0; i < n; i++ {
-		colorIdx := uint8(m.rng.Int(1, m.dotCount-1))
-		r := m.rng.Int(1, maxradius)
-		m.drawCircle(m.rng.Int(r, maxx-r), m.rng.Int(r, maxy-r), r, colorIdx)
+		//colorIdx := uint8(m.rng.Int(1, m.dotCount-1))
+		colorIdx := uint8(randIntRange(1, m.dotCount-1))
+		//r := m.rng.Int(1, maxradius)
+		r := randIntRange(1, maxradius)
+		//m.drawCircle(m.rng.Int(r, maxx-r), m.rng.Int(r, maxy-r), r, colorIdx)
+		m.drawCircle(randIntRange(r, maxx-r), randIntRange(r, maxy-r), r, colorIdx)
 	}
 }
 
 func (m *ItemDigit) strikeThrough() {
 	maxx := m.Bounds().Max.X
 	maxy := m.Bounds().Max.Y
-	y := m.rng.Int(maxy/3, maxy-maxy/3)
-	amplitude := m.rng.Float(5, 20)
-	period := m.rng.Float(80, 180)
+	y := randIntRange(maxy/3, maxy-maxy/3)
+	amplitude := randFloat64Range(5, 20)
+	period := randFloat64Range(80, 180)
 	dx := 2.0 * math.Pi / period
 	for x := 0; x < maxx; x++ {
 		xo := amplitude * math.Cos(float64(y)*dx)
 		yo := amplitude * math.Sin(float64(x)*dx)
 		for yn := 0; yn < m.dotSize; yn++ {
-			r := m.rng.Int(0, m.dotSize)
+			//r := m.rng.Int(0, m.dotSize)
+			r := rand.Intn(m.dotSize)
 			m.drawCircle(x+int(xo), y+int(yo)+(yn*m.dotSize), r/2, 1)
 		}
 	}
@@ -156,10 +160,10 @@ func (m *ItemDigit) strikeThrough() {
 
 //draw digit
 func (m *ItemDigit) drawDigit(digit []byte, x, y int) {
-	skf := m.rng.Float(-m.maxSkew, m.maxSkew)
+	skf := randFloat64Range(-m.maxSkew, m.maxSkew)
 	xs := float64(x)
 	r := m.dotSize / 2
-	y += m.rng.Int(-r, r)
+	y += randIntRange(-r, r)
 	for yo := 0; yo < digitFontHeight; yo++ {
 		for xo := 0; xo < digitFontWidth; xo++ {
 			if digit[yo*digitFontWidth+xo] != digitFontBlackChar {

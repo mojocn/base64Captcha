@@ -14,7 +14,10 @@
 
 package base64Captcha
 
-import "encoding/binary"
+import (
+	"encoding/binary"
+	"math/rand"
+)
 
 // siprng is PRNG based on SipHash-2-4.
 // (Note: it's not safe to use a single siprng from multiple goroutines.)
@@ -224,7 +227,8 @@ func (p *siprng) Bytes(n int) []byte {
 	numBlocks := (n + 8 - 1) / 8
 	b := make([]byte, numBlocks*8)
 	for i := 0; i < len(b); i += 8 {
-		binary.LittleEndian.PutUint64(b[i:], p.Uint64())
+
+		binary.LittleEndian.PutUint64(b[i:], rand.Uint64())
 	}
 	return b[:n]
 }

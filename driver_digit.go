@@ -14,6 +14,8 @@
 
 package base64Captcha
 
+import "math/rand"
+
 //DriverDigit config for captcha-engine-digit.
 type DriverDigit struct {
 	// Height png height in pixel.
@@ -50,7 +52,6 @@ func (d *DriverDigit) DrawCaptcha(content string) (item Item, err error) {
 	itemDigit := NewItemDigit(d.Width, d.Height, d.DotCount, d.MaxSkew)
 	//parse digits to string
 	digits := stringToFakeByte(content)
-	itemDigit.rng.Seed(deriveSeed(imageSeedPurpose, RandomId(), digits))
 
 	itemDigit.calculateSizes(d.Width, d.Height, len(digits))
 	// Randomly position captcha inside the image.
@@ -62,8 +63,8 @@ func (d *DriverDigit) DrawCaptcha(content string) (item Item, err error) {
 	} else {
 		border = d.Width / 5
 	}
-	x := itemDigit.rng.Int(border, maxx-border)
-	y := itemDigit.rng.Int(border, maxy-border)
+	x := rand.Intn(maxx-border*2) + border
+	y := rand.Intn(maxy-border*2) + border
 	// Draw digits.
 	for _, n := range digits {
 		itemDigit.drawDigit(digitFontData[n], x, y)
@@ -72,7 +73,7 @@ func (d *DriverDigit) DrawCaptcha(content string) (item Item, err error) {
 	// Draw strike-through line.
 	itemDigit.strikeThrough()
 	// Apply wave distortion.
-	itemDigit.distort(itemDigit.rng.Float(5, 10), itemDigit.rng.Float(100, 200))
+	itemDigit.distort(rand.Float64()*(10-5)+5, rand.Float64()*(200-100)+100)
 	// Fill image with random circles.
 	itemDigit.fillWithCircles(d.DotCount, itemDigit.dotSize)
 	return itemDigit, nil
