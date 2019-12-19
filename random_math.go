@@ -6,7 +6,13 @@ import (
 	"math"
 	"math/rand"
 	"strings"
+	"time"
 )
+
+func init() {
+	//init rand seed
+	rand.Seed(time.Now().UnixNano())
+}
 
 //RandText create random text.
 func RandText(size int, sourceChars string) string {
@@ -89,4 +95,13 @@ func randBytes(n int) []byte {
 		binary.LittleEndian.PutUint64(b[i:], rand.Uint64())
 	}
 	return b[:n]
+}
+
+// RandomId returns a new random id key string.
+func RandomId() string {
+	b := randomBytesMod(idLen, byte(len(idChars)))
+	for i, c := range b {
+		b[i] = idChars[c]
+	}
+	return string(b)
 }

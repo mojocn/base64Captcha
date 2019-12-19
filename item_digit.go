@@ -32,13 +32,12 @@ type ItemDigit struct {
 //NewItemDigit create a instance of item-digit
 func NewItemDigit(width int, height int, dotCount int, maxSkew float64) *ItemDigit {
 	itemDigit := &ItemDigit{width: width, height: height, dotCount: dotCount, maxSkew: maxSkew}
-
-	itemDigit.Paletted = image.NewPaletted(image.Rect(0, 0, width, height), randomPalette(dotCount))
-
+	//init image.Paletted
+	itemDigit.Paletted = image.NewPaletted(image.Rect(0, 0, width, height), createRandPaletteColors(dotCount))
 	return itemDigit
 }
 
-func randomPalette(dotCount int) color.Palette {
+func createRandPaletteColors(dotCount int) color.Palette {
 	p := make([]color.Color, dotCount+1)
 	// Transparent color.
 	p[0] = color.RGBA{0xFF, 0xFF, 0xFF, 0x00}
