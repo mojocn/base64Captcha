@@ -4,7 +4,6 @@
 [![Build Status](https://travis-ci.org/mojocn/base64Captcha.svg?branch=master)](https://travis-ci.org/mojocn/base64Captcha)
 [![codecov](https://codecov.io/gh/mojocn/base64Captcha/branch/master/graph/badge.svg)](https://codecov.io/gh/mojocn/base64Captcha)
 ![stability-stable](https://img.shields.io/badge/stability-stable-brightgreen.svg)
-[![codebeat badge](https://codebeat.co/badges/650029a5-fcea-4416-925e-277e2f178e96)](https://codebeat.co/projects/github-com-mojocn-base64captcha-master)
 [![Foundation](https://img.shields.io/badge/Golang-Foundation-green.svg)](http://golangfoundation.org)
 
 Base64captcha supports any unicode character and can easily be customized to support Math Chinese Korean Japanese Russian Arabic etc.
@@ -237,11 +236,10 @@ func main() {
 }
 ```
 
-### ♣♣♣ Use history version
+### 2.3 🎬🎬🎬 Use history version
 [v1.2.2](https://github.com/mojocn/base64Captcha/tree/v1.2.2)
 
 ` go get github.com/mojocn/base64Captcha@v1.2.2 `
-
 
 ## 3. 🎨🎨🎨 Customization
 You can customize your captcha display image by implementing [interface driver](interface_driver.go) 

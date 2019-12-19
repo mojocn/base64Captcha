@@ -3,7 +3,6 @@ package base64Captcha
 import (
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
-	"log"
 	"math/rand"
 )
 
@@ -24,11 +23,14 @@ var fontsAll = append(fontsSimple, fontChinese)
 var fontChinese = loadFontByName("fonts/wqy-microhei.ttc")
 
 func loadFontByName(name string) *truetype.Font {
-	fontBytes, _ := Asset(name)
+	fontBytes, err := Asset(name)
+	if err != nil {
+		panic(err)
+	}
 	//font file bytes to trueTypeFont
 	trueTypeFont, err := freetype.ParseFont(fontBytes)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	return trueTypeFont
 }

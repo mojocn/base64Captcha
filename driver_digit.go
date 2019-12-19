@@ -14,10 +14,6 @@
 
 package base64Captcha
 
-import (
-	"image"
-)
-
 //DriverDigit config for captcha-engine-digit.
 type DriverDigit struct {
 	// Height png height in pixel.
@@ -56,7 +52,6 @@ func (d *DriverDigit) DrawCaptcha(content string) (item Item, err error) {
 	digits := stringToFakeByte(content)
 	itemDigit.rng.Seed(deriveSeed(imageSeedPurpose, RandomId(), digits))
 
-	itemDigit.Paletted = image.NewPaletted(image.Rect(0, 0, d.Width, d.Height), itemDigit.getRandomPalette())
 	itemDigit.calculateSizes(d.Width, d.Height, len(digits))
 	// Randomly position captcha inside the image.
 	maxx := d.Width - (itemDigit.width+itemDigit.dotSize)*len(digits) - itemDigit.dotSize

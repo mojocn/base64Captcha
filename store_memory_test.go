@@ -15,8 +15,10 @@
 package base64Captcha
 
 import (
+	"container/list"
 	"fmt"
 	"math/rand"
+	"reflect"
 	"testing"
 	"time"
 )
@@ -106,5 +108,126 @@ func TestMemoryStore_CollectNotExpire(t *testing.T) {
 
 	if v := s.Get("0", false); v != "0" {
 		t.Error("mem store get failed")
+	}
+}
+
+func TestNewMemoryStore(t *testing.T) {
+	type args struct {
+		collectNum int
+		expiration time.Duration
+	}
+	tests := []struct {
+		name string
+		args args
+		want Store
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewMemoryStore(tt.args.collectNum, tt.args.expiration); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewMemoryStore() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_memoryStore_Set(t *testing.T) {
+	type args struct {
+		id    string
+		value string
+	}
+	tests := []struct {
+		name string
+		s    *memoryStore
+		args args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.s.Set(tt.args.id, tt.args.value)
+		})
+	}
+}
+
+func Test_memoryStore_Verify(t *testing.T) {
+	type args struct {
+		id     string
+		answer string
+		clear  bool
+	}
+	tests := []struct {
+		name string
+		s    *memoryStore
+		args args
+		want bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.s.Verify(tt.args.id, tt.args.answer, tt.args.clear); got != tt.want {
+				t.Errorf("memoryStore.Verify() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_memoryStore_Get(t *testing.T) {
+	type args struct {
+		id    string
+		clear bool
+	}
+	tests := []struct {
+		name      string
+		s         *memoryStore
+		args      args
+		wantValue string
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotValue := tt.s.Get(tt.args.id, tt.args.clear); gotValue != tt.wantValue {
+				t.Errorf("memoryStore.Get() = %v, want %v", gotValue, tt.wantValue)
+			}
+		})
+	}
+}
+
+func Test_memoryStore_collect(t *testing.T) {
+	tests := []struct {
+		name string
+		s    *memoryStore
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.s.collect()
+		})
+	}
+}
+
+func Test_memoryStore_collectOne(t *testing.T) {
+	type args struct {
+		e           *list.Element
+		specifyTime time.Time
+	}
+	tests := []struct {
+		name string
+		s    *memoryStore
+		args args
+		want *list.Element
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.s.collectOne(tt.args.e, tt.args.specifyTime); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("memoryStore.collectOne() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }

@@ -9,6 +9,7 @@ import (
 	"image/png"
 	"io"
 	"math"
+	"math/rand"
 )
 
 const (
@@ -30,24 +31,28 @@ type ItemDigit struct {
 
 //NewItemDigit create a instance of item-digit
 func NewItemDigit(width int, height int, dotCount int, maxSkew float64) *ItemDigit {
-	return &ItemDigit{width: width, height: height, dotCount: dotCount, maxSkew: maxSkew}
+	itemDigit := &ItemDigit{width: width, height: height, dotCount: dotCount, maxSkew: maxSkew}
+
+	itemDigit.Paletted = image.NewPaletted(image.Rect(0, 0, width, height), randomPalette(dotCount))
+
+	return itemDigit
 }
 
-func (m *ItemDigit) getRandomPalette() color.Palette {
-	p := make([]color.Color, m.dotCount+1)
+func randomPalette(dotCount int) color.Palette {
+	p := make([]color.Color, dotCount+1)
 	// Transparent color.
 	p[0] = color.RGBA{0xFF, 0xFF, 0xFF, 0x00}
 	// Primary color.
 	prim := color.RGBA{
-		uint8(m.rng.Intn(129)),
-		uint8(m.rng.Intn(129)),
-		uint8(m.rng.Intn(129)),
+		uint8(rand.Intn(129)),
+		uint8(rand.Intn(129)),
+		uint8(rand.Intn(129)),
 		0xFF,
 	}
 	p[1] = prim
 	// Circle colors.
-	for i := 2; i <= m.dotCount; i++ {
-		p[i] = m.randomBrightness(prim, 255)
+	for i := 2; i <= dotCount; i++ {
+		p[i] = randomBrightness(prim, 255)
 	}
 	return p
 }
@@ -185,13 +190,13 @@ func (m *ItemDigit) distort(amplude float64, period float64) {
 	m.Paletted = newm
 }
 
-func (m *ItemDigit) randomBrightness(c color.RGBA, max uint8) color.RGBA {
+func randomBrightness(c color.RGBA, max uint8) color.RGBA {
 	minc := min3(c.R, c.G, c.B)
 	maxc := max3(c.R, c.G, c.B)
 	if maxc > max {
 		return c
 	}
-	n := m.rng.Intn(int(max-maxc)) - int(minc)
+	n := rand.Intn(int(max-maxc)) - int(minc)
 	return color.RGBA{
 		uint8(int(c.R) + n),
 		uint8(int(c.G) + n),
