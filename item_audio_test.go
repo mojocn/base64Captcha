@@ -6,8 +6,10 @@ package base64Captcha
 
 import (
 	"bytes"
+	"fmt"
 	"reflect"
 	"testing"
+	"time"
 )
 
 func Test_newAudio(t *testing.T) {
@@ -70,7 +72,7 @@ func TestItemAudio_makeBackgroundSound(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.a.makeBackgroundSound(tt.args.length); len(got) > 0 {
+			if got := tt.a.makeBackgroundSound(tt.args.length); len(got) <= 0 {
 				t.Errorf("ItemAudio.makeBackgroundSound() = %v, want %v", got, tt.want)
 			}
 		})
@@ -99,20 +101,21 @@ func TestItemAudio_randomizedDigitSound(t *testing.T) {
 }
 
 func TestItemAudio_longestDigitSndLen(t *testing.T) {
-	tests := []struct {
-		name string
-		a    *ItemAudio
-		want int
-	}{
-		// TODO: Add test cases.
+	baseS := "0123456789abcdef"
+	base := int64(len(baseS))
+	num := time.Now().UnixNano()
+	fmt.Printf("%x\n", num)
+	newB := []byte{}
+	for {
+		idx := num % base
+		bbb := []byte{byte(baseS[idx])}
+		newB = append(bbb, newB...)
+		num = num / base
+		if num == 0 {
+			break
+		}
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.a.longestDigitSndLen(); got != tt.want {
-				t.Errorf("ItemAudio.longestDigitSndLen() = %v, want %v", got, tt.want)
-			}
-		})
-	}
+	t.Log(string(newB))
 }
 
 func TestItemAudio_randomSpeed(t *testing.T) {

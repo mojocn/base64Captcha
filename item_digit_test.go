@@ -2,9 +2,6 @@ package base64Captcha
 
 import (
 	"bytes"
-	"image"
-	"image/color"
-	"reflect"
 	"testing"
 )
 
@@ -28,23 +25,6 @@ func TestNewItemDigit(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := NewItemDigit(tt.args.width, tt.args.height, tt.args.dotCount, tt.args.maxSkew); got == nil {
 				t.Errorf("NewItemDigit() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestItemDigit_getRandomPalette(t *testing.T) {
-	tests := []struct {
-		name string
-		m    *ItemDigit
-		want color.Palette
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.m.getRandomPalette(); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ItemDigit.getRandomPalette() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -184,28 +164,6 @@ func TestItemDigit_distort(t *testing.T) {
 	}
 }
 
-func TestItemDigit_randomBrightness(t *testing.T) {
-	type args struct {
-		c   color.RGBA
-		max uint8
-	}
-	tests := []struct {
-		name string
-		m    *ItemDigit
-		args args
-		want color.RGBA
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.m.randomBrightness(tt.args.c, tt.args.max); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ItemDigit.randomBrightness() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func Test_min3(t *testing.T) {
 	type args struct {
 		x uint8
@@ -253,7 +211,6 @@ func Test_max3(t *testing.T) {
 func TestItemDigit_EncodeBinary(t *testing.T) {
 
 	idd := NewItemDigit(80, 300, 20, 0.25)
-	idd.Paletted = image.NewPaletted(image.Rect(0, 0, 80, 300), idd.getRandomPalette())
 
 	tests := []struct {
 		name string

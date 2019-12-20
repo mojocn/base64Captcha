@@ -49,31 +49,6 @@ func TestGetClear(t *testing.T) {
 	}
 }
 
-func TestCollect(t *testing.T) {
-	// TODO(dchest): can't test automatic collection when saving, because
-	// it's currently launched in a different goroutine.
-	s := NewMemoryStore(10, -1)
-	// create 10 ids
-	ids := make([]string, 10)
-	d := "fdjsij892jfi392j2"
-	for i := range ids {
-		ids[i] = fmt.Sprintf("%d", rand.Int63())
-		s.Set(ids[i], d)
-	}
-	// Must be already collected
-	nc := 0
-	for i := range ids {
-		d2 := s.Get(ids[i], false)
-		if d2 != "" {
-			t.Errorf("%d: not collected", i)
-			nc++
-		}
-	}
-	if nc > 0 {
-		t.Errorf("= not collected %d out of %d captchas", nc, len(ids))
-	}
-}
-
 func BenchmarkSetCollect(b *testing.B) {
 	b.StopTimer()
 	d := "fdskfew9832232r"
