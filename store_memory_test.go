@@ -15,10 +15,8 @@
 package base64Captcha
 
 import (
-	"container/list"
 	"fmt"
 	"math/rand"
-	"reflect"
 	"testing"
 	"time"
 )
@@ -96,11 +94,12 @@ func TestNewMemoryStore(t *testing.T) {
 		args args
 		want Store
 	}{
-		// TODO: Add test cases.
+		{"", args{20, time.Hour}, nil},
+		{"", args{20, time.Hour * 5}, nil},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewMemoryStore(tt.args.collectNum, tt.args.expiration); !reflect.DeepEqual(got, tt.want) {
+			if got := NewMemoryStore(tt.args.collectNum, tt.args.expiration); got == nil {
 				t.Errorf("NewMemoryStore() = %v, want %v", got, tt.want)
 			}
 		})
@@ -108,16 +107,17 @@ func TestNewMemoryStore(t *testing.T) {
 }
 
 func Test_memoryStore_Set(t *testing.T) {
+	thisStore := NewMemoryStore(10, time.Hour)
 	type args struct {
 		id    string
 		value string
 	}
 	tests := []struct {
 		name string
-		s    *memoryStore
+		s    Store
 		args args
 	}{
-		// TODO: Add test cases.
+		{"", thisStore, args{RandomId(), RandomId()}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -127,82 +127,38 @@ func Test_memoryStore_Set(t *testing.T) {
 }
 
 func Test_memoryStore_Verify(t *testing.T) {
-	type args struct {
-		id     string
-		answer string
-		clear  bool
+	thisStore := NewMemoryStore(10, time.Hour)
+	thisStore.Set("xx", "xx")
+	got := thisStore.Verify("xx", "xx", false)
+	if !got {
+		t.Error("failed1")
 	}
-	tests := []struct {
-		name string
-		s    *memoryStore
-		args args
-		want bool
-	}{
-		// TODO: Add test cases.
+	got = thisStore.Verify("xx", "xx", true)
+
+	if !got {
+		t.Error("failed2")
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.s.Verify(tt.args.id, tt.args.answer, tt.args.clear); got != tt.want {
-				t.Errorf("memoryStore.Verify() = %v, want %v", got, tt.want)
-			}
-		})
+	got = thisStore.Verify("xx", "xx", true)
+
+	if got {
+		t.Error("failed3")
 	}
 }
 
 func Test_memoryStore_Get(t *testing.T) {
-	type args struct {
-		id    string
-		clear bool
+	thisStore := NewMemoryStore(10, time.Hour)
+	thisStore.Set("xx", "xx")
+	got := thisStore.Get("xx", false)
+	if got != "xx" {
+		t.Error("failed1")
 	}
-	tests := []struct {
-		name      string
-		s         *memoryStore
-		args      args
-		wantValue string
-	}{
-		// TODO: Add test cases.
+	got = thisStore.Get("xx", true)
+	if got != "xx" {
+		t.Error("failed2")
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if gotValue := tt.s.Get(tt.args.id, tt.args.clear); gotValue != tt.wantValue {
-				t.Errorf("memoryStore.Get() = %v, want %v", gotValue, tt.wantValue)
-			}
-		})
+	got = thisStore.Get("xx", false)
+	if got == "xx" {
+		t.Error("failed3")
 	}
-}
 
-func Test_memoryStore_collect(t *testing.T) {
-	tests := []struct {
-		name string
-		s    *memoryStore
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.s.collect()
-		})
-	}
-}
-
-func Test_memoryStore_collectOne(t *testing.T) {
-	type args struct {
-		e           *list.Element
-		specifyTime time.Time
-	}
-	tests := []struct {
-		name string
-		s    *memoryStore
-		args args
-		want *list.Element
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.s.collectOne(tt.args.e, tt.args.specifyTime); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("memoryStore.collectOne() = %v, want %v", got, tt.want)
-			}
-		})
-	}
 }

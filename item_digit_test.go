@@ -30,184 +30,6 @@ func TestNewItemDigit(t *testing.T) {
 	}
 }
 
-func TestItemDigit_calculateSizes(t *testing.T) {
-	type args struct {
-		width  int
-		height int
-		ncount int
-	}
-	tests := []struct {
-		name string
-		m    *ItemDigit
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.m.calculateSizes(tt.args.width, tt.args.height, tt.args.ncount)
-		})
-	}
-}
-
-func TestItemDigit_drawHorizLine(t *testing.T) {
-	type args struct {
-		fromX    int
-		toX      int
-		y        int
-		colorIdx uint8
-	}
-	tests := []struct {
-		name string
-		m    *ItemDigit
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.m.drawHorizLine(tt.args.fromX, tt.args.toX, tt.args.y, tt.args.colorIdx)
-		})
-	}
-}
-
-func TestItemDigit_drawCircle(t *testing.T) {
-	type args struct {
-		x        int
-		y        int
-		radius   int
-		colorIdx uint8
-	}
-	tests := []struct {
-		name string
-		m    *ItemDigit
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.m.drawCircle(tt.args.x, tt.args.y, tt.args.radius, tt.args.colorIdx)
-		})
-	}
-}
-
-func TestItemDigit_fillWithCircles(t *testing.T) {
-	type args struct {
-		n         int
-		maxradius int
-	}
-	tests := []struct {
-		name string
-		m    *ItemDigit
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.m.fillWithCircles(tt.args.n, tt.args.maxradius)
-		})
-	}
-}
-
-func TestItemDigit_strikeThrough(t *testing.T) {
-	tests := []struct {
-		name string
-		m    *ItemDigit
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.m.strikeThrough()
-		})
-	}
-}
-
-func TestItemDigit_drawDigit(t *testing.T) {
-	type args struct {
-		digit []byte
-		x     int
-		y     int
-	}
-	tests := []struct {
-		name string
-		m    *ItemDigit
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.m.drawDigit(tt.args.digit, tt.args.x, tt.args.y)
-		})
-	}
-}
-
-func TestItemDigit_distort(t *testing.T) {
-	type args struct {
-		amplude float64
-		period  float64
-	}
-	tests := []struct {
-		name string
-		m    *ItemDigit
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.m.distort(tt.args.amplude, tt.args.period)
-		})
-	}
-}
-
-func Test_min3(t *testing.T) {
-	type args struct {
-		x uint8
-		y uint8
-		z uint8
-	}
-	tests := []struct {
-		name  string
-		args  args
-		wantM uint8
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if gotM := min3(tt.args.x, tt.args.y, tt.args.z); gotM != tt.wantM {
-				t.Errorf("min3() = %v, want %v", gotM, tt.wantM)
-			}
-		})
-	}
-}
-
-func Test_max3(t *testing.T) {
-	type args struct {
-		x uint8
-		y uint8
-		z uint8
-	}
-	tests := []struct {
-		name  string
-		args  args
-		wantM uint8
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if gotM := max3(tt.args.x, tt.args.y, tt.args.z); gotM != tt.wantM {
-				t.Errorf("max3() = %v, want %v", gotM, tt.wantM)
-			}
-		})
-	}
-}
-
 func TestItemDigit_EncodeBinary(t *testing.T) {
 
 	idd := NewItemDigit(80, 300, 20, 0.25)
@@ -257,16 +79,18 @@ func TestItemDigit_WriteTo(t *testing.T) {
 }
 
 func TestItemDigit_EncodeB64string(t *testing.T) {
+	idd := NewItemDigit(80, 300, 20, 0.25)
+
 	tests := []struct {
 		name string
 		m    *ItemDigit
 		want string
 	}{
-		// TODO: Add test cases.
+		{"", idd, ""},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.m.EncodeB64string(); got != tt.want {
+			if got := tt.m.EncodeB64string(); got == tt.want {
 				t.Errorf("ItemDigit.EncodeB64string() = %v, want %v", got, tt.want)
 			}
 		})

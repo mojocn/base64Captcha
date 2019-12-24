@@ -7,7 +7,6 @@ package base64Captcha
 import (
 	"bytes"
 	"fmt"
-	"reflect"
 	"testing"
 	"time"
 )
@@ -56,50 +55,6 @@ func TestItemAudio_encodedLen(t *testing.T) {
 	}
 }
 
-func TestItemAudio_makeBackgroundSound(t *testing.T) {
-	ia := newAudio(RandomId(), randomDigits(3), "zh")
-
-	type args struct {
-		length int
-	}
-	tests := []struct {
-		name string
-		a    *ItemAudio
-		args args
-		want []byte
-	}{
-		{"makeB", ia, args{3}, nil},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.a.makeBackgroundSound(tt.args.length); len(got) <= 0 {
-				t.Errorf("ItemAudio.makeBackgroundSound() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestItemAudio_randomizedDigitSound(t *testing.T) {
-	type args struct {
-		n byte
-	}
-	tests := []struct {
-		name string
-		a    *ItemAudio
-		args args
-		want []byte
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.a.randomizedDigitSound(tt.args.n); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ItemAudio.randomizedDigitSound() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func TestItemAudio_longestDigitSndLen(t *testing.T) {
 	baseS := "0123456789abcdef"
 	base := int64(len(baseS))
@@ -116,49 +71,6 @@ func TestItemAudio_longestDigitSndLen(t *testing.T) {
 		}
 	}
 	t.Log(string(newB))
-}
-
-func TestItemAudio_randomSpeed(t *testing.T) {
-	type args struct {
-		b []byte
-	}
-	tests := []struct {
-		name string
-		a    *ItemAudio
-		args args
-		want []byte
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.a.randomSpeed(tt.args.b); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ItemAudio.randomSpeed() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestItemAudio_makeWhiteNoise(t *testing.T) {
-	type args struct {
-		length int
-		level  uint8
-	}
-	tests := []struct {
-		name string
-		a    *ItemAudio
-		args args
-		want []byte
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.a.makeWhiteNoise(tt.args.length, tt.args.level); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ItemAudio.makeWhiteNoise() = %v, want %v", got, tt.want)
-			}
-		})
-	}
 }
 
 func TestItemAudio_WriteTo(t *testing.T) {
