@@ -16,16 +16,6 @@
 // base64Captcha is used for fast development of RESTful APIs, web apps and backend services in Go. give a string identifier to the package and it returns with a base64-encoding-png-string
 package base64Captcha
 
-import (
-	"math/rand"
-	"time"
-)
-
-func init() {
-	//init rand seed
-	rand.Seed(time.Now().UnixNano())
-}
-
 // Captcha captcha basic information.
 type Captcha struct {
 	Driver Driver
@@ -39,9 +29,8 @@ func NewCaptcha(driver Driver, store Store) *Captcha {
 
 //Generate generates a random id, base64 image string or an error if any
 func (c *Captcha) Generate() (id, b64s string, err error) {
-	id = randomId()
-	content, answer := c.Driver.GenerateQuestionAnswer()
-	item, err := c.Driver.GenerateItem(content)
+	id, content, answer := c.Driver.GenerateIdQuestionAnswer()
+	item, err := c.Driver.DrawCaptcha(content)
 	if err != nil {
 		return "", "", err
 	}

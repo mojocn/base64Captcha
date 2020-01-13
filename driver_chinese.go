@@ -61,18 +61,19 @@ func (d *DriverChinese) ConvertFonts() *DriverChinese {
 	return d
 }
 
-//GenerateQuestionAnswer generates captcha content and its answer
-func (d *DriverChinese) GenerateQuestionAnswer() (content, answer string) {
+//GenerateIdQuestionAnswer generates captcha content and its answer
+func (d *DriverChinese) GenerateIdQuestionAnswer() (id, content, answer string) {
+	id = RandomId()
 
 	ss := strings.Split(d.Source, ",")
 	length := len(ss)
 	if length == 1 {
-		c := randText(d.Length, ss[0])
-		return c, c
+		c := RandText(d.Length, ss[0])
+		return id, c, c
 	}
 	if length <= d.Length {
-		c := randText(d.Length, TxtNumbers+TxtAlphabet)
-		return c, c
+		c := RandText(d.Length, TxtNumbers+TxtAlphabet)
+		return id, c, c
 	}
 
 	res := make([]string, d.Length)
@@ -81,17 +82,17 @@ func (d *DriverChinese) GenerateQuestionAnswer() (content, answer string) {
 	}
 
 	content = strings.Join(res, "")
-	return content, content
+	return id, content, content
 }
 
-//GenerateItem generates captcha item(image)
-func (d *DriverChinese) GenerateItem(content string) (item Item, err error) {
+//DrawCaptcha generates captcha item(image)
+func (d *DriverChinese) DrawCaptcha(content string) (item Item, err error) {
 
 	var bgc color.RGBA
 	if d.BgColor != nil {
 		bgc = *d.BgColor
 	} else {
-		bgc = randLightColor()
+		bgc = RandLightColor()
 	}
 	itemChar := NewItemChar(d.Width, d.Height, bgc)
 
@@ -113,7 +114,7 @@ func (d *DriverChinese) GenerateItem(content string) (item Item, err error) {
 	//draw noise
 	if d.NoiseCount > 0 {
 		source := TxtNumbers + TxtAlphabet + ",.[]<>"
-		noise := randText(d.NoiseCount, strings.Repeat(source, d.NoiseCount))
+		noise := RandText(d.NoiseCount, strings.Repeat(source, d.NoiseCount))
 		err = itemChar.drawNoise(noise, d.fontsArray)
 		if err != nil {
 			return

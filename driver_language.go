@@ -67,19 +67,20 @@ func NewDriverLanguage(height int, width int, noiseCount int, showLineOptions in
 	return &DriverLanguage{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, BgColor: bgColor, Fonts: fonts, LanguageCode: languageCode}
 }
 
-//GenerateQuestionAnswer creates content and answer
-func (d *DriverLanguage) GenerateQuestionAnswer() (content, answer string) {
+//GenerateIdQuestionAnswer creates content and answer
+func (d *DriverLanguage) GenerateIdQuestionAnswer() (id, content, answer string) {
+	id = RandomId()
 	content = generateRandomRune(d.Length, d.LanguageCode)
-	return content, content
+	return id, content, content
 }
 
-//GenerateItem creates item
-func (d *DriverLanguage) GenerateItem(content string) (item Item, err error) {
+//DrawCaptcha creates item
+func (d *DriverLanguage) DrawCaptcha(content string) (item Item, err error) {
 	var bgc color.RGBA
 	if d.BgColor != nil {
 		bgc = *d.BgColor
 	} else {
-		bgc = randLightColor()
+		bgc = RandLightColor()
 	}
 	itemChar := NewItemChar(d.Width, d.Height, bgc)
 
@@ -100,7 +101,7 @@ func (d *DriverLanguage) GenerateItem(content string) (item Item, err error) {
 
 	//draw noise
 	if d.NoiseCount > 0 {
-		noise := randText(d.NoiseCount, TxtNumbers+TxtAlphabet+",.[]<>")
+		noise := RandText(d.NoiseCount, TxtNumbers+TxtAlphabet+",.[]<>")
 		err = itemChar.drawNoise(noise, fontsAll)
 		if err != nil {
 			return

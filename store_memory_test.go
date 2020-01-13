@@ -47,31 +47,6 @@ func TestGetClear(t *testing.T) {
 	}
 }
 
-func TestCollect(t *testing.T) {
-	// TODO(dchest): can't test automatic collection when saving, because
-	// it's currently launched in a different goroutine.
-	s := NewMemoryStore(10, -1)
-	// create 10 ids
-	ids := make([]string, 10)
-	d := "fdjsij892jfi392j2"
-	for i := range ids {
-		ids[i] = fmt.Sprintf("%d", rand.Int63())
-		s.Set(ids[i], d)
-	}
-	// Must be already collected
-	nc := 0
-	for i := range ids {
-		d2 := s.Get(ids[i], false)
-		if d2 != "" {
-			t.Errorf("%d: not collected", i)
-			nc++
-		}
-	}
-	if nc > 0 {
-		t.Errorf("= not collected %d out of %d captchas", nc, len(ids))
-	}
-}
-
 func BenchmarkSetCollect(b *testing.B) {
 	b.StopTimer()
 	d := "fdskfew9832232r"
@@ -107,4 +82,83 @@ func TestMemoryStore_CollectNotExpire(t *testing.T) {
 	if v := s.Get("0", false); v != "0" {
 		t.Error("mem store get failed")
 	}
+}
+
+func TestNewMemoryStore(t *testing.T) {
+	type args struct {
+		collectNum int
+		expiration time.Duration
+	}
+	tests := []struct {
+		name string
+		args args
+		want Store
+	}{
+		{"", args{20, time.Hour}, nil},
+		{"", args{20, time.Hour * 5}, nil},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewMemoryStore(tt.args.collectNum, tt.args.expiration); got == nil {
+				t.Errorf("NewMemoryStore() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_memoryStore_Set(t *testing.T) {
+	thisStore := NewMemoryStore(10, time.Hour)
+	type args struct {
+		id    string
+		value string
+	}
+	tests := []struct {
+		name string
+		s    Store
+		args args
+	}{
+		{"", thisStore, args{RandomId(), RandomId()}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.s.Set(tt.args.id, tt.args.value)
+		})
+	}
+}
+
+func Test_memoryStore_Verify(t *testing.T) {
+	thisStore := NewMemoryStore(10, time.Hour)
+	thisStore.Set("xx", "xx")
+	got := thisStore.Verify("xx", "xx", false)
+	if !got {
+		t.Error("failed1")
+	}
+	got = thisStore.Verify("xx", "xx", true)
+
+	if !got {
+		t.Error("failed2")
+	}
+	got = thisStore.Verify("xx", "xx", true)
+
+	if got {
+		t.Error("failed3")
+	}
+}
+
+func Test_memoryStore_Get(t *testing.T) {
+	thisStore := NewMemoryStore(10, time.Hour)
+	thisStore.Set("xx", "xx")
+	got := thisStore.Get("xx", false)
+	if got != "xx" {
+		t.Error("failed1")
+	}
+	got = thisStore.Get("xx", true)
+	if got != "xx" {
+		t.Error("failed2")
+	}
+	got = thisStore.Get("xx", false)
+	if got == "xx" {
+		t.Error("failed3")
+	}
+
 }

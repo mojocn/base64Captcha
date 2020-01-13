@@ -4,7 +4,6 @@
 [![Build Status](https://travis-ci.org/mojocn/base64Captcha.svg?branch=master)](https://travis-ci.org/mojocn/base64Captcha)
 [![codecov](https://codecov.io/gh/mojocn/base64Captcha/branch/master/graph/badge.svg)](https://codecov.io/gh/mojocn/base64Captcha)
 ![stability-stable](https://img.shields.io/badge/stability-stable-brightgreen.svg)
-[![codebeat badge](https://codebeat.co/badges/650029a5-fcea-4416-925e-277e2f178e96)](https://codebeat.co/projects/github-com-mojocn-base64captcha-master)
 [![Foundation](https://img.shields.io/badge/Golang-Foundation-green.svg)](http://golangfoundation.org)
 
 Base64captcha supports any unicode character and can easily be customized to support Math Chinese Korean Japanese Russian Arabic etc.
@@ -13,20 +12,28 @@ Base64captcha supports any unicode character and can easily be customized to sup
 ## 1. 📖📖📖 Doc & Demo
 
 * [English](https://godoc.org/github.com/mojocn/base64Captcha)
-* [中文文档](https://github.com/mojocn/base64Captcha/blob/master/README_zh.md)
+* [中文文档](https://mojotv.cn/go/refactor-base64-captcha)
 * [Playground](https://captcha.mojotv.cn)
 
 ## 2. 🚀🚀🚀 Quick start
+### 2.1 🎬🎬🎬 Use history version
+[Tag v1.2.2](https://github.com/mojocn/base64Captcha/tree/v1.2.2)
 
-### 2.1 📥📥📥 Download package
+` go get github.com/mojocn/base64Captcha@v1.2.2`
+
+or edit your `go.mod` file to
+
+`github.com/mojocn/base64Captcha@v1.2.2`
+
+### 2.2 📥📥📥 Download package
     go get -u github.com/mojocn/base64Captcha
 For Gopher from mainland China without VPN `go get golang.org/x/image` failure solution:
 - go version > 1.11
 - set env `GOPROXY=https://goproxy.io`
 
-### 2.2 🏂🏂🏂 How to code with base64Captcha
+### 2.3 🏂🏂🏂 How to code with base64Captcha
 
-#### 2.2.1 🏇🏇🏇 Implement [Store interface](interface_store.go) or use build-in memory store
+#### 2.3.1 🏇🏇🏇 Implement [Store interface](interface_store.go) or use build-in memory store
 
 - [Build-in Memory Store](store_memory.go)
 
@@ -45,24 +52,32 @@ type Store interface {
 
 ```
 
-#### 2.2.2 🏄🏄🏄 Implement [Driver interface](interface_driver.go) or use one of build-in drivers
+#### 2.3.2 🏄🏄🏄 Implement [Driver interface](interface_driver.go) or use one of build-in drivers
 There are some build-in drivers:
 1. [Build-in Driver Digit](driver_digit.go)  
 2. [Build-in Driver String](driver_string.go)
 3. [Build-in Driver Math](driver_math.go)
-4. [Build-in Driver Chinese](driver_chinses.go))
+4. [Build-in Driver Chinese](driver_chinese.go)
 
 ```go
 // Driver captcha interface for captcha engine to to write staff
 type Driver interface {
-	// EncodeBinary covert to bytes
-	GenerateItem(content string) (item Item, err error)
-	GenerateQuestionAnswer() (q, a string)
+	//DrawCaptcha draws binary item
+	DrawCaptcha(content string) (item Item, err error)
+	//GenerateIdQuestionAnswer creates rand id, content and answer
+	GenerateIdQuestionAnswer() (id, q, a string)
 }
 ```
 
-#### 2.2.3 🚴🚴🚴 ‍New [Captcha instance]((captcha.go))
+#### 2.3.3 🚴🚴🚴 ‍Core code [captcha.go](captcha.go)
+`captcha.go` is the entry of base64Captcha which is quite simple.
 ```go
+package base64Captcha
+
+import (
+	"math/rand"
+	"time"
+)
 
 func init() {
 	//init rand seed
@@ -75,14 +90,15 @@ type Captcha struct {
 	Store  Store
 }
 
+//NewCaptcha creates a captcha instance from driver and store
 func NewCaptcha(driver Driver, store Store) *Captcha {
 	return &Captcha{Driver: driver, Store: store}
 }
 
+//Generate generates a random id, base64 image string or an error if any
 func (c *Captcha) Generate() (id, b64s string, err error) {
-	id = randomId()
-	content, answer := c.Driver.GenerateQuestionAnswer()
-	item, err := c.Driver.GenerateItem(content)
+	id,content, answer := c.Driver.GenerateIdQuestionAnswer()
+	item, err := c.Driver.DrawCaptcha(content)
 	if err != nil {
 		return "", "", err
 	}
@@ -90,20 +106,22 @@ func (c *Captcha) Generate() (id, b64s string, err error) {
 	b64s = item.EncodeB64string()
 	return
 }
-//if you has multiple captcha instances which shares a same store. You may want to use `store.Verify` method instead.
-//Verify by given id key and remove the captcha value in store, return boolean value.
+
+//Verify by a given id key and remove the captcha value in store,
+//return boolean value.
+//if you has multiple captcha instances which share a same store.
+//You may want to call `store.Verify` method instead.
 func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 	match = c.Store.Get(id, clear) == answer
 	return
 }
 
 ```
-#### 2.2.4 🚵🚵🚵 ‍Generate Base64(image/audio) string
+#### 2.3.4 🚵🚵🚵 ‍Generate Base64(image/audio) string
 ```go
 func (c *Captcha) Generate() (id, b64s string, err error) {
-	id = randomId()
-	content, answer := c.Driver.GenerateQuestionAnswer()
-	item, err := c.Driver.GenerateItem(content)
+	id,content, answer := c.Driver.GenerateIdQuestionAnswer()
+	item, err := c.Driver.DrawCaptcha(content)
 	if err != nil {
 		return "", "", err
 	}
@@ -112,7 +130,7 @@ func (c *Captcha) Generate() (id, b64s string, err error) {
 	return
 }
 ```
-#### 2.2.5 🤸🤸🤸 Verify Answer
+#### 2.3.5 🤸🤸🤸 Verify Answer
 ```go
 //if you has multiple captcha instances which shares a same store. You may want to use `store.Verify` method instead.
 //Verify by given id key and remove the captcha value in store, return boolean value.
@@ -122,7 +140,7 @@ func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 }
 ```
 
-#### 2.2.6 🏃🏃🏃 ‍Full Example
+#### 2.3.6 🏃🏃🏃 ‍Full Example
 
 ```go
 // example of HTTP server that uses the captcha package.
@@ -226,6 +244,7 @@ func main() {
 }
 ```
 
+
 ## 3. 🎨🎨🎨 Customization
 You can customize your captcha display image by implementing [interface driver](interface_driver.go) 
 and [interface item](interface_item.go).
@@ -235,12 +254,14 @@ There are some example for your reference.
 2. [DriverChinese](driver_chinese.go)
 3. [ItemChar](item_char.go)
 
+***You can even design the [captcha struct](captcha.go) to whatever you prefer.***
 
 ## 4. 💖💖💖 Thanks
 - [dchest/captha](https://github.com/dchest/captcha)
 - [@slayercat](https://github.com/slayercat)
 - [@amzyang](https://github.com/amzyang)
 - [@Luckyboys](https://github.com/Luckyboys)
+- [@hi-sb](https://github.com/hi-sb)
 
 ## 5. 🍭🍭🍭 Licence
 

@@ -8,7 +8,6 @@ import (
 
 //DriverChar captcha config for captcha-engine-characters.
 type DriverString struct {
-
 	// Height png height in pixel.
 	Height int
 
@@ -62,20 +61,21 @@ func (d *DriverString) ConvertFonts() *DriverString {
 	return d
 }
 
-//GenerateQuestionAnswer creates content and answer
-func (d *DriverString) GenerateQuestionAnswer() (content, answer string) {
-	content = randText(d.Length, d.Source)
-	return content, content
+//GenerateIdQuestionAnswer creates id,content and answer
+func (d *DriverString) GenerateIdQuestionAnswer() (id, content, answer string) {
+	id = RandomId()
+	content = RandText(d.Length, d.Source)
+	return id, content, content
 }
 
-//GenerateItem draws captcha item
-func (d *DriverString) GenerateItem(content string) (item Item, err error) {
+//DrawCaptcha draws captcha item
+func (d *DriverString) DrawCaptcha(content string) (item Item, err error) {
 
 	var bgc color.RGBA
 	if d.BgColor != nil {
 		bgc = *d.BgColor
 	} else {
-		bgc = randLightColor()
+		bgc = RandLightColor()
 	}
 	itemChar := NewItemChar(d.Width, d.Height, bgc)
 
@@ -97,7 +97,7 @@ func (d *DriverString) GenerateItem(content string) (item Item, err error) {
 	//draw noise
 	if d.NoiseCount > 0 {
 		source := TxtNumbers + TxtAlphabet + ",.[]<>"
-		noise := randText(d.NoiseCount, strings.Repeat(source, d.NoiseCount))
+		noise := RandText(d.NoiseCount, strings.Repeat(source, d.NoiseCount))
 		err = itemChar.drawNoise(noise, d.fontsArray)
 		if err != nil {
 			return

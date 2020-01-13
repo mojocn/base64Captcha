@@ -26,7 +26,6 @@ var store = base64Captcha.DefaultMemStore
 // base64Captcha create http handler
 func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	//parse request parameters
-	//接收客户端发送来的请求参数
 	decoder := json.NewDecoder(r.Body)
 	var param configJsonBody
 	err := decoder.Decode(&param)
@@ -36,8 +35,7 @@ func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	var driver base64Captcha.Driver
 
-	//create base64 encoding captcha
-	//创建base64图像验证码
+	//choose driver
 	switch param.CaptchaType {
 	case "audio":
 		driver = param.DriverAudio
@@ -64,7 +62,6 @@ func generateCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
 
 	//parse request parameters
-	//接收客户端发送来的请求参数
 	decoder := json.NewDecoder(r.Body)
 	var param configJsonBody
 	err := decoder.Decode(&param)
@@ -79,7 +76,6 @@ func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//set json response
-	//设置json响应
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	json.NewEncoder(w).Encode(body)

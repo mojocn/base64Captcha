@@ -9,6 +9,7 @@ import (
 	"image/png"
 	"io"
 	"math"
+	"math/rand"
 )
 
 const (
@@ -25,29 +26,32 @@ type ItemDigit struct {
 	dotSize  int
 	dotCount int
 	maxSkew  float64
-	rng      siprng
+	//rng      siprng
 }
 
 //NewItemDigit create a instance of item-digit
 func NewItemDigit(width int, height int, dotCount int, maxSkew float64) *ItemDigit {
-	return &ItemDigit{width: width, height: height, dotCount: dotCount, maxSkew: maxSkew}
+	itemDigit := &ItemDigit{width: width, height: height, dotCount: dotCount, maxSkew: maxSkew}
+	//init image.Paletted
+	itemDigit.Paletted = image.NewPaletted(image.Rect(0, 0, width, height), createRandPaletteColors(dotCount))
+	return itemDigit
 }
 
-func (m *ItemDigit) getRandomPalette() color.Palette {
-	p := make([]color.Color, m.dotCount+1)
+func createRandPaletteColors(dotCount int) color.Palette {
+	p := make([]color.Color, dotCount+1)
 	// Transparent color.
 	p[0] = color.RGBA{0xFF, 0xFF, 0xFF, 0x00}
 	// Primary color.
 	prim := color.RGBA{
-		uint8(m.rng.Intn(129)),
-		uint8(m.rng.Intn(129)),
-		uint8(m.rng.Intn(129)),
+		uint8(rand.Intn(129)),
+		uint8(rand.Intn(129)),
+		uint8(rand.Intn(129)),
 		0xFF,
 	}
 	p[1] = prim
 	// Circle colors.
-	for i := 2; i <= m.dotCount; i++ {
-		p[i] = m.randomBrightness(prim, 255)
+	for i := 2; i <= dotCount; i++ {
+		p[i] = randomBrightness(prim, 255)
 	}
 	return p
 }
@@ -126,24 +130,28 @@ func (m *ItemDigit) fillWithCircles(n, maxradius int) {
 	maxx := m.Bounds().Max.X
 	maxy := m.Bounds().Max.Y
 	for i := 0; i < n; i++ {
-		colorIdx := uint8(m.rng.Int(1, m.dotCount-1))
-		r := m.rng.Int(1, maxradius)
-		m.drawCircle(m.rng.Int(r, maxx-r), m.rng.Int(r, maxy-r), r, colorIdx)
+		//colorIdx := uint8(m.rng.Int(1, m.dotCount-1))
+		colorIdx := uint8(randIntRange(1, m.dotCount-1))
+		//r := m.rng.Int(1, maxradius)
+		r := randIntRange(1, maxradius)
+		//m.drawCircle(m.rng.Int(r, maxx-r), m.rng.Int(r, maxy-r), r, colorIdx)
+		m.drawCircle(randIntRange(r, maxx-r), randIntRange(r, maxy-r), r, colorIdx)
 	}
 }
 
 func (m *ItemDigit) strikeThrough() {
 	maxx := m.Bounds().Max.X
 	maxy := m.Bounds().Max.Y
-	y := m.rng.Int(maxy/3, maxy-maxy/3)
-	amplitude := m.rng.Float(5, 20)
-	period := m.rng.Float(80, 180)
+	y := randIntRange(maxy/3, maxy-maxy/3)
+	amplitude := randFloat64Range(5, 20)
+	period := randFloat64Range(80, 180)
 	dx := 2.0 * math.Pi / period
 	for x := 0; x < maxx; x++ {
 		xo := amplitude * math.Cos(float64(y)*dx)
 		yo := amplitude * math.Sin(float64(x)*dx)
 		for yn := 0; yn < m.dotSize; yn++ {
-			r := m.rng.Int(0, m.dotSize)
+			//r := m.rng.Int(0, m.dotSize)
+			r := rand.Intn(m.dotSize)
 			m.drawCircle(x+int(xo), y+int(yo)+(yn*m.dotSize), r/2, 1)
 		}
 	}
@@ -151,10 +159,10 @@ func (m *ItemDigit) strikeThrough() {
 
 //draw digit
 func (m *ItemDigit) drawDigit(digit []byte, x, y int) {
-	skf := m.rng.Float(-m.maxSkew, m.maxSkew)
+	skf := randFloat64Range(-m.maxSkew, m.maxSkew)
 	xs := float64(x)
 	r := m.dotSize / 2
-	y += m.rng.Int(-r, r)
+	y += randIntRange(-r, r)
 	for yo := 0; yo < digitFontHeight; yo++ {
 		for xo := 0; xo < digitFontWidth; xo++ {
 			if digit[yo*digitFontWidth+xo] != digitFontBlackChar {
@@ -185,13 +193,13 @@ func (m *ItemDigit) distort(amplude float64, period float64) {
 	m.Paletted = newm
 }
 
-func (m *ItemDigit) randomBrightness(c color.RGBA, max uint8) color.RGBA {
+func randomBrightness(c color.RGBA, max uint8) color.RGBA {
 	minc := min3(c.R, c.G, c.B)
 	maxc := max3(c.R, c.G, c.B)
 	if maxc > max {
 		return c
 	}
-	n := m.rng.Intn(int(max-maxc)) - int(minc)
+	n := rand.Intn(int(max-maxc)) - int(minc)
 	return color.RGBA{
 		uint8(int(c.R) + n),
 		uint8(int(c.G) + n),

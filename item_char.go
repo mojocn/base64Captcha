@@ -41,7 +41,7 @@ func (item *ItemChar) drawHollowLine() *ItemChar {
 	first := item.width / 20
 	end := first * 19
 
-	lineColor := randLightColor()
+	lineColor := RandLightColor()
 
 	x1 := float64(rand.Intn(first))
 	//y1 := float64(rand.Intn(y)+y);
@@ -99,7 +99,7 @@ func (item *ItemChar) drawSineLine() *ItemChar {
 	px1 := 0
 	px2 := int(random(int64(float64(item.width)*0.8), int64(item.width)))
 
-	c := randDeepColor()
+	c := RandDeepColor()
 
 	for px := px1; px < px2; px++ {
 		if w != 0 {
@@ -137,7 +137,7 @@ func (item *ItemChar) drawSlimLine(num int) *ItemChar {
 			point2.Y = rand.Intn(y) + y*2
 		}
 
-		item.drawBeeline(point1, point2, randDeepColor())
+		item.drawBeeline(point1, point2, RandDeepColor())
 
 	}
 	return item
@@ -190,7 +190,7 @@ func (item *ItemChar) drawNoise(noiseText string, fonts []*truetype.Font) error 
 		rw := rand.Intn(item.width)
 		rh := rand.Intn(item.height)
 		fontSize := rawFontSize/2 + float64(rand.Intn(5))
-		c.SetSrc(image.NewUniform(randLightColor()))
+		c.SetSrc(image.NewUniform(RandLightColor()))
 		c.SetFontSize(fontSize)
 		c.SetFont(randFontFrom(fonts))
 		pt := freetype.Pt(rw, rh)
@@ -218,7 +218,7 @@ func (item *ItemChar) drawText(text string, fonts []*truetype.Font) error {
 
 	for i, s := range text {
 		fontSize := float64(item.height) / (1 + float64(rand.Intn(7))/float64(9))
-		c.SetSrc(image.NewUniform(randDeepColor()))
+		c.SetSrc(image.NewUniform(RandDeepColor()))
 		c.SetFontSize(fontSize)
 		//useFont := randFontFrom(fonts)
 		c.SetFont(randFontFrom(fonts))

@@ -10,6 +10,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
+	"math/rand"
 )
 
 //ItemAudio captcha-audio-engine return type.
@@ -17,7 +18,7 @@ type ItemAudio struct {
 	answer      string
 	body        *bytes.Buffer
 	digitSounds [][]byte
-	rng         siprng
+	//rng         siprng
 }
 
 // newAudio returns a new audio captcha with the given digits, where each digit
@@ -26,9 +27,6 @@ type ItemAudio struct {
 // Possible values for lang are "en", "ja", "ru", "zh".
 func newAudio(id string, digits []byte, lang string) *ItemAudio {
 	a := new(ItemAudio)
-
-	// Initialize PRNG.
-	a.rng.Seed(deriveSeed(audioSeedPurpose, id, digits))
 
 	if sounds, ok := digitSounds[lang]; ok {
 		a.digitSounds = sounds
@@ -45,7 +43,7 @@ func newAudio(id string, digits []byte, lang string) *ItemAudio {
 	intervals := make([]int, len(digits)+1)
 	intdur := 0
 	for i := range intervals {
-		dur := a.rng.Int(sampleRate, sampleRate*2) // 1 to 2 seconds
+		dur := randIntRange(sampleRate, sampleRate*2) // 1 to 2 seconds
 		intdur += dur
 		intervals[i] = dur
 	}
@@ -81,10 +79,10 @@ func (a *ItemAudio) encodedLen() int {
 func (a *ItemAudio) makeBackgroundSound(length int) []byte {
 	b := a.makeWhiteNoise(length, 4)
 	for i := 0; i < length/(sampleRate/10); i++ {
-		snd := reversedSound(a.digitSounds[a.rng.Intn(10)])
+		snd := reversedSound(a.digitSounds[rand.Intn(10)])
 		//snd = changeSpeed(snd, a.rng.Float(0.8, 1.2))
-		place := a.rng.Intn(len(b) - len(snd))
-		setSoundLevel(snd, a.rng.Float(0.04, 0.08))
+		place := rand.Intn(len(b) - len(snd))
+		setSoundLevel(snd, randFloat64Range(0.04, 0.08))
 		mixSound(b[place:], snd)
 	}
 	return b
@@ -92,7 +90,7 @@ func (a *ItemAudio) makeBackgroundSound(length int) []byte {
 
 func (a *ItemAudio) randomizedDigitSound(n byte) []byte {
 	s := a.randomSpeed(a.digitSounds[n])
-	setSoundLevel(s, a.rng.Float(0.85, 1.2))
+	setSoundLevel(s, randFloat64Range(0.85, 1.2))
 	return s
 }
 
@@ -107,12 +105,12 @@ func (a *ItemAudio) longestDigitSndLen() int {
 }
 
 func (a *ItemAudio) randomSpeed(b []byte) []byte {
-	pitch := a.rng.Float(0.95, 1.1)
+	pitch := randFloat64Range(0.95, 1.1)
 	return changeSpeed(b, pitch)
 }
 
 func (a *ItemAudio) makeWhiteNoise(length int, level uint8) []byte {
-	noise := a.rng.Bytes(length)
+	noise := randBytes(length)
 	adj := 128 - level/2
 	for i, v := range noise {
 		v %= level

@@ -2,19 +2,18 @@ package base64Captcha
 
 import (
 	"image/color"
+	"reflect"
 	"testing"
-
-	"github.com/golang/freetype/truetype"
 )
 
-func TestDriverMath_GenerateItem(t *testing.T) {
+func TestDriverMath_DrawCaptcha(t *testing.T) {
 	type fields struct {
 		Height          int
 		Width           int
 		NoiseCount      int
 		ShowLineOptions int
 		BgColor         *color.RGBA
-		Fonts           []*truetype.Font
+		Fonts           []string
 	}
 	type args struct {
 		question string
@@ -27,7 +26,7 @@ func TestDriverMath_GenerateItem(t *testing.T) {
 		wantErr  bool
 	}{
 		{"Math",
-			fields{80, 240, 5, OptionShowSineLine | OptionShowSlimeLine | OptionShowHollowLine, nil, fontsAll},
+			fields{80, 240, 5, OptionShowSineLine | OptionShowSlimeLine | OptionShowHollowLine, nil, []string{"3Dumb.ttf"}},
 			args{""},
 			nil, false},
 	}
@@ -41,14 +40,84 @@ func TestDriverMath_GenerateItem(t *testing.T) {
 				BgColor:         tt.fields.BgColor,
 				Fonts:           tt.fields.Fonts,
 			}
-			q, a := d.GenerateQuestionAnswer()
-			gotItem, err := d.GenerateItem(q)
+			d.ConvertFonts()
+			_, q, a := d.GenerateIdQuestionAnswer()
+
+			gotItem, err := d.DrawCaptcha(q)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("DriverMath.GenerateItem() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("DriverMath.DrawCaptcha() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			itemWriteFile(gotItem, "_builds", a, "png")
 
+		})
+	}
+}
+
+func TestNewDriverMath(t *testing.T) {
+	type args struct {
+		height          int
+		width           int
+		noiseCount      int
+		showLineOptions int
+		bgColor         *color.RGBA
+		fonts           []string
+	}
+	tests := []struct {
+		name string
+		args args
+		want *DriverMath
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewDriverMath(tt.args.height, tt.args.width, tt.args.noiseCount, tt.args.showLineOptions, tt.args.bgColor, tt.args.fonts); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewDriverMath() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDriverMath_ConvertFonts(t *testing.T) {
+	tests := []struct {
+		name string
+		d    *DriverMath
+		want *DriverMath
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.d.ConvertFonts(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("DriverMath.ConvertFonts() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDriverMath_GenerateIdQuestionAnswer(t *testing.T) {
+	tests := []struct {
+		name         string
+		d            *DriverMath
+		wantId       string
+		wantQuestion string
+		wantAnswer   string
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotId, gotQuestion, gotAnswer := tt.d.GenerateIdQuestionAnswer()
+			if gotId != tt.wantId {
+				t.Errorf("DriverMath.GenerateIdQuestionAnswer() gotId = %v, want %v", gotId, tt.wantId)
+			}
+			if gotQuestion != tt.wantQuestion {
+				t.Errorf("DriverMath.GenerateIdQuestionAnswer() gotQuestion = %v, want %v", gotQuestion, tt.wantQuestion)
+			}
+			if gotAnswer != tt.wantAnswer {
+				t.Errorf("DriverMath.GenerateIdQuestionAnswer() gotAnswer = %v, want %v", gotAnswer, tt.wantAnswer)
+			}
 		})
 	}
 }

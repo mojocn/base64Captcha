@@ -14,9 +14,7 @@
 
 package base64Captcha
 
-import (
-	"image"
-)
+import "math/rand"
 
 //DriverDigit config for captcha-engine-digit.
 type DriverDigit struct {
@@ -40,22 +38,21 @@ func NewDriverDigit(height int, width int, length int, maxSkew float64, dotCount
 //DefaultDriverDigit is a default driver of digit
 var DefaultDriverDigit = NewDriverDigit(80, 240, 5, 0.7, 80)
 
-//GenerateQuestionAnswer creates captcha content and answer
-func (d *DriverDigit) GenerateQuestionAnswer() (q, a string) {
+//GenerateIdQuestionAnswer creates captcha content and answer
+func (d *DriverDigit) GenerateIdQuestionAnswer() (id, q, a string) {
+	id = RandomId()
 	digits := randomDigits(d.Length)
 	a = parseDigitsToString(digits)
-	return a, a
+	return id, a, a
 }
 
-//GenerateItem creates digit captcha item
-func (d *DriverDigit) GenerateItem(content string) (item Item, err error) {
+//DrawCaptcha creates digit captcha item
+func (d *DriverDigit) DrawCaptcha(content string) (item Item, err error) {
 	// Initialize PRNG.
 	itemDigit := NewItemDigit(d.Width, d.Height, d.DotCount, d.MaxSkew)
 	//parse digits to string
 	digits := stringToFakeByte(content)
-	itemDigit.rng.Seed(deriveSeed(imageSeedPurpose, randomId(), digits))
 
-	itemDigit.Paletted = image.NewPaletted(image.Rect(0, 0, d.Width, d.Height), itemDigit.getRandomPalette())
 	itemDigit.calculateSizes(d.Width, d.Height, len(digits))
 	// Randomly position captcha inside the image.
 	maxx := d.Width - (itemDigit.width+itemDigit.dotSize)*len(digits) - itemDigit.dotSize
@@ -66,8 +63,8 @@ func (d *DriverDigit) GenerateItem(content string) (item Item, err error) {
 	} else {
 		border = d.Width / 5
 	}
-	x := itemDigit.rng.Int(border, maxx-border)
-	y := itemDigit.rng.Int(border, maxy-border)
+	x := rand.Intn(maxx-border*2) + border
+	y := rand.Intn(maxy-border*2) + border
 	// Draw digits.
 	for _, n := range digits {
 		itemDigit.drawDigit(digitFontData[n], x, y)
@@ -76,7 +73,7 @@ func (d *DriverDigit) GenerateItem(content string) (item Item, err error) {
 	// Draw strike-through line.
 	itemDigit.strikeThrough()
 	// Apply wave distortion.
-	itemDigit.distort(itemDigit.rng.Float(5, 10), itemDigit.rng.Float(100, 200))
+	itemDigit.distort(rand.Float64()*(10-5)+5, rand.Float64()*(200-100)+100)
 	// Fill image with random circles.
 	itemDigit.fillWithCircles(d.DotCount, itemDigit.dotSize)
 	return itemDigit, nil
