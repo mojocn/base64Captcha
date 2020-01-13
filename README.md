@@ -19,7 +19,11 @@ Base64captcha supports any unicode character and can easily be customized to sup
 ### 2.1 🎬🎬🎬 Use history version
 [Tag v1.2.2](https://github.com/mojocn/base64Captcha/tree/v1.2.2)
 
-` go get github.com/mojocn/base64Captcha@v1.2.2 `
+` go get github.com/mojocn/base64Captcha@v1.2.2`
+
+or edit your `go.mod` file to
+
+`github.com/mojocn/base64Captcha@v1.2.2`
 
 ### 2.2 📥📥📥 Download package
     go get -u github.com/mojocn/base64Captcha
