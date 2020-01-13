@@ -16,16 +16,20 @@ Base64captcha supports any unicode character and can easily be customized to sup
 * [Playground](https://captcha.mojotv.cn)
 
 ## 2. 🚀🚀🚀 Quick start
+### 2.1 🎬🎬🎬 Use history version
+[Tag v1.2.2](https://github.com/mojocn/base64Captcha/tree/v1.2.2)
 
-### 2.1 📥📥📥 Download package
+` go get github.com/mojocn/base64Captcha@v1.2.2 `
+
+### 2.2 📥📥📥 Download package
     go get -u github.com/mojocn/base64Captcha
 For Gopher from mainland China without VPN `go get golang.org/x/image` failure solution:
 - go version > 1.11
 - set env `GOPROXY=https://goproxy.io`
 
-### 2.2 🏂🏂🏂 How to code with base64Captcha
+### 2.3 🏂🏂🏂 How to code with base64Captcha
 
-#### 2.2.1 🏇🏇🏇 Implement [Store interface](interface_store.go) or use build-in memory store
+#### 2.3.1 🏇🏇🏇 Implement [Store interface](interface_store.go) or use build-in memory store
 
 - [Build-in Memory Store](store_memory.go)
 
@@ -44,7 +48,7 @@ type Store interface {
 
 ```
 
-#### 2.2.2 🏄🏄🏄 Implement [Driver interface](interface_driver.go) or use one of build-in drivers
+#### 2.3.2 🏄🏄🏄 Implement [Driver interface](interface_driver.go) or use one of build-in drivers
 There are some build-in drivers:
 1. [Build-in Driver Digit](driver_digit.go)  
 2. [Build-in Driver String](driver_string.go)
@@ -61,7 +65,7 @@ type Driver interface {
 }
 ```
 
-#### 2.2.3 🚴🚴🚴 ‍Core code [captcha.go](captcha.go)
+#### 2.3.3 🚴🚴🚴 ‍Core code [captcha.go](captcha.go)
 `captcha.go` is the entry of base64Captcha which is quite simple.
 ```go
 package base64Captcha
@@ -109,7 +113,7 @@ func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 }
 
 ```
-#### 2.2.4 🚵🚵🚵 ‍Generate Base64(image/audio) string
+#### 2.3.4 🚵🚵🚵 ‍Generate Base64(image/audio) string
 ```go
 func (c *Captcha) Generate() (id, b64s string, err error) {
 	id,content, answer := c.Driver.GenerateIdQuestionAnswer()
@@ -122,7 +126,7 @@ func (c *Captcha) Generate() (id, b64s string, err error) {
 	return
 }
 ```
-#### 2.2.5 🤸🤸🤸 Verify Answer
+#### 2.3.5 🤸🤸🤸 Verify Answer
 ```go
 //if you has multiple captcha instances which shares a same store. You may want to use `store.Verify` method instead.
 //Verify by given id key and remove the captcha value in store, return boolean value.
@@ -132,7 +136,7 @@ func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 }
 ```
 
-#### 2.2.6 🏃🏃🏃 ‍Full Example
+#### 2.3.6 🏃🏃🏃 ‍Full Example
 
 ```go
 // example of HTTP server that uses the captcha package.
@@ -236,10 +240,6 @@ func main() {
 }
 ```
 
-### 2.3 🎬🎬🎬 Use history version
-[v1.2.2](https://github.com/mojocn/base64Captcha/tree/v1.2.2)
-
-` go get github.com/mojocn/base64Captcha@v1.2.2 `
 
 ## 3. 🎨🎨🎨 Customization
 You can customize your captcha display image by implementing [interface driver](interface_driver.go) 
