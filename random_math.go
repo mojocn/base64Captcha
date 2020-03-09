@@ -38,9 +38,9 @@ func RandText(size int, sourceChars string) string {
 	return string(text)
 }
 
-//Random get random in min between max. 生成指定大小的随机数.
-func random(min int64, max int64) float64 {
-	return rand.Float64()*float64(max) - float64(min)
+//Random get random number between min and max. 生成指定大小的随机数.
+func Random(min int64, max int64) float64 {
+	return float64(min) + rand.Float64()*float64(max-min)
 }
 
 //RandDeepColor get random deep color. 随机生成深色系.
