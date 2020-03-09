@@ -39,7 +39,7 @@ func RandText(size int, sourceChars string) string {
 }
 
 //Random get random number between min and max. 生成指定大小的随机数.
-func Random(min int64, max int64) float64 {
+func random(min int64, max int64) float64 {
 	return float64(min) + rand.Float64()*float64(max-min)
 }
 
@@ -68,7 +68,6 @@ func RandLightColor() color.RGBA {
 
 //RandColor get random color. 生成随机颜色.
 func RandColor() color.RGBA {
-
 	red := rand.Intn(255)
 	green := rand.Intn(255)
 	var blue int
@@ -84,6 +83,10 @@ func RandColor() color.RGBA {
 }
 
 func randIntRange(from, to int) int {
+	// rand.Intn panics if n <= 0.
+	if to-from <= 0 {
+		return from
+	}
 	return rand.Intn(to-from) + from
 }
 func randFloat64Range(from, to float64) float64 {
