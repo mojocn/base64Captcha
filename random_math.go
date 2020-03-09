@@ -14,11 +14,20 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-//RandText create random text.
+//RandText creates random text of given size.
 func RandText(size int, sourceChars string) string {
-	if size >= len(sourceChars) {
-		sourceChars = strings.Repeat(sourceChars, size)
+	if sourceChars == "" || size == 0 {
+		return ""
 	}
+
+	// repeat sourceChars to make it
+	// greater or equal to size
+	charsLen := len(sourceChars)
+	if size >= charsLen {
+		times := int((size-charsLen)/charsLen) + 1
+		sourceChars = strings.Repeat(sourceChars, times)
+	}
+
 	sourceRunes := []rune(sourceChars)
 	sourceLength := len(sourceRunes)
 

@@ -14,8 +14,13 @@ func TestRandText(t *testing.T) {
 		args args
 		want string
 	}{
+		{"", args{0, "foo"}, ""},
 		{"", args{1, "aaa"}, "a"},
 		{"", args{2, "bbb"}, "bb"},
+		{"", args{3, "bbb"}, "bbb"},
+		{"", args{3, "b"}, "bbb"},
+		{"", args{4, "b"}, "bbbb"},
+		{"", args{4, ""}, ""},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
