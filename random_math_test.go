@@ -105,17 +105,11 @@ func TestRand(t *testing.T) {
 		{"", args{0, 15}},
 		{"", args{10, 14}},
 		{"", args{10, 10}},
-		{"", args{12, 10}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := randIntRange(tt.args.from, tt.args.to)
-			// swap if from > to
-			if tt.args.from > tt.args.to {
-				temp := tt.args.from
-				tt.args.from = tt.args.to
-				tt.args.to = temp
-			}
+
 			// if out of bound then error
 			if got < tt.args.from || got > tt.args.to {
 				t.Errorf("RandText() = %v, out of range", got)
@@ -160,5 +154,30 @@ func TestRandomID(t *testing.T) {
 		if !bytes.ContainsRune(idChars, val) {
 			t.Errorf("got %v, want %v", idChars, val)
 		}
+	}
+}
+
+func TestRandBytes(t *testing.T) {
+	type args struct {
+		n int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{"", args{5}, 5},
+		{"", args{0}, 0},
+		{"", args{1}, 1},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := randBytes(tt.args.n)
+
+			// if out of bound then error
+			if len(got) != tt.want {
+				t.Errorf("randBytes() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }
