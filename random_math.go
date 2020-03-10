@@ -20,12 +20,8 @@ func RandText(size int, sourceChars string) string {
 		return ""
 	}
 
-	// repeat sourceChars to make it
-	// greater or equal to size
-	charsLen := len(sourceChars)
-	if size >= charsLen {
-		times := int((size-charsLen)/charsLen) + 1
-		sourceChars = strings.Repeat(sourceChars, times)
+	if size >= len(sourceChars) {
+		sourceChars = strings.Repeat(sourceChars, size)
 	}
 
 	sourceRunes := []rune(sourceChars)
