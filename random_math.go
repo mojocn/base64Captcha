@@ -14,11 +14,16 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-//RandText create random text.
+//RandText creates random text of given size.
 func RandText(size int, sourceChars string) string {
+	if sourceChars == "" || size == 0 {
+		return ""
+	}
+
 	if size >= len(sourceChars) {
 		sourceChars = strings.Repeat(sourceChars, size)
 	}
+
 	sourceRunes := []rune(sourceChars)
 	sourceLength := len(sourceRunes)
 
@@ -29,9 +34,9 @@ func RandText(size int, sourceChars string) string {
 	return string(text)
 }
 
-//Random get random in min between max. 生成指定大小的随机数.
+//Random get random number between min and max. 生成指定大小的随机数.
 func random(min int64, max int64) float64 {
-	return rand.Float64()*float64(max) - float64(min)
+	return float64(min) + rand.Float64()*float64(max-min)
 }
 
 //RandDeepColor get random deep color. 随机生成深色系.
@@ -59,7 +64,6 @@ func RandLightColor() color.RGBA {
 
 //RandColor get random color. 生成随机颜色.
 func RandColor() color.RGBA {
-
 	red := rand.Intn(255)
 	green := rand.Intn(255)
 	var blue int
@@ -75,6 +79,10 @@ func RandColor() color.RGBA {
 }
 
 func randIntRange(from, to int) int {
+	// rand.Intn panics if n <= 0.
+	if to-from <= 0 {
+		return from
+	}
 	return rand.Intn(to-from) + from
 }
 func randFloat64Range(from, to float64) float64 {
