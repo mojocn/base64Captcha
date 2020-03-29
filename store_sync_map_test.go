@@ -159,23 +159,3 @@ func TestStoreSyncMap_rmExpire(t *testing.T) {
 		})
 	}
 }
-
-func Test_newSmv(t *testing.T) {
-	type args struct {
-		v string
-	}
-	tests := []struct {
-		name string
-		args args
-		want *smv
-	}{
-		{"newsmv", args{"1"}, &smv{t: time.Now(), Value: "1"}},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := newSmv(tt.args.v); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("newSmv() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
