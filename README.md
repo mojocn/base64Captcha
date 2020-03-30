@@ -245,6 +245,8 @@ func main() {
 }
 ```
 
+#### 2.3.7 Example Use Etcd as store
+[captcha with etcd database as store](captcha_with_etcd_exmaple.md)
 
 ## 3. 🎨🎨🎨 Customization
 You can customize your captcha display image by implementing [interface driver](interface_driver.go) 
