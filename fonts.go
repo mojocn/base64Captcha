@@ -49,6 +49,12 @@ func loadFontsByNames(assetFontNames []string) []*truetype.Font {
 //randFontFrom choose random font family.选择随机的字体
 func randFontFrom(fonts []*truetype.Font) *truetype.Font {
 	fontCount := len(fonts)
+
+	if fontCount == 0 {
+		//loading default fonts
+		fonts = fontsAll
+		fontCount = len(fontsAll)
+	}
 	index := rand.Intn(fontCount)
 	return fonts[index]
 }
