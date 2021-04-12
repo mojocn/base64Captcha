@@ -64,8 +64,8 @@ func (d *DriverMath) GenerateIdQuestionAnswer() (id, question, answer string) {
 	var mathResult int32
 	switch operators[rand.Int31n(3)] {
 	case "+":
-		a := rand.Int31n(100)
-		b := rand.Int31n(100)
+		a := rand.Int31n(20)
+		b := rand.Int31n(20)
 		question = fmt.Sprintf("%d+%d=?", a, b)
 		mathResult = a + b
 	case "x":
@@ -74,15 +74,12 @@ func (d *DriverMath) GenerateIdQuestionAnswer() (id, question, answer string) {
 		question = fmt.Sprintf("%dx%d=?", a, b)
 		mathResult = a * b
 	default:
-		a := rand.Int31n(100)
-		b := rand.Int31n(100)
-		if a > b {
-			question = fmt.Sprintf("%d-%d=?", a, b)
-			mathResult = a - b
-		} else {
-			question = fmt.Sprintf("%d-%d=?", b, a)
-			mathResult = b - a
-		}
+		a := rand.Int31n(80) + rand.Int31n(20)
+		b := rand.Int31n(80)
+
+		question = fmt.Sprintf("%d-%d=?", a, b)
+		mathResult = a - b
+
 	}
 	answer = fmt.Sprintf("%d", mathResult)
 	return
