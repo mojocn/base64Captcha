@@ -96,3 +96,7 @@ func TestItemDigit_EncodeB64string(t *testing.T) {
 		})
 	}
 }
+
+func TestItemDigit_DotCountZero(t *testing.T) {
+	_ = NewItemDigit(80, 300, 0, 0.25)
+}
