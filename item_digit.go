@@ -48,6 +48,12 @@ func createRandPaletteColors(dotCount int) color.Palette {
 		uint8(rand.Intn(129)),
 		0xFF,
 	}
+
+	if dotCount == 0 {
+		p[0] = prim
+		return p
+	}
+
 	p[1] = prim
 	// Circle colors.
 	for i := 2; i <= dotCount; i++ {
