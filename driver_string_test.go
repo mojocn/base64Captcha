@@ -76,7 +76,7 @@ func TestNewDriverString(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewDriverString(tt.args.height, tt.args.width, tt.args.noiseCount, tt.args.showLineOptions, tt.args.length, tt.args.source, tt.args.bgColor, tt.args.fonts); !reflect.DeepEqual(got, tt.want) {
+			if got := NewDriverString(tt.args.height, tt.args.width, tt.args.noiseCount, tt.args.showLineOptions, tt.args.length, tt.args.source, tt.args.bgColor, nil, tt.args.fonts); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewDriverString() = %v, want %v", got, tt.want)
 			}
 		})

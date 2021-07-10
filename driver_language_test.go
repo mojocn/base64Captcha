@@ -9,7 +9,7 @@ import (
 )
 
 func TestDriverLanguage_DrawCaptcha(t *testing.T) {
-	ds := NewDriverLanguage(80, 240, 5, OptionShowSineLine|OptionShowSlimeLine|OptionShowHollowLine, 5, nil, []*truetype.Font{fontChinese}, "emotion")
+	ds := NewDriverLanguage(80, 240, 5, OptionShowSineLine|OptionShowSlimeLine|OptionShowHollowLine, 5, nil, nil, []*truetype.Font{fontChinese}, "emotion")
 
 	for i := 0; i < 40; i++ {
 		_, q, _ := ds.GenerateIdQuestionAnswer()
@@ -62,7 +62,7 @@ func TestNewDriverLanguage(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewDriverLanguage(tt.args.height, tt.args.width, tt.args.noiseCount, tt.args.showLineOptions, tt.args.length, tt.args.bgColor, tt.args.fonts, tt.args.languageCode); !reflect.DeepEqual(got, tt.want) {
+			if got := NewDriverLanguage(tt.args.height, tt.args.width, tt.args.noiseCount, tt.args.showLineOptions, tt.args.length, tt.args.bgColor, nil, tt.args.fonts, tt.args.languageCode); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewDriverLanguage() = %v, want %v", got, tt.want)
 			}
 		})
