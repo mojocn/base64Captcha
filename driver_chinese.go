@@ -1,10 +1,11 @@
 package base64Captcha
 
 import (
-	"github.com/golang/freetype/truetype"
 	"image/color"
 	"math/rand"
 	"strings"
+
+	"github.com/golang/freetype/truetype"
 )
 
 //DriverChinese is a driver of unicode Chinese characters.
@@ -28,36 +29,50 @@ type DriverChinese struct {
 
 	//BgColor captcha image background color (optional)
 	BgColor *color.RGBA
-	//Fonts loads by name see fonts.go's comment
-	Fonts []string
 
+	//fontsStorage font storage (optional)
+	fontsStorage FontsStorage
+
+	//Fonts loads by name see fonts.go's comment
+	Fonts      []string
 	fontsArray []*truetype.Font
 }
 
 //NewDriverChinese creates a driver of Chinese characters
-func NewDriverChinese(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fonts []string) *DriverChinese {
+func NewDriverChinese(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fontsStorage FontsStorage, fonts []string) *DriverChinese {
+	if fontsStorage == nil {
+		fontsStorage = DefaultEmbeddedFonts
+	}
+
 	tfs := []*truetype.Font{}
 	for _, fff := range fonts {
-		tf := loadFontByName("fonts/" + fff)
+		tf := fontsStorage.LoadFontByName("fonts/" + fff)
 		tfs = append(tfs, tf)
 	}
+
 	if len(tfs) == 0 {
 		tfs = fontsAll
 	}
-	return &DriverChinese{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsArray: tfs}
+
+	return &DriverChinese{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsStorage: fontsStorage, fontsArray: tfs}
 }
 
 //ConvertFonts loads fonts by names
 func (d *DriverChinese) ConvertFonts() *DriverChinese {
+	if d.fontsStorage == nil {
+		d.fontsStorage = DefaultEmbeddedFonts
+	}
+
 	tfs := []*truetype.Font{}
 	for _, fff := range d.Fonts {
-		tf := loadFontByName("fonts/" + fff)
+		tf := d.fontsStorage.LoadFontByName("fonts/" + fff)
 		tfs = append(tfs, tf)
 	}
 	if len(tfs) == 0 {
 		tfs = fontsAll
 	}
 	d.fontsArray = tfs
+
 	return d
 }
 

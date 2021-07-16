@@ -1,9 +1,10 @@
 package base64Captcha
 
 import (
-	"github.com/golang/freetype/truetype"
 	"image/color"
 	"strings"
+
+	"github.com/golang/freetype/truetype"
 )
 
 //DriverChar captcha config for captcha-engine-characters.
@@ -29,35 +30,50 @@ type DriverString struct {
 	//BgColor captcha image background color (optional)
 	BgColor *color.RGBA
 
+	//fontsStorage font storage (optional)
+	fontsStorage FontsStorage
+
 	//Fonts loads by name see fonts.go's comment
 	Fonts      []string
 	fontsArray []*truetype.Font
 }
 
 //NewDriverString creates driver
-func NewDriverString(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fonts []string) *DriverString {
+func NewDriverString(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fontsStorage FontsStorage, fonts []string) *DriverString {
+	if fontsStorage == nil {
+		fontsStorage = DefaultEmbeddedFonts
+	}
+
 	tfs := []*truetype.Font{}
 	for _, fff := range fonts {
-		tf := loadFontByName("fonts/" + fff)
+		tf := fontsStorage.LoadFontByName("fonts/" + fff)
 		tfs = append(tfs, tf)
 	}
+
 	if len(tfs) == 0 {
 		tfs = fontsAll
 	}
-	return &DriverString{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsArray: tfs}
+
+	return &DriverString{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsStorage: fontsStorage, fontsArray: tfs}
 }
 
 //ConvertFonts loads fonts by names
 func (d *DriverString) ConvertFonts() *DriverString {
+	if d.fontsStorage == nil {
+		d.fontsStorage = DefaultEmbeddedFonts
+	}
+
 	tfs := []*truetype.Font{}
 	for _, fff := range d.Fonts {
-		tf := loadFontByName("fonts/" + fff)
+		tf := d.fontsStorage.LoadFontByName("fonts/" + fff)
 		tfs = append(tfs, tf)
 	}
 	if len(tfs) == 0 {
 		tfs = fontsAll
 	}
+
 	d.fontsArray = tfs
+
 	return d
 }
 

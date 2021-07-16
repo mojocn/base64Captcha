@@ -38,6 +38,7 @@ func TestDriverMath_DrawCaptcha(t *testing.T) {
 				NoiseCount:      tt.fields.NoiseCount,
 				ShowLineOptions: tt.fields.ShowLineOptions,
 				BgColor:         tt.fields.BgColor,
+				fontsStorage:    DefaultEmbeddedFonts,
 				Fonts:           tt.fields.Fonts,
 			}
 			d.ConvertFonts()
@@ -72,7 +73,7 @@ func TestNewDriverMath(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewDriverMath(tt.args.height, tt.args.width, tt.args.noiseCount, tt.args.showLineOptions, tt.args.bgColor, tt.args.fonts); !reflect.DeepEqual(got, tt.want) {
+			if got := NewDriverMath(tt.args.height, tt.args.width, tt.args.noiseCount, tt.args.showLineOptions, tt.args.bgColor, nil, tt.args.fonts); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewDriverMath() = %v, want %v", got, tt.want)
 			}
 		})

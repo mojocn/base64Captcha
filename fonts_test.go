@@ -18,13 +18,13 @@ import (
 // fonts/wqy-microhei.ttc (5.177MB)
 
 func Test_loadFontByName(t *testing.T) {
-	f := loadFontByName("fonts/wqy-microhei.ttc")
+	f := DefaultEmbeddedFonts.LoadFontByName("fonts/wqy-microhei.ttc")
 	if f == nil {
 		t.Error("failed")
 	}
 
 	defer recoverPanic(t)
-	f = loadFontByName("fonts/readme.md")
+	f = DefaultEmbeddedFonts.LoadFontByName("fonts/readme.md")
 
 }
 func recoverPanic(t *testing.T) {
@@ -36,12 +36,12 @@ func recoverPanic(t *testing.T) {
 
 func Test_loadFontsByNames(t *testing.T) {
 
-	fs := loadFontsByNames([]string{"fonts/chromohv.ttf", "fonts/RitaSmith.ttf"})
+	fs := DefaultEmbeddedFonts.LoadFontsByNames([]string{"fonts/chromohv.ttf", "fonts/RitaSmith.ttf"})
 	if len(fs) != 2 {
 		t.Error("failed")
 	}
 	defer recoverPanic(t)
-	loadFontsByNames([]string{"fonts/actionj.txxxxxtf"})
+	DefaultEmbeddedFonts.LoadFontsByNames([]string{"fonts/actionj.txxxxxtf"})
 }
 
 func Test_randFontFrom(t *testing.T) {
