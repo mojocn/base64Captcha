@@ -1,4 +1,4 @@
-module github.com/golifes/base64Captcha
+module base64Captcha
 
 go 1.12
 
