@@ -25,7 +25,7 @@ func TestSetGet(t *testing.T) {
 	s := NewMemoryStore(GCLimitNumber, Expiration)
 	id := "captcha id"
 	d := "random-string"
-	s.Set(id, d)
+	_ = s.Set(id, d)
 	d2 := s.Get(id, false)
 	if d2 != d {
 		t.Errorf("saved %v, getDigits returned got %v", d, d2)
@@ -36,7 +36,7 @@ func TestGetClear(t *testing.T) {
 	s := NewMemoryStore(GCLimitNumber, Expiration)
 	id := "captcha id"
 	d := "932839jfffjkdss"
-	s.Set(id, d)
+	_ = s.Set(id, d)
 	d2 := s.Get(id, true)
 	if d != d2 {
 		t.Errorf("saved %v, getDigitsClear returned got %v", d, d2)
@@ -58,7 +58,7 @@ func BenchmarkSetCollect(b *testing.B) {
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < 1000; j++ {
-			s.Set(ids[j], d)
+			_ = s.Set(ids[j], d)
 		}
 	}
 }
@@ -66,14 +66,14 @@ func BenchmarkSetCollect(b *testing.B) {
 func TestMemoryStore_SetGoCollect(t *testing.T) {
 	s := NewMemoryStore(10, -1)
 	for i := 0; i <= 100; i++ {
-		s.Set(fmt.Sprint(i), fmt.Sprint(i))
+		_ = s.Set(fmt.Sprint(i), fmt.Sprint(i))
 	}
 }
 
 func TestMemoryStore_CollectNotExpire(t *testing.T) {
 	s := NewMemoryStore(10, time.Hour)
 	for i := 0; i < 50; i++ {
-		s.Set(fmt.Sprint(i), fmt.Sprint(i))
+		_ = s.Set(fmt.Sprint(i), fmt.Sprint(i))
 	}
 
 	// let background goroutine to go
@@ -121,14 +121,14 @@ func Test_memoryStore_Set(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.s.Set(tt.args.id, tt.args.value)
+			_ = tt.s.Set(tt.args.id, tt.args.value)
 		})
 	}
 }
 
 func Test_memoryStore_Verify(t *testing.T) {
 	thisStore := NewMemoryStore(10, time.Hour)
-	thisStore.Set("xx", "xx")
+	_ = thisStore.Set("xx", "xx")
 	got := thisStore.Verify("xx", "xx", false)
 	if !got {
 		t.Error("failed1")
@@ -147,7 +147,7 @@ func Test_memoryStore_Verify(t *testing.T) {
 
 func Test_memoryStore_Get(t *testing.T) {
 	thisStore := NewMemoryStore(10, time.Hour)
-	thisStore.Set("xx", "xx")
+	_ = thisStore.Set("xx", "xx")
 	got := thisStore.Get("xx", false)
 	if got != "xx" {
 		t.Error("failed1")
