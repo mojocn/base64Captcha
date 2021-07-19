@@ -25,10 +25,10 @@ func TestSetGet(t *testing.T) {
 	s := NewMemoryStore(GCLimitNumber, Expiration)
 	id := "captcha id"
 	d := "random-string"
-	s.Set(id, d)
+	err := s.Set(id, d)
 	d2 := s.Get(id, false)
 	if d2 != d {
-		t.Errorf("saved %v, getDigits returned got %v", d, d2)
+		t.Errorf("saved %v, getDigits returned got %v", d, d2, err)
 	}
 }
 
