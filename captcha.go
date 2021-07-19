@@ -36,7 +36,10 @@ func (c *Captcha) Generate() (id, b64s string, err error) {
 	if err != nil {
 		return "", "", err
 	}
-	c.Store.Set(id, answer)
+	err = c.Store.Set(id, answer)
+	if err != nil {
+		return "", "", err
+	}
 	b64s = item.EncodeB64string()
 	return
 }
