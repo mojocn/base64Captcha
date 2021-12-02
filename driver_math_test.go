@@ -42,7 +42,7 @@ func TestDriverMath_DrawCaptcha(t *testing.T) {
 				Fonts:           tt.fields.Fonts,
 			}
 			d.ConvertFonts()
-			_, q, a := d.GenerateIdQuestionAnswer()
+			_, q, a := d.GenerateIdQuestionAnswer("")
 
 			gotItem, err := d.DrawCaptcha(q)
 			if (err != nil) != tt.wantErr {

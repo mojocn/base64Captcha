@@ -66,7 +66,7 @@ type Driver interface {
 	//DrawCaptcha draws binary item
 	DrawCaptcha(content string) (item Item, err error)
 	//GenerateIdQuestionAnswer creates rand id, content and answer
-	GenerateIdQuestionAnswer() (id, q, a string)
+	GenerateIdQuestionAnswer(key string) (id, q, a string)
 }
 ```
 
@@ -98,7 +98,7 @@ func NewCaptcha(driver Driver, store Store) *Captcha {
 
 //Generate generates a random id, base64 image string or an error if any
 func (c *Captcha) Generate() (id, b64s string, err error) {
-	id,content, answer := c.Driver.GenerateIdQuestionAnswer()
+	id,content, answer := c.Driver.GenerateIdQuestionAnswer("")
 	item, err := c.Driver.DrawCaptcha(content)
 	if err != nil {
 		return "", "", err
@@ -121,7 +121,7 @@ func (c *Captcha) Verify(id, answer string, clear bool) (match bool) {
 #### 2.3.4 🚵🚵🚵 ‍Generate Base64(image/audio) string
 ```go
 func (c *Captcha) Generate() (id, b64s string, err error) {
-	id,content, answer := c.Driver.GenerateIdQuestionAnswer()
+	id,content, answer := c.Driver.GenerateIdQuestionAnswer("")
 	item, err := c.Driver.DrawCaptcha(content)
 	if err != nil {
 		return "", "", err

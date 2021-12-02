@@ -73,8 +73,12 @@ func (d *DriverMath) ConvertFonts() *DriverMath {
 }
 
 //GenerateIdQuestionAnswer creates id,captcha content and answer
-func (d *DriverMath) GenerateIdQuestionAnswer() (id, question, answer string) {
-	id = RandomId()
+func (d *DriverMath) GenerateIdQuestionAnswer(key string) (id, question, answer string) {
+	if len(key)==0 {
+		id = RandomId() 
+	}else{
+		id = key
+	}
 	operators := []string{"+", "-", "x"}
 	var mathResult int32
 	switch operators[rand.Int31n(3)] {

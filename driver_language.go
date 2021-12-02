@@ -72,8 +72,12 @@ func NewDriverLanguage(height int, width int, noiseCount int, showLineOptions in
 }
 
 //GenerateIdQuestionAnswer creates content and answer
-func (d *DriverLanguage) GenerateIdQuestionAnswer() (id, content, answer string) {
-	id = RandomId()
+func (d *DriverLanguage) GenerateIdQuestionAnswer(key string) (id, content, answer string) {
+	if len(key)==0 {
+		id = RandomId() 
+	}else{
+		id = key
+	}
 	content = generateRandomRune(d.Length, d.LanguageCode)
 	return id, content, content
 }

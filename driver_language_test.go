@@ -12,7 +12,7 @@ func TestDriverLanguage_DrawCaptcha(t *testing.T) {
 	ds := NewDriverLanguage(80, 240, 5, OptionShowSineLine|OptionShowSlimeLine|OptionShowHollowLine, 5, nil, nil, []*truetype.Font{fontChinese}, "emotion")
 
 	for i := 0; i < 40; i++ {
-		_, q, _ := ds.GenerateIdQuestionAnswer()
+		_, q, _ := ds.GenerateIdQuestionAnswer("")
 		item, err := ds.DrawCaptcha(q)
 		if err != nil {
 			t.Error(err)
@@ -81,7 +81,7 @@ func TestDriverLanguage_GenerateIdQuestionAnswer(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotId, gotContent, gotAnswer := tt.d.GenerateIdQuestionAnswer()
+			gotId, gotContent, gotAnswer := tt.d.GenerateIdQuestionAnswer("")
 			if gotId != tt.wantId {
 				t.Errorf("DriverLanguage.GenerateIdQuestionAnswer() gotId = %v, want %v", gotId, tt.wantId)
 			}

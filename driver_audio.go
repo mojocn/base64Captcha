@@ -28,8 +28,13 @@ func (d *DriverAudio) DrawCaptcha(content string) (item Item, err error) {
 }
 
 //GenerateIdQuestionAnswer creates id,captcha content and answer
-func (d *DriverAudio) GenerateIdQuestionAnswer() (id, q, a string) {
-	id = RandomId()
+func (d *DriverAudio) GenerateIdQuestionAnswer(key string) (id, q, a string) {
+	if len(key)==0 {
+		id = RandomId() 
+	}else{
+		id = key
+	}
+	
 	digits := randomDigits(d.Length)
 	a = parseDigitsToString(digits)
 	return id, a, a

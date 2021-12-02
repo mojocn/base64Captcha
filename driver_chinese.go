@@ -77,9 +77,13 @@ func (d *DriverChinese) ConvertFonts() *DriverChinese {
 }
 
 //GenerateIdQuestionAnswer generates captcha content and its answer
-func (d *DriverChinese) GenerateIdQuestionAnswer() (id, content, answer string) {
-	id = RandomId()
-
+func (d *DriverChinese) GenerateIdQuestionAnswer(key string) (id, content, answer string) {
+	if len(key)==0 {
+		id = RandomId() 
+	}else{
+		id = key
+	}
+	
 	ss := strings.Split(d.Source, ",")
 	length := len(ss)
 	if length == 1 {
