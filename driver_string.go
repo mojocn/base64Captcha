@@ -54,7 +54,7 @@ func NewDriverString(height int, width int, noiseCount int, showLineOptions int,
 		tfs = fontsAll
 	}
 
-	return &DriverString{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsStorage: fontsStorage, fontsArray: tfs}
+	return &DriverString{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsStorage: fontsStorage, fontsArray: tfs, Fonts: fonts}
 }
 
 //ConvertFonts loads fonts by names
