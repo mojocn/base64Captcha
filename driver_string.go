@@ -78,8 +78,12 @@ func (d *DriverString) ConvertFonts() *DriverString {
 }
 
 //GenerateIdQuestionAnswer creates id,content and answer
-func (d *DriverString) GenerateIdQuestionAnswer() (id, content, answer string) {
-	id = RandomId()
+func (d *DriverString) GenerateIdQuestionAnswer(key string) (id, content, answer string) {
+	if len(key)==0 {
+		id = RandomId() 
+	}else{
+		id = key
+	}
 	content = RandText(d.Length, d.Source)
 	return id, content, content
 }

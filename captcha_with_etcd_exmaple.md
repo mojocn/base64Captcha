@@ -35,7 +35,7 @@ const (
 
 //GenerateIdAndImage create image
 func (c *CaptchaEtcd) GenerateIdAndImage() (id, b64s, ans string, err error) {
-	id, content, answer := c.GenerateIdQuestionAnswer()
+	id, content, answer := c.GenerateIdQuestionAnswer("")
 	item, err := c.DrawCaptcha(content)
 	if err != nil {
 		return "", "", "", err

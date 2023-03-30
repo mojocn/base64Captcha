@@ -39,8 +39,12 @@ func NewDriverDigit(height int, width int, length int, maxSkew float64, dotCount
 var DefaultDriverDigit = NewDriverDigit(80, 240, 5, 0.7, 80)
 
 //GenerateIdQuestionAnswer creates captcha content and answer
-func (d *DriverDigit) GenerateIdQuestionAnswer() (id, q, a string) {
-	id = RandomId()
+func (d *DriverDigit) GenerateIdQuestionAnswer(key string) (id, q, a string) {
+	if len(key)==0 {
+		id = RandomId() 
+	}else{
+		id = key
+	}
 	digits := randomDigits(d.Length)
 	a = parseDigitsToString(digits)
 	return id, a, a
