@@ -1,8 +1,8 @@
 package base64Captcha
 
 import (
-	"fmt"
 	"image/color"
+	"log"
 	"math/rand"
 
 	"github.com/golang/freetype/truetype"
@@ -26,7 +26,7 @@ var langMap = map[string][]int{
 func generateRandomRune(size int, code string) string {
 	lang, ok := langMap[code]
 	if !ok {
-		fmt.Sprintf("can not font language of %s", code)
+		log.Printf("can not font language of %s \n", code)
 		lang = langMap["latin"]
 	}
 	start := lang[0]

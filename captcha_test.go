@@ -43,7 +43,7 @@ func TestCaptcha_GenerateB64s(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := NewCaptcha(tt.fields.Driver, tt.fields.Store)
-			gotId, b64s, err := c.Generate()
+			gotId, b64s,_, err := c.Generate()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Captcha.Generate() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -122,7 +122,7 @@ func TestCaptcha_Generate(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotId, gotB64s, err := tt.c.Generate()
+			gotId, gotB64s,_, err := tt.c.Generate()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Captcha.Generate() error = %v, wantErr %v", err, tt.wantErr)
 				return
