@@ -16,7 +16,7 @@ package base64Captcha
 
 import "math/rand"
 
-//DriverDigit config for captcha-engine-digit.
+// DriverDigit config for captcha-engine-digit.
 type DriverDigit struct {
 	// Height png height in pixel.
 	Height int
@@ -30,15 +30,15 @@ type DriverDigit struct {
 	DotCount int
 }
 
-//NewDriverDigit creates a driver of digit
+// NewDriverDigit creates a driver of digit
 func NewDriverDigit(height int, width int, length int, maxSkew float64, dotCount int) *DriverDigit {
 	return &DriverDigit{Height: height, Width: width, Length: length, MaxSkew: maxSkew, DotCount: dotCount}
 }
 
-//DefaultDriverDigit is a default driver of digit
+// DefaultDriverDigit is a default driver of digit
 var DefaultDriverDigit = NewDriverDigit(80, 240, 5, 0.7, 80)
 
-//GenerateIdQuestionAnswer creates captcha content and answer
+// GenerateIdQuestionAnswer creates captcha content and answer
 func (d *DriverDigit) GenerateIdQuestionAnswer() (id, q, a string) {
 	id = RandomId()
 	digits := randomDigits(d.Length)
@@ -46,7 +46,15 @@ func (d *DriverDigit) GenerateIdQuestionAnswer() (id, q, a string) {
 	return id, a, a
 }
 
-//DrawCaptcha creates digit captcha item
+// GenerateIdQuestionAnswer creates captcha content and answer
+func (d *DriverDigit) GenerateSpecificIdQuestionAnswer(mId string) (id, q, a string) {
+	id = mId
+	digits := randomDigits(d.Length)
+	a = parseDigitsToString(digits)
+	return id, a, a
+}
+
+// DrawCaptcha creates digit captcha item
 func (d *DriverDigit) DrawCaptcha(content string) (item Item, err error) {
 	// Initialize PRNG.
 	itemDigit := NewItemDigit(d.Width, d.Height, d.DotCount, d.MaxSkew)
