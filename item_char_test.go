@@ -160,7 +160,7 @@ func TestItemChar_BinaryEncoding(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.item.BinaryEncoding(); !reflect.DeepEqual(got, tt.want) {
+			if got := tt.item.EncodeBinary(); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("ItemChar.BinaryEncoding() = %v, want %v", got, tt.want)
 			}
 		})
