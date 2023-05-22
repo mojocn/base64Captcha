@@ -5,9 +5,6 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"github.com/golang/freetype"
-	"github.com/golang/freetype/truetype"
-	"golang.org/x/image/font"
 	"image"
 	"image/color"
 	"image/draw"
@@ -16,9 +13,13 @@ import (
 	"log"
 	"math"
 	"math/rand"
+
+	"github.com/golang/freetype"
+	"github.com/golang/freetype/truetype"
+	"golang.org/x/image/font"
 )
 
-//ItemChar captcha item of unicode characters
+// ItemChar captcha item of unicode characters
 type ItemChar struct {
 	bgColor color.Color
 	width   int
@@ -26,16 +27,16 @@ type ItemChar struct {
 	nrgba   *image.NRGBA
 }
 
-//NewItemChar creates a captcha item of characters
+// NewItemChar creates a captcha item of characters
 func NewItemChar(w int, h int, bgColor color.RGBA) *ItemChar {
 	d := ItemChar{width: w, height: h}
 	m := image.NewNRGBA(image.Rect(0, 0, w, h))
-	draw.Draw(m, m.Bounds(), &image.Uniform{bgColor}, image.ZP, draw.Src)
+	draw.Draw(m, m.Bounds(), &image.Uniform{bgColor}, image.Point{}, draw.Src)
 	d.nrgba = m
 	return &d
 }
 
-//drawHollowLine draw strong and bold white line.
+// drawHollowLine draw strong and bold white line.
 func (item *ItemChar) drawHollowLine() *ItemChar {
 
 	first := item.width / 20
@@ -72,7 +73,7 @@ func (item *ItemChar) drawHollowLine() *ItemChar {
 	return item
 }
 
-//drawSineLine draw a sine line.
+// drawSineLine draw a sine line.
 func (item *ItemChar) drawSineLine() *ItemChar {
 	var py float64
 
@@ -116,7 +117,7 @@ func (item *ItemChar) drawSineLine() *ItemChar {
 	return item
 }
 
-//drawSlimLine draw n slim-random-color lines.
+// drawSlimLine draw n slim-random-color lines.
 func (item *ItemChar) drawSlimLine(num int) *ItemChar {
 
 	first := item.width / 10
@@ -231,8 +232,8 @@ func (item *ItemChar) drawText(text string, fonts []*truetype.Font) error {
 	return nil
 }
 
-//BinaryEncoding encodes an image to PNG and returns a byte slice.
-func (item *ItemChar) BinaryEncoding() []byte {
+// BinaryEncoding encodes an image to PNG and returns a byte slice.
+func (item *ItemChar) EncodeBinary() []byte {
 	var buf bytes.Buffer
 	if err := png.Encode(&buf, item.nrgba); err != nil {
 		panic(err.Error())
@@ -243,13 +244,13 @@ func (item *ItemChar) BinaryEncoding() []byte {
 // WriteTo writes captcha character in png format into the given io.Writer, and
 // returns the number of bytes written and an error if any.
 func (item *ItemChar) WriteTo(w io.Writer) (int64, error) {
-	n, err := w.Write(item.BinaryEncoding())
+	n, err := w.Write(item.EncodeBinary())
 	return int64(n), err
 }
 
 // EncodeB64string encodes an image to base64 string
 func (item *ItemChar) EncodeB64string() string {
-	return fmt.Sprintf("data:%s;base64,%s", MimeTypeImage, base64.StdEncoding.EncodeToString(item.BinaryEncoding()))
+	return fmt.Sprintf("data:%s;base64,%s", MimeTypeImage, base64.StdEncoding.EncodeToString(item.EncodeBinary()))
 }
 
 type point struct {

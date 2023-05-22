@@ -13,7 +13,7 @@ import (
 	"math/rand"
 )
 
-//ItemAudio captcha-audio-engine return type.
+// ItemAudio captcha-audio-engine return type.
 type ItemAudio struct {
 	answer      string
 	body        *bytes.Buffer
@@ -120,6 +120,14 @@ func (a *ItemAudio) makeWhiteNoise(length int, level uint8) []byte {
 	return noise
 }
 
+func (a *ItemAudio) EncodeBinary() []byte {
+	var buf bytes.Buffer
+	if _, err := a.WriteTo(&buf); err != nil {
+		panic(err)
+	}
+	return buf.Bytes()
+}
+
 // WriteTo writes captcha audio in WAVE format into the given io.Writer, and
 // returns the number of bytes written and an error if any.
 func (a *ItemAudio) WriteTo(w io.Writer) (n int64, err error) {
@@ -160,10 +168,6 @@ func (a *ItemAudio) WriteTo(w io.Writer) (n int64, err error) {
 
 // EncodeB64string encodes a sound to base64 string
 func (a *ItemAudio) EncodeB64string() string {
-	var buf bytes.Buffer
-	if _, err := a.WriteTo(&buf); err != nil {
-		panic(err)
-	}
-	return fmt.Sprintf("data:%s;base64,%s", MimeTypeAudio, base64.StdEncoding.EncodeToString(buf.Bytes()))
+	return fmt.Sprintf("data:%s;base64,%s", MimeTypeAudio, base64.StdEncoding.EncodeToString(a.EncodeBinary()))
 
 }
