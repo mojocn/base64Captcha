@@ -13,7 +13,7 @@ import (
 	"math/rand"
 )
 
-//ItemAudio captcha-audio-engine return type.
+// ItemAudio captcha-audio-engine return type.
 type ItemAudio struct {
 	answer      string
 	body        *bytes.Buffer
@@ -81,7 +81,7 @@ func (a *ItemAudio) makeBackgroundSound(length int) []byte {
 	for i := 0; i < length/(sampleRate/10); i++ {
 		snd := reversedSound(a.digitSounds[rand.Intn(10)])
 		//snd = changeSpeed(snd, a.rng.Float(0.8, 1.2))
-		place := rand.Intn(len(b) - len(snd))
+		place := randIntn(len(b) - len(snd))
 		setSoundLevel(snd, randFloat64Range(0.04, 0.08))
 		mixSound(b[place:], snd)
 	}

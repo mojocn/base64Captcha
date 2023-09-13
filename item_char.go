@@ -5,9 +5,6 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"github.com/golang/freetype"
-	"github.com/golang/freetype/truetype"
-	"golang.org/x/image/font"
 	"image"
 	"image/color"
 	"image/draw"
@@ -16,9 +13,13 @@ import (
 	"log"
 	"math"
 	"math/rand"
+
+	"github.com/golang/freetype"
+	"github.com/golang/freetype/truetype"
+	"golang.org/x/image/font"
 )
 
-//ItemChar captcha item of unicode characters
+// ItemChar captcha item of unicode characters
 type ItemChar struct {
 	bgColor color.Color
 	width   int
@@ -26,7 +27,7 @@ type ItemChar struct {
 	nrgba   *image.NRGBA
 }
 
-//NewItemChar creates a captcha item of characters
+// NewItemChar creates a captcha item of characters
 func NewItemChar(w int, h int, bgColor color.RGBA) *ItemChar {
 	d := ItemChar{width: w, height: h}
 	m := image.NewNRGBA(image.Rect(0, 0, w, h))
@@ -35,7 +36,7 @@ func NewItemChar(w int, h int, bgColor color.RGBA) *ItemChar {
 	return &d
 }
 
-//drawHollowLine draw strong and bold white line.
+// drawHollowLine draw strong and bold white line.
 func (item *ItemChar) drawHollowLine() *ItemChar {
 
 	first := item.width / 20
@@ -43,10 +44,10 @@ func (item *ItemChar) drawHollowLine() *ItemChar {
 
 	lineColor := RandLightColor()
 
-	x1 := float64(rand.Intn(first))
-	//y1 := float64(rand.Intn(y)+y);
+	x1 := float64(randIntn(first))
+	//y1 := float64(randIntn(y)+y);
 
-	x2 := float64(rand.Intn(first) + end)
+	x2 := float64(randIntn(first) + end)
 
 	multiple := float64(rand.Intn(5)+3) / float64(5)
 	if int(multiple*10)%3 == 0 {
@@ -72,12 +73,12 @@ func (item *ItemChar) drawHollowLine() *ItemChar {
 	return item
 }
 
-//drawSineLine draw a sine line.
+// drawSineLine draw a sine line.
 func (item *ItemChar) drawSineLine() *ItemChar {
 	var py float64
 
 	//振幅
-	a := rand.Intn(item.height / 2)
+	a := randIntn(item.height / 2)
 
 	//Y轴方向偏移量
 	b := random(int64(-item.height/4), int64(item.height/4))
@@ -116,7 +117,7 @@ func (item *ItemChar) drawSineLine() *ItemChar {
 	return item
 }
 
-//drawSlimLine draw n slim-random-color lines.
+// drawSlimLine draw n slim-random-color lines.
 func (item *ItemChar) drawSlimLine(num int) *ItemChar {
 
 	first := item.width / 10
@@ -126,15 +127,15 @@ func (item *ItemChar) drawSlimLine(num int) *ItemChar {
 
 	for i := 0; i < num; i++ {
 
-		point1 := point{X: rand.Intn(first), Y: rand.Intn(y)}
-		point2 := point{X: rand.Intn(first) + end, Y: rand.Intn(y)}
+		point1 := point{X: randIntn(first), Y: randIntn(y)}
+		point2 := point{X: randIntn(first) + end, Y: randIntn(y)}
 
 		if i%2 == 0 {
-			point1.Y = rand.Intn(y) + y*2
-			point2.Y = rand.Intn(y)
+			point1.Y = randIntn(y) + y*2
+			point2.Y = randIntn(y)
 		} else {
-			point1.Y = rand.Intn(y) + y*(i%2)
-			point2.Y = rand.Intn(y) + y*2
+			point1.Y = randIntn(y) + y*(i%2)
+			point2.Y = randIntn(y) + y*2
 		}
 
 		item.drawBeeline(point1, point2, RandDeepColor())
@@ -187,8 +188,8 @@ func (item *ItemChar) drawNoise(noiseText string, fonts []*truetype.Font) error 
 	rawFontSize := float64(item.height) / (1 + float64(rand.Intn(7))/float64(10))
 
 	for _, char := range noiseText {
-		rw := rand.Intn(item.width)
-		rh := rand.Intn(item.height)
+		rw := randIntn(item.width)
+		rh := randIntn(item.height)
 		fontSize := rawFontSize/2 + float64(rand.Intn(5))
 		c.SetSrc(image.NewUniform(RandLightColor()))
 		c.SetFontSize(fontSize)
@@ -222,7 +223,7 @@ func (item *ItemChar) drawText(text string, fonts []*truetype.Font) error {
 		c.SetFontSize(float64(fontSize))
 		c.SetFont(randFontFrom(fonts))
 		x := fontWidth*i + fontWidth/fontSize
-		y := item.height/2 + fontSize/2 - rand.Intn(item.height/16*3)
+		y := item.height/2 + fontSize/2 - randIntn(item.height/16*3)
 		pt := freetype.Pt(x, y)
 		if _, err := c.DrawString(string(s), pt); err != nil {
 			return err
@@ -231,7 +232,7 @@ func (item *ItemChar) drawText(text string, fonts []*truetype.Font) error {
 	return nil
 }
 
-//BinaryEncoding encodes an image to PNG and returns a byte slice.
+// BinaryEncoding encodes an image to PNG and returns a byte slice.
 func (item *ItemChar) BinaryEncoding() []byte {
 	var buf bytes.Buffer
 	if err := png.Encode(&buf, item.nrgba); err != nil {
