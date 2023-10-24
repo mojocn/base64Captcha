@@ -18,7 +18,7 @@ func TestHandlerCaptchaGenerate(t *testing.T) {
 
 	c := NewCaptcha(driver, s)
 
-	id, _,_, err := c.Generate()
+	id, _, _, err := c.Generate()
 	if err != nil {
 		t.Fatalf("some error: %s", err)
 	}

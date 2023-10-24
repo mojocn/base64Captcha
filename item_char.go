@@ -18,7 +18,7 @@ import (
 	"math/rand"
 )
 
-//ItemChar captcha item of unicode characters
+// ItemChar captcha item of unicode characters
 type ItemChar struct {
 	bgColor color.Color
 	width   int
@@ -26,7 +26,7 @@ type ItemChar struct {
 	nrgba   *image.NRGBA
 }
 
-//NewItemChar creates a captcha item of characters
+// NewItemChar creates a captcha item of characters
 func NewItemChar(w int, h int, bgColor color.RGBA) *ItemChar {
 	d := ItemChar{width: w, height: h}
 	m := image.NewNRGBA(image.Rect(0, 0, w, h))
@@ -35,7 +35,7 @@ func NewItemChar(w int, h int, bgColor color.RGBA) *ItemChar {
 	return &d
 }
 
-//drawHollowLine draw strong and bold white line.
+// drawHollowLine draw strong and bold white line.
 func (item *ItemChar) drawHollowLine() *ItemChar {
 
 	first := item.width / 20
@@ -72,7 +72,7 @@ func (item *ItemChar) drawHollowLine() *ItemChar {
 	return item
 }
 
-//drawSineLine draw a sine line.
+// drawSineLine draw a sine line.
 func (item *ItemChar) drawSineLine() *ItemChar {
 	var py float64
 
@@ -116,7 +116,7 @@ func (item *ItemChar) drawSineLine() *ItemChar {
 	return item
 }
 
-//drawSlimLine draw n slim-random-color lines.
+// drawSlimLine draw n slim-random-color lines.
 func (item *ItemChar) drawSlimLine(num int) *ItemChar {
 
 	first := item.width / 10
@@ -231,7 +231,7 @@ func (item *ItemChar) drawText(text string, fonts []*truetype.Font) error {
 	return nil
 }
 
-//BinaryEncoding encodes an image to PNG and returns a byte slice.
+// BinaryEncoding encodes an image to PNG and returns a byte slice.
 func (item *ItemChar) BinaryEncoding() []byte {
 	var buf bytes.Buffer
 	if err := png.Encode(&buf, item.nrgba); err != nil {

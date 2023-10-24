@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-//parseDigitsToString parse randomDigits to normal string
+// parseDigitsToString parse randomDigits to normal string
 func parseDigitsToString(bytes []byte) string {
 	stringB := make([]byte, len(bytes))
 	for idx, by := range bytes {

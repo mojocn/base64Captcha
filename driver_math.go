@@ -9,7 +9,7 @@ import (
 	"github.com/golang/freetype/truetype"
 )
 
-//DriverMath captcha config for captcha math
+// DriverMath captcha config for captcha math
 type DriverMath struct {
 	//Height png height in pixel.
 	Height int
@@ -34,7 +34,7 @@ type DriverMath struct {
 	fontsArray []*truetype.Font
 }
 
-//NewDriverMath creates a driver of math
+// NewDriverMath creates a driver of math
 func NewDriverMath(height int, width int, noiseCount int, showLineOptions int, bgColor *color.RGBA, fontsStorage FontsStorage, fonts []string) *DriverMath {
 	if fontsStorage == nil {
 		fontsStorage = DefaultEmbeddedFonts
@@ -53,7 +53,7 @@ func NewDriverMath(height int, width int, noiseCount int, showLineOptions int, b
 	return &DriverMath{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, fontsArray: tfs, BgColor: bgColor, Fonts: fonts}
 }
 
-//ConvertFonts loads fonts from names
+// ConvertFonts loads fonts from names
 func (d *DriverMath) ConvertFonts() *DriverMath {
 	if d.fontsStorage == nil {
 		d.fontsStorage = DefaultEmbeddedFonts
@@ -72,7 +72,7 @@ func (d *DriverMath) ConvertFonts() *DriverMath {
 	return d
 }
 
-//GenerateIdQuestionAnswer creates id,captcha content and answer
+// GenerateIdQuestionAnswer creates id,captcha content and answer
 func (d *DriverMath) GenerateIdQuestionAnswer() (id, question, answer string) {
 	id = RandomId()
 	operators := []string{"+", "-", "x"}
@@ -100,7 +100,7 @@ func (d *DriverMath) GenerateIdQuestionAnswer() (id, question, answer string) {
 	return
 }
 
-//DrawCaptcha creates math captcha item
+// DrawCaptcha creates math captcha item
 func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 	var bgc color.RGBA
 	if d.BgColor != nil {

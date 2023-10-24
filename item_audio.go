@@ -13,7 +13,7 @@ import (
 	"math/rand"
 )
 
-//ItemAudio captcha-audio-engine return type.
+// ItemAudio captcha-audio-engine return type.
 type ItemAudio struct {
 	answer      string
 	body        *bytes.Buffer

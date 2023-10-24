@@ -14,7 +14,7 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-//RandText creates random text of given size.
+// RandText creates random text of given size.
 func RandText(size int, sourceChars string) string {
 	if sourceChars == "" || size == 0 {
 		return ""
@@ -34,12 +34,12 @@ func RandText(size int, sourceChars string) string {
 	return string(text)
 }
 
-//Random get random number between min and max. 生成指定大小的随机数.
+// Random get random number between min and max. 生成指定大小的随机数.
 func random(min int64, max int64) float64 {
 	return float64(min) + rand.Float64()*float64(max-min)
 }
 
-//RandDeepColor get random deep color. 随机生成深色系.
+// RandDeepColor get random deep color. 随机生成深色系.
 func RandDeepColor() color.RGBA {
 
 	randColor := RandColor()
@@ -54,7 +54,7 @@ func RandDeepColor() color.RGBA {
 	return color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
 }
 
-//RandLightColor get random ligth color. 随机生成浅色.
+// RandLightColor get random ligth color. 随机生成浅色.
 func RandLightColor() color.RGBA {
 	red := rand.Intn(55) + 200
 	green := rand.Intn(55) + 200
@@ -62,7 +62,7 @@ func RandLightColor() color.RGBA {
 	return color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
 }
 
-//RandColor get random color. 生成随机颜色.
+// RandColor get random color. 生成随机颜色.
 func RandColor() color.RGBA {
 	red := rand.Intn(255)
 	green := rand.Intn(255)

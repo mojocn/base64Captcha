@@ -8,7 +8,7 @@ import (
 	"github.com/golang/freetype/truetype"
 )
 
-//DriverChinese is a driver of unicode Chinese characters.
+// DriverChinese is a driver of unicode Chinese characters.
 type DriverChinese struct {
 	//Height png height in pixel.
 	Height int
@@ -38,7 +38,7 @@ type DriverChinese struct {
 	fontsArray []*truetype.Font
 }
 
-//NewDriverChinese creates a driver of Chinese characters
+// NewDriverChinese creates a driver of Chinese characters
 func NewDriverChinese(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fontsStorage FontsStorage, fonts []string) *DriverChinese {
 	if fontsStorage == nil {
 		fontsStorage = DefaultEmbeddedFonts
@@ -57,7 +57,7 @@ func NewDriverChinese(height int, width int, noiseCount int, showLineOptions int
 	return &DriverChinese{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsStorage: fontsStorage, fontsArray: tfs}
 }
 
-//ConvertFonts loads fonts by names
+// ConvertFonts loads fonts by names
 func (d *DriverChinese) ConvertFonts() *DriverChinese {
 	if d.fontsStorage == nil {
 		d.fontsStorage = DefaultEmbeddedFonts
@@ -76,7 +76,7 @@ func (d *DriverChinese) ConvertFonts() *DriverChinese {
 	return d
 }
 
-//GenerateIdQuestionAnswer generates captcha content and its answer
+// GenerateIdQuestionAnswer generates captcha content and its answer
 func (d *DriverChinese) GenerateIdQuestionAnswer() (id, content, answer string) {
 	id = RandomId()
 
@@ -100,7 +100,7 @@ func (d *DriverChinese) GenerateIdQuestionAnswer() (id, content, answer string) 
 	return id, content, content
 }
 
-//DrawCaptcha generates captcha item(image)
+// DrawCaptcha generates captcha item(image)
 func (d *DriverChinese) DrawCaptcha(content string) (item Item, err error) {
 
 	var bgc color.RGBA
