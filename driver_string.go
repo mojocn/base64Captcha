@@ -7,7 +7,7 @@ import (
 	"github.com/golang/freetype/truetype"
 )
 
-//DriverChar captcha config for captcha-engine-characters.
+// DriverString captcha config for captcha-engine-characters.
 type DriverString struct {
 	// Height png height in pixel.
 	Height int
@@ -38,7 +38,7 @@ type DriverString struct {
 	fontsArray []*truetype.Font
 }
 
-//NewDriverString creates driver
+// NewDriverString creates driver
 func NewDriverString(height int, width int, noiseCount int, showLineOptions int, length int, source string, bgColor *color.RGBA, fontsStorage FontsStorage, fonts []string) *DriverString {
 	if fontsStorage == nil {
 		fontsStorage = DefaultEmbeddedFonts
@@ -57,7 +57,7 @@ func NewDriverString(height int, width int, noiseCount int, showLineOptions int,
 	return &DriverString{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsStorage: fontsStorage, fontsArray: tfs, Fonts: fonts}
 }
 
-//ConvertFonts loads fonts by names
+// ConvertFonts loads fonts by names
 func (d *DriverString) ConvertFonts() *DriverString {
 	if d.fontsStorage == nil {
 		d.fontsStorage = DefaultEmbeddedFonts
@@ -77,14 +77,14 @@ func (d *DriverString) ConvertFonts() *DriverString {
 	return d
 }
 
-//GenerateIdQuestionAnswer creates id,content and answer
+// GenerateIdQuestionAnswer creates id,content and answer
 func (d *DriverString) GenerateIdQuestionAnswer() (id, content, answer string) {
 	id = RandomId()
 	content = RandText(d.Length, d.Source)
 	return id, content, content
 }
 
-//DrawCaptcha draws captcha item
+// DrawCaptcha draws captcha item
 func (d *DriverString) DrawCaptcha(content string) (item Item, err error) {
 
 	var bgc color.RGBA
