@@ -66,6 +66,9 @@ func (s *memoryStore) Set(id string, value string) error {
 }
 
 func (s *memoryStore) Verify(id, answer string, clear bool) bool {
+	if id == "" || answer == "" {
+		return false
+	}
 	v := s.Get(id, clear)
 	return v != "" && v == answer
 }
