@@ -106,7 +106,7 @@ func (d *DriverLanguage) DrawCaptcha(content string) (item Item, err error) {
 	//draw noise
 	if d.NoiseCount > 0 {
 		noise := RandText(d.NoiseCount, TxtNumbers+TxtAlphabet+",.[]<>")
-		err = itemChar.drawNoise(noise, fontsAll)
+		err = itemChar.drawNoise(noise, FontsAll)
 		if err != nil {
 			return
 		}
@@ -114,7 +114,7 @@ func (d *DriverLanguage) DrawCaptcha(content string) (item Item, err error) {
 
 	//draw content
 	//use font that match your language
-	err = itemChar.drawText(content, []*truetype.Font{fontChinese})
+	err = itemChar.drawText(content, []*truetype.Font{FontChinese})
 	if err != nil {
 		return
 	}

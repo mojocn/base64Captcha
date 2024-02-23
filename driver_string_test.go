@@ -29,7 +29,7 @@ func TestDriverString_DrawCaptcha(t *testing.T) {
 		wantItem Item
 		wantErr  bool
 	}{
-		{"string", fields{80, 240, 20, 100, 2, 5, nil, fontsAll}, args{"45Ad8"}, nil, false},
+		{"string", fields{80, 240, 20, 100, 2, 5, nil, FontsAll}, args{"45Ad8"}, nil, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
