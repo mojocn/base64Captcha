@@ -9,7 +9,7 @@ import (
 )
 
 func TestDriverLanguage_DrawCaptcha(t *testing.T) {
-	ds := NewDriverLanguage(80, 240, 5, OptionShowSineLine|OptionShowSlimeLine|OptionShowHollowLine, 5, nil, nil, []*truetype.Font{fontChinese}, "emotion")
+	ds := NewDriverLanguage(80, 240, 5, OptionShowSineLine|OptionShowSlimeLine|OptionShowHollowLine, 5, nil, nil, []*truetype.Font{FontChinese}, "emotion")
 
 	for i := 0; i < 40; i++ {
 		_, q, _ := ds.GenerateIdQuestionAnswer()

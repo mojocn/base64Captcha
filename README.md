@@ -248,6 +248,48 @@ func main() {
 #### 2.3.7 Example Use Etcd as store
 [captcha with etcd database as store](captcha_with_etcd_exmaple.md)
 
+
+#### 2.3.8 Load Fonts
+Because the font is loaded by default, resulting in unwanted data at compile time. Add compilation only when you use it.[#110](https://github.com/mojocn/base64Captcha/issues/110)
+
+```go
+import (
+	_ "github.com/mojocn/base64Captcha/fonts" // defaults load all embed fonts
+)
+...
+
+import (
+	_ "github.com/mojocn/base64Captcha/fonts/defaults" // load fonts without chinese
+)
+...
+
+import (
+	_ "embed"
+	dennnethree_dee "github.com/mojocn/base64Captcha/fonts/DENNEthree-dee"
+	"github.com/mojocn/base64Captcha/fonts/actionj"
+	"github.com/mojocn/base64Captcha/fonts/apothecary"
+)
+
+//go:embed a.ttf
+var your_fonts []byte
+
+var defaultfonts = map[string][]byte{
+	"ApothecaryFont":	apothecary.FontBytes,
+	"DENNEthree-dee":	dennnethree_dee.FontBytes,
+	"actionj":			actionj.FontBytes,
+	"your_name":		your_fonts,
+}
+
+base64Captcha.DefaultEmbeddedFonts = base64Captcha.NewEmbeddedFontsStorage(defaultfonts)
+
+base64Captcha.FontChinese = base64Captcha.DefaultEmbeddedFonts.LoadFontByName("your_name")
+base64Captcha.FontsAll = append(base64Captcha.DefaultEmbeddedFonts.LoadFontsByNames([]string{
+	"ApothecaryFont",
+	"DENNEthree-dee",
+	"actionj",
+}), base64Captcha.FontChinese)
+```
+
 ## 3. 🎨🎨🎨 Customization
 You can customize your captcha display image by implementing [interface driver](interface_driver.go) 
 and [interface item](interface_item.go).
