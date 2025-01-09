@@ -1,6 +1,7 @@
 package base64Captcha
 
 import (
+	"strings"
 	"sync"
 	"time"
 )
@@ -59,5 +60,6 @@ func (s StoreSyncMap) Get(id string, clear bool) string {
 
 // Verify check a string value
 func (s StoreSyncMap) Verify(id, answer string, clear bool) bool {
-	return s.Get(id, clear) == answer
+	vv := s.Get(id, clear)
+    return strings.EqualFold(vv, answer)
 }

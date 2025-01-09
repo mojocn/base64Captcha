@@ -16,6 +16,7 @@ package base64Captcha
 
 import (
 	"container/list"
+	"strings"
 	"sync"
 	"time"
 )
@@ -70,7 +71,7 @@ func (s *memoryStore) Verify(id, answer string, clear bool) bool {
 		return false
 	}
 	v := s.Get(id, clear)
-	return v != "" && v == answer
+	return strings.EqualFold(v, answer)
 }
 
 func (s *memoryStore) Get(id string, clear bool) (value string) {
