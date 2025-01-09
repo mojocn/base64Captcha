@@ -2,7 +2,6 @@ package base64Captcha
 
 import (
 	"image/color"
-	"math/rand"
 	"strings"
 
 	"github.com/golang/freetype/truetype"
@@ -93,7 +92,7 @@ func (d *DriverChinese) GenerateIdQuestionAnswer() (id, content, answer string) 
 
 	res := make([]string, d.Length)
 	for k := range res {
-		res[k] = ss[rand.Intn(length)]
+		res[k] = ss[randIntn(length)]
 	}
 
 	content = strings.Join(res, "")
