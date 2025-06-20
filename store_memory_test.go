@@ -16,9 +16,10 @@ package base64Captcha
 
 import (
 	"fmt"
-	"math/rand"
 	"testing"
 	"time"
+
+	"github.com/mojocn/base64Captcha/rand"
 )
 
 func TestSetGet(t *testing.T) {

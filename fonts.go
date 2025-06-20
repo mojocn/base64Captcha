@@ -1,9 +1,9 @@
 package base64Captcha
 
 import (
-	"math/rand"
-
 	"github.com/golang/freetype/truetype"
+
+	"github.com/mojocn/base64Captcha/rand"
 )
 
 var fontsSimple = DefaultEmbeddedFonts.LoadFontsByNames([]string{

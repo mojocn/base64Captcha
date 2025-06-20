@@ -14,7 +14,9 @@
 
 package base64Captcha
 
-import "math/rand"
+import (
+	"github.com/mojocn/base64Captcha/rand"
+)
 
 // DriverDigit config for captcha-engine-digit.
 type DriverDigit struct {

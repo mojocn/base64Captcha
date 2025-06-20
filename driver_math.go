@@ -3,10 +3,11 @@ package base64Captcha
 import (
 	"fmt"
 	"image/color"
-	"math/rand"
 	"strings"
 
 	"github.com/golang/freetype/truetype"
+
+	"github.com/mojocn/base64Captcha/rand"
 )
 
 // DriverMath captcha config for captcha math

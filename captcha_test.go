@@ -17,9 +17,10 @@
 package base64Captcha
 
 import (
-	"math/rand"
 	"reflect"
 	"testing"
+
+	"github.com/mojocn/base64Captcha/rand"
 )
 
 func TestCaptcha_GenerateB64s(t *testing.T) {

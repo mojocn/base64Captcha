@@ -5,9 +5,6 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"github.com/golang/freetype"
-	"github.com/golang/freetype/truetype"
-	"golang.org/x/image/font"
 	"image"
 	"image/color"
 	"image/draw"
@@ -15,7 +12,12 @@ import (
 	"io"
 	"log"
 	"math"
-	"math/rand"
+
+	"github.com/golang/freetype"
+	"github.com/golang/freetype/truetype"
+	"golang.org/x/image/font"
+
+	"github.com/mojocn/base64Captcha/rand"
 )
 
 // ItemChar captcha item of unicode characters

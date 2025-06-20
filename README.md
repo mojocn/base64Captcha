@@ -76,14 +76,8 @@ type Driver interface {
 package base64Captcha
 
 import (
-	"math/rand"
 	"time"
 )
-
-func init() {
-	//init rand seed
-	rand.Seed(time.Now().UnixNano())
-}
 
 // Captcha captcha basic information.
 type Captcha struct {

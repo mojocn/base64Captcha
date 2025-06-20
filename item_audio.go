@@ -10,7 +10,8 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
-	"math/rand"
+
+	"github.com/mojocn/base64Captcha/rand"
 )
 
 // ItemAudio captcha-audio-engine return type.

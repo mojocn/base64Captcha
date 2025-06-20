@@ -2,10 +2,11 @@ package base64Captcha
 
 import (
 	"image/color"
-	"math/rand"
 	"strings"
 
 	"github.com/golang/freetype/truetype"
+
+	"github.com/mojocn/base64Captcha/rand"
 )
 
 // DriverChinese is a driver of unicode Chinese characters.

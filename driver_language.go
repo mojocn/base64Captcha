@@ -3,9 +3,10 @@ package base64Captcha
 import (
 	"image/color"
 	"log"
-	"math/rand"
 
 	"github.com/golang/freetype/truetype"
+
+	"github.com/mojocn/base64Captcha/rand"
 )
 
 // https://en.wikipedia.org/wiki/Unicode_block

@@ -9,7 +9,8 @@ import (
 	"image/png"
 	"io"
 	"math"
-	"math/rand"
+
+	"github.com/mojocn/base64Captcha/rand"
 )
 
 const (

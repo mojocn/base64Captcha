@@ -4,15 +4,10 @@ import (
 	"encoding/binary"
 	"image/color"
 	"math"
-	"math/rand"
 	"strings"
-	"time"
-)
 
-func init() {
-	//init rand seed
-	rand.Seed(time.Now().UnixNano())
-}
+	"github.com/mojocn/base64Captcha/rand"
+)
 
 // RandText creates random text of given size.
 func RandText(size int, sourceChars string) string {
@@ -99,7 +94,6 @@ func randBytes(n int) []byte {
 	numBlocks := (n + 8 - 1) / 8
 	b := make([]byte, numBlocks*8)
 	for i := 0; i < len(b); i += 8 {
-
 		binary.LittleEndian.PutUint64(b[i:], rand.Uint64())
 	}
 	return b[:n]
