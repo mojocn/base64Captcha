@@ -1,20 +1,18 @@
 package base64Captcha
 
 import (
-	"embed"
-
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
 )
 
 type EmbeddedFontsStorage struct {
-	fs embed.FS
+	data map[string][]byte
 }
 
 func (s *EmbeddedFontsStorage) LoadFontByName(name string) *truetype.Font {
-	fontBytes, err := s.fs.ReadFile(name)
-	if err != nil {
-		panic(err)
+	fontBytes, ok := s.data[name]
+	if !ok {
+		panic("font not found.")
 	}
 
 	//font file bytes to trueTypeFont
@@ -37,8 +35,8 @@ func (s *EmbeddedFontsStorage) LoadFontsByNames(assetFontNames []string) []*true
 	return fonts
 }
 
-func NewEmbeddedFontsStorage(fs embed.FS) *EmbeddedFontsStorage {
+func NewEmbeddedFontsStorage(data map[string][]byte) *EmbeddedFontsStorage {
 	return &EmbeddedFontsStorage{
-		fs: fs,
+		data: data,
 	}
 }
