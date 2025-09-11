@@ -157,7 +157,7 @@ func (m *ItemDigit) strikeThrough() {
 		yo := amplitude * math.Sin(float64(x)*dx)
 		for yn := 0; yn < m.dotSize; yn++ {
 			//r := m.rng.Int(0, m.dotSize)
-			r := rand.Intn(m.dotSize)
+			r := randIntn(m.dotSize)
 			m.drawCircle(x+int(xo), y+int(yo)+(yn*m.dotSize), r/2, 1)
 		}
 	}
@@ -205,7 +205,7 @@ func randomBrightness(c color.RGBA, max uint8) color.RGBA {
 	if maxc > max {
 		return c
 	}
-	n := rand.Intn(int(max-maxc)) - int(minc)
+	n := randIntn(int(max-maxc)) - int(minc)
 	return color.RGBA{
 		uint8(int(c.R) + n),
 		uint8(int(c.G) + n),
