@@ -45,7 +45,7 @@ func Test_loadFontsByNames(t *testing.T) {
 }
 
 func Test_randFontFrom(t *testing.T) {
-	f := randFontFrom(fontsAll)
+	f := randFontFrom(FontsAll)
 	if f == nil {
 		t.Error("failed")
 	}
