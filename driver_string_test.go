@@ -125,3 +125,48 @@ func TestDriverString_GenerateIdQuestionAnswer(t *testing.T) {
 		})
 	}
 }
+
+func TestDriverString_SmallCaptcha_ImprovementsFor120x30(t *testing.T) {
+	// Test case for the specific issue: 120x30 captcha improvements
+	driver := NewDriverString(30, 120, 0, 0, 4, "1234567890abcdefghjklmnpqrstuvwxyz", 
+		&color.RGBA{255, 255, 255, 0}, nil, []string{})
+	
+	// Enable improvements
+	driver.Bold = true
+	driver.MinFontSize = 18
+	driver.MaxFontSize = 24
+	
+	driver = driver.ConvertFonts()
+	
+	// Verify driver settings
+	if driver.MinFontSize != 18 {
+		t.Errorf("Expected MinFontSize 18, got %d", driver.MinFontSize)
+	}
+	if driver.MaxFontSize != 24 {
+		t.Errorf("Expected MaxFontSize 24, got %d", driver.MaxFontSize)
+	}
+	if !driver.Bold {
+		t.Errorf("Expected Bold to be true")
+	}
+	
+	// Test captcha generation
+	item, err := driver.DrawCaptcha("test")
+	if err != nil {
+		t.Errorf("Failed to draw captcha: %v", err)
+	}
+	if item == nil {
+		t.Errorf("Expected non-nil item")
+	}
+	
+	// Test that it generates a valid base64 string
+	b64 := item.EncodeB64string()
+	if len(b64) == 0 {
+		t.Errorf("Expected non-empty base64 string")
+	}
+	
+	// Save for visual inspection during development
+	err = itemWriteFile(item, "_builds", "small_improved_captcha", "png")
+	if err != nil {
+		t.Logf("Warning: could not save test file: %v", err)
+	}
+}

@@ -9,3 +9,6 @@ coverage.*
 *.exe
 _builds/*
 _builds
+# Test generated images
+*.png
+test/*.png
