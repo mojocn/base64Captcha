@@ -36,6 +36,15 @@ type DriverString struct {
 	//Fonts loads by name see fonts.go's comment
 	Fonts      []string
 	fontsArray []*truetype.Font
+
+	//MinFontSize minimum font size for text clarity (optional, default: calculated based on height)
+	MinFontSize int
+
+	//MaxFontSize maximum font size for text variation (optional, default: calculated based on height)  
+	MaxFontSize int
+
+	//Bold renders text in bold for better clarity (optional, default: false)
+	Bold bool
 }
 
 // NewDriverString creates driver
@@ -54,7 +63,19 @@ func NewDriverString(height int, width int, noiseCount int, showLineOptions int,
 		tfs = fontsAll
 	}
 
-	return &DriverString{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsStorage: fontsStorage, fontsArray: tfs, Fonts: fonts}
+	// Calculate reasonable font size defaults based on image height
+	minFontSize := height * 3 / 5  // 60% of height as minimum
+	maxFontSize := height * 4 / 5  // 80% of height as maximum
+	
+	// Ensure minimum readability for small captchas
+	if minFontSize < 16 {
+		minFontSize = 16
+	}
+	if maxFontSize < minFontSize + 4 {
+		maxFontSize = minFontSize + 4
+	}
+
+	return &DriverString{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsStorage: fontsStorage, fontsArray: tfs, Fonts: fonts, MinFontSize: minFontSize, MaxFontSize: maxFontSize}
 }
 
 // ConvertFonts loads fonts by names
@@ -73,6 +94,20 @@ func (d *DriverString) ConvertFonts() *DriverString {
 	}
 
 	d.fontsArray = tfs
+
+	// Initialize font sizes if not set
+	if d.MinFontSize == 0 || d.MaxFontSize == 0 {
+		d.MinFontSize = d.Height * 3 / 5  // 60% of height as minimum
+		d.MaxFontSize = d.Height * 4 / 5  // 80% of height as maximum
+		
+		// Ensure minimum readability for small captchas
+		if d.MinFontSize < 16 {
+			d.MinFontSize = 16
+		}
+		if d.MaxFontSize < d.MinFontSize + 4 {
+			d.MaxFontSize = d.MinFontSize + 4
+		}
+	}
 
 	return d
 }
@@ -121,7 +156,7 @@ func (d *DriverString) DrawCaptcha(content string) (item Item, err error) {
 	}
 
 	//draw content
-	err = itemChar.drawText(content, d.fontsArray)
+	err = itemChar.drawTextWithFontSize(content, d.fontsArray, d.MinFontSize, d.MaxFontSize, d.Bold)
 	if err != nil {
 		return
 	}

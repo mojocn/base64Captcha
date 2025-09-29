@@ -211,3 +211,62 @@ func TestItemChar_EncodeB64string(t *testing.T) {
 		})
 	}
 }
+func TestItemChar_drawTextWithFontSize(t *testing.T) {
+	type args struct {
+		text        string
+		fonts       []*truetype.Font
+		minFontSize int
+		maxFontSize int
+		bold        bool
+	}
+	tests := []struct {
+		name    string
+		item    *ItemChar
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "small captcha with improved font sizes",
+			item: NewItemChar(120, 30, color.RGBA{255, 255, 255, 0}),
+			args: args{
+				text:        "test",
+				fonts:       fontsAll,
+				minFontSize: 18,
+				maxFontSize: 24,
+				bold:        true,
+			},
+			wantErr: false,
+		},
+		{
+			name: "empty text should return error",
+			item: NewItemChar(120, 30, color.RGBA{255, 255, 255, 0}),
+			args: args{
+				text:        "",
+				fonts:       fontsAll,
+				minFontSize: 18,
+				maxFontSize: 24,
+				bold:        false,
+			},
+			wantErr: true,
+		},
+		{
+			name: "invalid font sizes should auto-correct",
+			item: NewItemChar(120, 30, color.RGBA{255, 255, 255, 0}),
+			args: args{
+				text:        "test", 
+				fonts:       fontsAll,
+				minFontSize: 0, // should use defaults
+				maxFontSize: 0, // should use defaults
+				bold:        false,
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := tt.item.drawTextWithFontSize(tt.args.text, tt.args.fonts, tt.args.minFontSize, tt.args.maxFontSize, tt.args.bold); (err != nil) != tt.wantErr {
+				t.Errorf("ItemChar.drawTextWithFontSize() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

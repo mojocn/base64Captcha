@@ -204,6 +204,11 @@ func (item *ItemChar) drawNoise(noiseText string, fonts []*truetype.Font) error 
 //drawText draw captcha string to image.把文字写入图像验证码
 
 func (item *ItemChar) drawText(text string, fonts []*truetype.Font) error {
+	return item.drawTextWithFontSize(text, fonts, 0, 0, false)
+}
+
+//drawTextWithFontSize draw captcha string to image with customizable font sizes and bold effect
+func (item *ItemChar) drawTextWithFontSize(text string, fonts []*truetype.Font, minFontSize, maxFontSize int, bold bool) error {
 	c := freetype.NewContext()
 	c.SetDPI(imageStringDpi)
 	c.SetClip(item.nrgba.Bounds())
@@ -214,18 +219,79 @@ func (item *ItemChar) drawText(text string, fonts []*truetype.Font) error {
 		return errors.New("text must not be empty, there is nothing to draw")
 	}
 
-	fontWidth := item.width / len(text)
+	// Calculate font size range - use defaults if not provided
+	if minFontSize <= 0 || maxFontSize <= 0 {
+		minFontSize = item.height * (7) / 16  // old minimum
+		maxFontSize = item.height * (13) / 16 // old maximum
+	}
+
+	// Ensure reasonable minimum font size for small captchas
+	if minFontSize < 16 && item.height <= 40 {
+		minFontSize = 16
+	}
+	if maxFontSize < minFontSize {
+		maxFontSize = minFontSize + 4
+	}
+
+	// Calculate character spacing with proper margins
+	textLen := len(text)
+	margins := item.width / 10 // 10% margins on each side
+	availableWidth := item.width - (2 * margins)
+	charSpacing := availableWidth / textLen
 
 	for i, s := range text {
-		fontSize := item.height * (rand.Intn(7) + 7) / 16
+		// Calculate font size with better distribution
+		fontSizeRange := maxFontSize - minFontSize
+		fontSize := minFontSize + rand.Intn(fontSizeRange+1)
+		
 		c.SetSrc(image.NewUniform(RandDeepColor()))
 		c.SetFontSize(float64(fontSize))
 		c.SetFont(randFontFrom(fonts))
-		x := fontWidth*i + fontWidth/fontSize
-		y := item.height/2 + fontSize/2 - rand.Intn(item.height/16*3)
+		
+		// Improved character positioning with proper margins and centering
+		charWidth := charSpacing
+		x := margins + charWidth*i + (charWidth-fontSize/2)/2
+		// Ensure character doesn't go beyond available space
+		if x < margins {
+			x = margins
+		}
+		if x+fontSize/2 > item.width-margins {
+			x = item.width - margins - fontSize/2
+		}
+		
+		// Center vertically with small random variation
+		baseY := item.height/2 + fontSize/3
+		variation := item.height / 8
+		if variation > fontSize/4 {
+			variation = fontSize / 4
+		}
+		y := baseY + rand.Intn(variation*2) - variation
+		
+		// Ensure text stays within bounds
+		if y < fontSize/2 {
+			y = fontSize/2
+		}
+		if y > item.height-fontSize/4 {
+			y = item.height - fontSize/4
+		}
+		
 		pt := freetype.Pt(x, y)
 		if _, err := c.DrawString(string(s), pt); err != nil {
 			return err
+		}
+		
+		// Add bold effect by drawing the character slightly offset
+		if bold {
+			// Draw additional strokes for bold effect
+			offsets := []struct{ dx, dy int }{
+				{1, 0}, {-1, 0}, {0, 1}, {0, -1}, // cardinal directions
+				{1, 1}, {-1, -1}, // diagonal for better effect
+			}
+			
+			for _, offset := range offsets {
+				boldPt := freetype.Pt(x+offset.dx, y+offset.dy)
+				c.DrawString(string(s), boldPt)
+			}
 		}
 	}
 	return nil
