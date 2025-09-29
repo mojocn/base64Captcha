@@ -16,6 +16,7 @@ package base64Captcha
 
 import (
 	"container/list"
+	"strings"
 	"sync"
 	"time"
 )
@@ -58,8 +59,9 @@ func (s *memoryStore) Set(id string, value string) error {
 	s.digitsById[id] = value
 	s.idByTime.PushBack(idByTimeValue{time.Now(), id})
 	s.numStored++
+	needCollect := s.numStored > s.collectNum
 	s.Unlock()
-	if s.numStored > s.collectNum {
+	if needCollect {
 		go s.collect()
 	}
 	return nil
@@ -70,7 +72,7 @@ func (s *memoryStore) Verify(id, answer string, clear bool) bool {
 		return false
 	}
 	v := s.Get(id, clear)
-	return v != "" && v == answer
+	return strings.EqualFold(v, answer)
 }
 
 func (s *memoryStore) Get(id string, clear bool) (value string) {

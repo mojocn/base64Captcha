@@ -1,5 +1,6 @@
 # A flexible and various captcha package
 ![Test](https://github.com/mojocn/base64Captcha/workflows/Test/badge.svg)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/mojocn/base64Captcha)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mojocn/base64Captcha)](https://goreportcard.com/report/github.com/mojocn/base64Captcha)
 [![GoDoc](https://godoc.org/github.com/mojocn/base64Captcha?status.svg)](https://godoc.org/github.com/mojocn/base64Captcha)
 [![Build Status](https://travis-ci.org/mojocn/base64Captcha.svg?branch=master)](https://travis-ci.org/mojocn/base64Captcha)
@@ -265,7 +266,7 @@ There are some example for your reference.
 - [@amzyang](https://github.com/amzyang)
 - [@Luckyboys](https://github.com/Luckyboys)
 - [@hi-sb](https://github.com/hi-sb)
-
+  
 ## 5. 🍭🍭🍭 Licence
 
 base64Captcha source code is licensed under the Apache Licence, Version 2.0
