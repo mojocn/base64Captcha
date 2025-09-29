@@ -29,7 +29,7 @@ func RandText(size int, sourceChars string) string {
 
 	text := make([]rune, size)
 	for i := range text {
-		text[i] = sourceRunes[rand.Intn(sourceLength)]
+		text[i] = sourceRunes[randIntn(sourceLength)]
 	}
 	return string(text)
 }
@@ -83,7 +83,7 @@ func randIntRange(from, to int) int {
 	if to-from <= 0 {
 		return from
 	}
-	return rand.Intn(to-from) + from
+	return randIntn(to-from) + from
 }
 func randFloat64Range(from, to float64) float64 {
 	return rand.Float64()*(to-from) + from
