@@ -59,8 +59,9 @@ func (s *memoryStore) Set(id string, value string) error {
 	s.digitsById[id] = value
 	s.idByTime.PushBack(idByTimeValue{time.Now(), id})
 	s.numStored++
+	needCollect := s.numStored > s.collectNum
 	s.Unlock()
-	if s.numStored > s.collectNum {
+	if needCollect {
 		go s.collect()
 	}
 	return nil
