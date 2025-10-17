@@ -47,7 +47,7 @@ func NewDriverMath(height int, width int, noiseCount int, showLineOptions int, b
 	}
 
 	if len(tfs) == 0 {
-		tfs = fontsAll
+		tfs = FontsAll
 	}
 
 	return &DriverMath{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, fontsArray: tfs, BgColor: bgColor, Fonts: fonts}
@@ -65,7 +65,7 @@ func (d *DriverMath) ConvertFonts() *DriverMath {
 		tfs = append(tfs, tf)
 	}
 	if len(tfs) == 0 {
-		tfs = fontsAll
+		tfs = FontsAll
 	}
 	d.fontsArray = tfs
 
@@ -118,7 +118,7 @@ func (d *DriverMath) DrawCaptcha(question string) (item Item, err error) {
 	//背景有文字干扰
 	if d.NoiseCount > 0 {
 		noise := RandText(d.NoiseCount, strings.Repeat(TxtNumbers, d.NoiseCount))
-		err = itemChar.drawNoise(noise, fontsAll)
+		err = itemChar.drawNoise(noise, FontsAll)
 		if err != nil {
 			return
 		}

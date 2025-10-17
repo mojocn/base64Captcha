@@ -51,7 +51,7 @@ func NewDriverChinese(height int, width int, noiseCount int, showLineOptions int
 	}
 
 	if len(tfs) == 0 {
-		tfs = fontsAll
+		tfs = FontsAll
 	}
 
 	return &DriverChinese{Height: height, Width: width, NoiseCount: noiseCount, ShowLineOptions: showLineOptions, Length: length, Source: source, BgColor: bgColor, fontsStorage: fontsStorage, fontsArray: tfs}
@@ -69,7 +69,7 @@ func (d *DriverChinese) ConvertFonts() *DriverChinese {
 		tfs = append(tfs, tf)
 	}
 	if len(tfs) == 0 {
-		tfs = fontsAll
+		tfs = FontsAll
 	}
 	d.fontsArray = tfs
 
